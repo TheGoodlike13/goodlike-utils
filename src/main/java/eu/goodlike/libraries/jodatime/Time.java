@@ -74,6 +74,13 @@ public final class Time {
         return getDefault().from(date);
     }
 
+    /**
+     * @return millis to Date converter; uses UTC
+     */
+    public static DateConverter convert(long millis) {
+        return getDefault().from(millis);
+    }
+
     // PRIVATE
 
     private static final DateTimeZone DEFAULT_TIME_ZONE = DateTimeZone.forID("UTC");
