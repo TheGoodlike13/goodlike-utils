@@ -43,8 +43,12 @@ public final class Null {
      */
     public void ifAny(String message) {
         int index = objects.indexOf(null);
-        if (index >= 0)
-            throw new NullPointerException(message + "; parameter at index " + index + " was null, please check: " + objects);
+        if (index >= 0) {
+            if (objects.size() > 1)
+                message = message + "; parameter at index " + index + " was null, please check: " + objects;
+
+            throw new NullPointerException(message);
+        }
     }
 
     // CONSTRUCTORS
