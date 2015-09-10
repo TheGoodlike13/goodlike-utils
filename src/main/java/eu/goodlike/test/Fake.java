@@ -3,12 +3,6 @@ package eu.goodlike.test;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.function.IntFunction;
-import java.util.function.LongFunction;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 /**
  * <pre>
@@ -30,24 +24,6 @@ import java.util.stream.LongStream;
  * </pre>
  */
 public final class Fake {
-
-    /**
-     * @return list of objects, creating using ids from 1 to amount in the given method
-     */
-    public static <T> List<T> someOf(IntFunction<T> fakeCreationMethod, int amount) {
-        return IntStream.rangeClosed(1, amount)
-                .mapToObj(fakeCreationMethod)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @return list of objects, creating using ids from 1 to amount in the given method
-     */
-    public static <T> List<T> someOfLong(LongFunction<T> fakeCreationMethod, long amount) {
-        return LongStream.rangeClosed(1, amount)
-                .mapToObj(fakeCreationMethod)
-                .collect(Collectors.toList());
-    }
 
     public static String name(long id) {
         return "Name" + id;

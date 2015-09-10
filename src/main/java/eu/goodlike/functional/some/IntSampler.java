@@ -1,0 +1,97 @@
+package eu.goodlike.functional.some;
+
+import eu.goodlike.neat.Null;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+/**
+ * <pre>
+ * An alternative to sequential loops:
+ *      List list = new ArrayList();
+ *      for (int i = 0; i < limit; i++)
+ *          lost.add(getSomethingForInt(i));
+ *
+ * and primitive streams:
+ *      List list = IntStream.range(0, limit)
+ *              .mapToObj(this::getSomethingForInt)
+ *              .collect(toList());
+ *
+ * which turns into:
+ *      List list = Some.of(this::getSomethingForInt).get(limit);
+ * </pre>
+ * @param <T> type returned by given integer function
+ */
+public final class IntSampler<T> {
+
+    /**
+     * @return list of int function results, evaluated for all i in {0, amount-1}
+     */
+    public List<T> get(int amount) {
+        return evaluate(IntStream.range(0, amount));
+    }
+
+    /**
+     * @return list of int function results, evaluated for all i in {1, amount}
+     */
+    public List<T> fetch(int amount) {
+        return evaluate(IntStream.rangeClosed(1, amount));
+    }
+
+    /**
+     * @return single int function result, evaluated for index
+     */
+    public T sample(int index) {
+        return anyFunction.apply(index);
+    }
+
+    /**
+     * @return list of int function results, evaluated for all i in {startInclusive, endExclusive-1}
+     */
+    public List<T> range(int startInclusive, int endExclusive) {
+        return evaluate(IntStream.range(startInclusive, endExclusive));
+    }
+
+    /**
+     * @return list of int function results, evaluated for all i in {startInclusive, endExclusive}
+     */
+    public List<T> rangeClosed(int startInclusive, int endInclusive) {
+        return evaluate(IntStream.range(startInclusive, endInclusive));
+    }
+
+    /**
+     * @return list of int function results, evaluated for all i in indexes
+     */
+    public List<T> with(int... indexes) {
+        Null.checkAlone(indexes).ifAny("Index array cannot be null");
+        return evaluate(IntStream.of(indexes));
+    }
+
+    /**
+     * @return list of int function results, evaluated for all i in indexes
+     */
+    public List<T> with(Collection<Integer> indexes) {
+        Null.checkCollection(indexes).ifAny("Index collection cannot be null");
+        return evaluate(indexes.stream().mapToInt(Integer::intValue));
+    }
+
+    // CONSTRUCTORS
+
+    public IntSampler(IntFunction<T> anyFunction) {
+        this.anyFunction = anyFunction;
+    }
+
+    // PRIVATE
+
+    private final IntFunction<T> anyFunction;
+
+    private List<T> evaluate(IntStream stream) {
+        return stream
+                .mapToObj(anyFunction)
+                .collect(Collectors.toList());
+    }
+
+}
