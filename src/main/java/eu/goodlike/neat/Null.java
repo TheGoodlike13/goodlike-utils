@@ -1,6 +1,8 @@
 package eu.goodlike.neat;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -54,25 +56,32 @@ public final class Null {
     // CONSTRUCTORS
 
     public static Null check(Object... objects) {
-        return new Null(objects);
+        return new Null(Arrays.asList(objects));
     }
 
     /**
      * Use this method when you need to check something like a primitive array for null by itself
      */
     public static Null checkAlone(Object possiblyArray) {
-        return new Null(possiblyArray);
+        return new Null(Collections.singletonList(possiblyArray));
     }
 
     /**
-     * Use this method when you need to check all array elements for null
+     * Use this method when you need to check all array elements for null (including array itself)
      */
     public static Null checkArray(Object[] definitelyArray) {
-        return new Null(definitelyArray);
+        return definitelyArray == null ? checkAlone(null) : check(definitelyArray);
     }
 
-    private Null(Object... objects) {
-        this.objects = Arrays.asList(objects);
+    /**
+     * Use this method when you need to check all collection elements for null (including collection itself)
+     */
+    public static Null checkCollection(Collection<?> collection) {
+        return collection == null ? checkAlone(null) : check(collection);
+    }
+
+    private Null(List<Object> objects) {
+        this.objects = objects;
     }
 
     // PRIVATE
