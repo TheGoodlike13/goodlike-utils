@@ -40,16 +40,31 @@ public final class ObjectSampler<T, U> {
      */
     @SafeVarargs
     public final List<U> with(T... values) {
-        Null.checkAlone(values).ifAny("Value array cannot be null");
-        return evaluate(Stream.of(values));
+        return toList(stream(values));
     }
 
     /**
      * @return list of long function results, evaluated for all values
      */
     public List<U> with(Collection<T> values) {
+        return toList(stream(values));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all values
+     */
+    @SafeVarargs
+    public final Stream<U> stream(T... values) {
+        Null.checkAlone(values).ifAny("Value array cannot be null");
+        return map(Stream.of(values));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all values
+     */
+    public Stream<U> stream(Collection<T> values) {
         Null.checkAlone(values).ifAny("Value collection cannot be null");
-        return evaluate(values.stream());
+        return map(values.stream());
     }
 
     // CONSTRUCTORS
@@ -62,10 +77,13 @@ public final class ObjectSampler<T, U> {
 
     private final Function<T, U> anyFunction;
 
-    private List<U> evaluate(Stream<T> stream) {
+    private Stream<U> map(Stream<T> stream) {
         return stream
-                .map(anyFunction)
-                .collect(Collectors.toList());
+                .map(anyFunction);
+    }
+
+    private List<U> toList(Stream<U> stream) {
+        return stream.collect(Collectors.toList());
     }
 
 }

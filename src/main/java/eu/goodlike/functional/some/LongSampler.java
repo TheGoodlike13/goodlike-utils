@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -28,6 +29,13 @@ import java.util.stream.LongStream;
 public final class LongSampler<T> {
 
     /**
+     * @return single long function result, evaluated for index
+     */
+    public T sample(long index) {
+        return anyFunction.apply(index);
+    }
+
+    /**
      * @return list of long function results, evaluated for all i in {0, amount-1}
      */
     public List<T> get(long amount) {
@@ -39,13 +47,6 @@ public final class LongSampler<T> {
      */
     public List<T> fetch(long amount) {
         return evaluate(LongStream.rangeClosed(1, amount));
-    }
-
-    /**
-     * @return single long function result, evaluated for index
-     */
-    public T sample(long index) {
-        return anyFunction.apply(index);
     }
 
     /**
@@ -66,16 +67,58 @@ public final class LongSampler<T> {
      * @return list of long function results, evaluated for all i in indexes
      */
     public List<T> with(long... indexes) {
-        Null.checkAlone(indexes).ifAny("Index array cannot be null");
-        return evaluate(LongStream.of(indexes));
+        return toList(stream(indexes));
     }
 
     /**
      * @return list of long function results, evaluated for all i in indexes
      */
     public List<T> with(Collection<Long> indexes) {
+        return toList(stream(indexes));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in {0, amount-1}
+     */
+    public Stream<T> getStream(long amount) {
+        return map(LongStream.range(0, amount));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in {1, amount}
+     */
+    public Stream<T> fetchStream(long amount) {
+        return map(LongStream.rangeClosed(1, amount));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in {startInclusive, endExclusive-1}
+     */
+    public Stream<T> rangeStream(long startInclusive, long endExclusive) {
+        return map(LongStream.range(startInclusive, endExclusive));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in {startInclusive, endExclusive}
+     */
+    public Stream<T> rangeStreamClosed(long startInclusive, long endInclusive) {
+        return map(LongStream.range(startInclusive, endInclusive));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in indexes
+     */
+    public Stream<T> stream(long... indexes) {
+        Null.checkAlone(indexes).ifAny("Index array cannot be null");
+        return map(LongStream.of(indexes));
+    }
+
+    /**
+     * @return stream of long function results, evaluated for all i in indexes
+     */
+    public Stream<T> stream(Collection<Long> indexes) {
         Null.checkCollection(indexes).ifAny("Index collection cannot be null");
-        return evaluate(indexes.stream().mapToLong(Long::longValue));
+        return map(indexes.stream().mapToLong(Long::intValue));
     }
 
     // CONSTRUCTORS
@@ -89,9 +132,16 @@ public final class LongSampler<T> {
     private final LongFunction<T> anyFunction;
 
     private List<T> evaluate(LongStream stream) {
+        return toList(map(stream));
+    }
+
+    private Stream<T> map(LongStream stream) {
         return stream
-                .mapToObj(anyFunction)
-                .collect(Collectors.toList());
+                .mapToObj(anyFunction);
+    }
+
+    private List<T> toList(Stream<T> stream) {
+        return stream.collect(Collectors.toList());
     }
 
 }

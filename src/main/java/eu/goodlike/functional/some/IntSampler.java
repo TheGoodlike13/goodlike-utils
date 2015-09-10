@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -28,6 +29,13 @@ import java.util.stream.IntStream;
 public final class IntSampler<T> {
 
     /**
+     * @return single int function result, evaluated for index
+     */
+    public T sample(int index) {
+        return anyFunction.apply(index);
+    }
+
+    /**
      * @return list of int function results, evaluated for all i in {0, amount-1}
      */
     public List<T> get(int amount) {
@@ -39,13 +47,6 @@ public final class IntSampler<T> {
      */
     public List<T> fetch(int amount) {
         return evaluate(IntStream.rangeClosed(1, amount));
-    }
-
-    /**
-     * @return single int function result, evaluated for index
-     */
-    public T sample(int index) {
-        return anyFunction.apply(index);
     }
 
     /**
@@ -66,16 +67,58 @@ public final class IntSampler<T> {
      * @return list of int function results, evaluated for all i in indexes
      */
     public List<T> with(int... indexes) {
-        Null.checkAlone(indexes).ifAny("Index array cannot be null");
-        return evaluate(IntStream.of(indexes));
+        return toList(stream(indexes));
     }
 
     /**
      * @return list of int function results, evaluated for all i in indexes
      */
     public List<T> with(Collection<Integer> indexes) {
+        return toList(stream(indexes));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in {0, amount-1}
+     */
+    public Stream<T> getStream(int amount) {
+        return map(IntStream.range(0, amount));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in {1, amount}
+     */
+    public Stream<T> fetchStream(int amount) {
+        return map(IntStream.rangeClosed(1, amount));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in {startInclusive, endExclusive-1}
+     */
+    public Stream<T> rangeStream(int startInclusive, int endExclusive) {
+        return map(IntStream.range(startInclusive, endExclusive));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in {startInclusive, endExclusive}
+     */
+    public Stream<T> rangeStreamClosed(int startInclusive, int endInclusive) {
+        return map(IntStream.range(startInclusive, endInclusive));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in indexes
+     */
+    public Stream<T> stream(int... indexes) {
+        Null.checkAlone(indexes).ifAny("Index array cannot be null");
+        return map(IntStream.of(indexes));
+    }
+
+    /**
+     * @return stream of int function results, evaluated for all i in indexes
+     */
+    public Stream<T> stream(Collection<Integer> indexes) {
         Null.checkCollection(indexes).ifAny("Index collection cannot be null");
-        return evaluate(indexes.stream().mapToInt(Integer::intValue));
+        return map(indexes.stream().mapToInt(Integer::intValue));
     }
 
     // CONSTRUCTORS
@@ -89,9 +132,16 @@ public final class IntSampler<T> {
     private final IntFunction<T> anyFunction;
 
     private List<T> evaluate(IntStream stream) {
+        return toList(map(stream));
+    }
+
+    private Stream<T> map(IntStream stream) {
         return stream
-                .mapToObj(anyFunction)
-                .collect(Collectors.toList());
+                .mapToObj(anyFunction);
+    }
+
+    private List<T> toList(Stream<T> stream) {
+        return stream.collect(Collectors.toList());
     }
 
 }
