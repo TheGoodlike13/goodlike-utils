@@ -57,6 +57,20 @@ public final class Null {
         return new Null(objects);
     }
 
+    /**
+     * Use this method when you need to check something like a primitive array for null by itself
+     */
+    public static Null checkAlone(Object possiblyArray) {
+        return new Null(possiblyArray);
+    }
+
+    /**
+     * Use this method when you need to check all array elements for null
+     */
+    public static Null checkArray(Object[] definitelyArray) {
+        return new Null(definitelyArray);
+    }
+
     private Null(Object... objects) {
         this.objects = Arrays.asList(objects);
     }
