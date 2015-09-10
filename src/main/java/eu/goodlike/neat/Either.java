@@ -129,31 +129,31 @@ public final class Either<T1, T2> {
     /**
      * @return Either with its first value mapped using the mapper; this only has an effect if this Either
      * is of the first kind
-     * @throws NullPointerException if function is null
+     * @throws NullPointerException if mapper is null
      */
     public <U1> Either<U1, T2> mapFirstKind(Function<? super T1, ? extends U1> mapper) {
-        Null.check(mapper).ifAny("Null functions not allowed");
+        Null.check(mapper).ifAny("Null mappers not allowed");
         return of(firstKind.map(mapper), secondKind);
     }
 
     /**
      * @return Either with its second value mapped using the mapper; this only has an effect if this Either
      * is of the second kind
-     * @throws NullPointerException if function is null
+     * @throws NullPointerException if mapper is null
      */
     public <U2> Either<T1, U2> mapSecondKind(Function<? super T2, ? extends U2> mapper) {
-        Null.check(mapper).ifAny("Null functions not allowed");
+        Null.check(mapper).ifAny("Null mappers not allowed");
         return of(firstKind, secondKind.map(mapper));
     }
 
     /**
      * @return Either with its first value mapped using the first mapper, and its second value mapped using
      * the second mapper
-     * @throws NullPointerException if any of the functions are null
+     * @throws NullPointerException if any of the mappers are null
      */
     public <U1, U2> Either<U1, U2> map(Function<? super T1, ? extends U1> mapper1,
                                        Function<? super T2, ? extends U2> mapper2) {
-        Null.check(mapper1, mapper2).ifAny("Null functions not allowed");
+        Null.check(mapper1, mapper2).ifAny("Null mappers not allowed");
         return of(firstKind.map(mapper1), secondKind.map(mapper2));
     }
 
