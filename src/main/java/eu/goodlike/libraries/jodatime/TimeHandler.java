@@ -19,8 +19,9 @@ import org.joda.time.*;
  * When converting to and from LocalDate/LocalTime/SqlDate assumes time 00:00:00.000
  *
  * The handler class itself is thread-safe;
- * the Converter class returned by its methods is mutable, but concurrent access should only result in repeated
- * computations, since all of the mutable state is derived from the immutable state without side effects
+ * the Converter class returned by its methods is mutable, and not thread-safe; however, it is not intended to be used
+ * across threads anyway (in general, if you want to convert a value, you want to do it at once, not store it for use
+ * by multiple threads)
  * </pre>
  */
 public final class TimeHandler {
