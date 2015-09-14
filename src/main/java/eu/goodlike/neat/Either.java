@@ -1,6 +1,7 @@
 package eu.goodlike.neat;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.*;
 
@@ -210,6 +211,26 @@ public final class Either<T1, T2> {
     }
 
     /**
+     * @return similar to mapInto(), except that the Function should return an Optional (to avoid Optional of Optional)
+     */
+    public <U> Optional<U> flatMapFirstKindInto(Function<? super T1, Optional<U>> mapper) {
+        Null.check(mapper).ifAny("Null mappers not allowed");
+        return isFirstKind()
+                ? mapper.apply(firstKind.get())
+                : Optional.empty();
+    }
+
+    /**
+     * @return similar to mapInto(), except that the Function should return an Optional (to avoid Optional of Optional)
+     */
+    public <U> Optional<U> flatMapSecondKindInto(Function<? super T2, Optional<U>> mapper) {
+        Null.check(mapper).ifAny("Null mappers not allowed");
+        return isSecondKind()
+                ? mapper.apply(secondKind.get())
+                : Optional.empty();
+    }
+
+    /**
      * @return similar to mapInto(), except that the BiFunction should return an Optional (to avoid Optional of Optional)
      */
     public <U> Optional<U> flatMapInto(BiFunction<? super T1, ? super T2, Optional<U>> mapper) {
@@ -332,5 +353,26 @@ public final class Either<T1, T2> {
     private final Optional<T2> secondKind;
 
     private static final Either<?, ?> NEITHER = new Either<>(Optional.empty(), Optional.empty());
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public String toString() {
+        return "Either{" + firstKind + ", " + secondKind + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Either)) return false;
+        Either<?, ?> either = (Either<?, ?>) o;
+        return Objects.equals(firstKind, either.firstKind) &&
+                Objects.equals(secondKind, either.secondKind);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstKind, secondKind);
+    }
 
 }
