@@ -14,16 +14,16 @@ public interface Action {
     void doIt();
 
     /**
-     * @return Action that wraps ThrowAction with a generic RuntimeException re-throw
+     * @return Action that wraps CheckedAction with a generic RuntimeException re-throw
      */
-    static <X extends RuntimeException> Action of(ThrowAction action) {
+    static <X extends RuntimeException> Action of(CheckedAction action) {
         return of(action, RuntimeException::new);
     }
 
     /**
-     * @return Action that wraps ThrowAction with a custom RuntimeException re-throw
+     * @return Action that wraps CheckedAction with a custom RuntimeException re-throw
      */
-    static <X extends RuntimeException> Action of(ThrowAction action, Function<Throwable, X> exceptionSupplier) {
+    static <X extends RuntimeException> Action of(CheckedAction action, Function<Throwable, X> exceptionSupplier) {
         return () -> {
             try {
                 action.doIt();
