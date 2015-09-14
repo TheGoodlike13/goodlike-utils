@@ -1,5 +1,6 @@
 package eu.goodlike.retry.steps;
 
+import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Either;
 
 import java.util.function.Consumer;
@@ -28,5 +29,11 @@ public interface FailureActionNoBacktrackStep<T> extends AdditionalFailureAction
 
     @Override
     PerformStep<T> onFail(Consumer<Either<T, Exception>> failAction);
+    @Override
+    PerformStep<T> onError(Consumer<Exception> exceptionAction);
+    @Override
+    PerformStep<T> onNull(Action nullAction);
+    @Override
+    PerformStep<T> onInvalid(Consumer<T> invalidAction);
 
 }

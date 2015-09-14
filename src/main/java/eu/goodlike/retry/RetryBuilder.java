@@ -1,5 +1,6 @@
 package eu.goodlike.retry;
 
+import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Either;
 import eu.goodlike.neat.Null;
 import eu.goodlike.retry.steps.*;
@@ -164,6 +165,24 @@ public final class RetryBuilder<T> implements TimesStep<T>, TimeoutStep<T>, Time
                 ? failAction
                 : this.failureAction.andThen(failAction);
         return this;
+    }
+
+    @Override
+    public PerformStep<T> onError(Consumer<Exception> exceptionAction) {
+        Null.check(exceptionAction).ifAny("Null Consumers not allowed");
+        return onFail(either -> either.ifSecondKind(exceptionAction));
+    }
+
+    @Override
+    public PerformStep<T> onNull(Action nullAction) {
+        Null.check(nullAction).ifAny("Null Actions not allowed");
+        return onFail(either -> either.ifNeitherKind(nullAction));
+    }
+
+    @Override
+    public PerformStep<T> onInvalid(Consumer<T> invalidAction) {
+        Null.check(invalidAction).ifAny("Null Consumers not allowed");
+        return onFail(either -> either.ifFirstKind(invalidAction));
     }
 
     @Override

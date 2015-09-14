@@ -1,5 +1,6 @@
 package eu.goodlike.retry.steps;
 
+import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Either;
 
 import java.util.function.Consumer;
@@ -23,5 +24,23 @@ public interface AdditionalFailureActionStep<T> {
      * @throws NullPointerException if failAction is null
      */
     PerformStep<T> onFail(Consumer<Either<T, Exception>> failAction);
+
+    /**
+     * Convenience method, equivalent to onFail(either -> either.ifSecondKind(exceptionAction))
+     * @throws NullPointerException if exceptionAction is null
+     */
+    PerformStep<T> onError(Consumer<Exception> exceptionAction);
+
+    /**
+     * Convenience method, equivalent to onFail(either -> either.ifNeitherKind(nullAction))
+     * @throws NullPointerException if exceptionAction is null
+     */
+    PerformStep<T> onNull(Action nullAction);
+
+    /**
+     * Convenience method, equivalent to onFail(either -> either.ifFirstKind(invalidAction))
+     * @throws NullPointerException if exceptionAction is null
+     */
+    PerformStep<T> onInvalid(Consumer<T> invalidAction);
 
 }
