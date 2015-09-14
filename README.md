@@ -109,7 +109,7 @@ something difficult and just aren't good enough by themselves; I opted for a sim
     Validate.string(someString).not().Null().not().blank().email().ifInvalid(someExceptionSupplier)
     Validate.Int(someInt).Null().or().dayOfMonth().ifInvalid(someExceptionSupplier)
     
-feel fairly simple to me
+feel fairly simple to me :)
 
     Requires Guava for CharArrayValidator
     compile 'com.google.guava:guava:18.0'
