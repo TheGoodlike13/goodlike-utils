@@ -1,5 +1,7 @@
 package eu.goodlike.neat;
 
+import eu.goodlike.functional.Action;
+
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -92,6 +94,16 @@ public final class Either<T1, T2> {
         Null.check(consumer1, consumer2).ifAny("Null consumers not allowed");
         ifFirstKind(consumer1);
         ifSecondKind(consumer2);
+    }
+
+    /**
+     * Invokes an action if this Either is of neither kind, otherwise does nothing
+     * @throws NullPointerException if consumer is null
+     */
+    public void ifNeitherKind(Action action) {
+        Null.check(action).ifAny("Null actions not allowed");
+        if (isNeitherKind())
+            action.doIt();
     }
 
     /**
