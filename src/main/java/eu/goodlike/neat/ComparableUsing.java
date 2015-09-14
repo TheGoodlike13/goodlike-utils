@@ -15,41 +15,46 @@ package eu.goodlike.neat;
  *      etc;
  * </pre>
  */
-public interface ComparableUsing<T extends Comparable<T>> extends Comparable<T> {
+public interface ComparableUsing<T extends Comparable<T>> {
+
+    /**
+     * @return this.t.comparedTo(other)
+     */
+    int compareUsing(T other);
 
     /**
      * @return this.t == other
      */
     default boolean isExactly(T other) {
-        return this.compareTo(other) == 0;
+        return this.compareUsing(other) == 0;
     }
 
     /**
      * @return this.t >= other
      */
     default boolean isAtLeast(T other) {
-        return this.compareTo(other) >= 0;
+        return this.compareUsing(other) >= 0;
     }
 
     /**
      * @return this.t <= other
      */
     default boolean isAtMost(T other) {
-        return this.compareTo(other) <= 0;
+        return this.compareUsing(other) <= 0;
     }
 
     /**
      * @return this.t < other
      */
     default boolean isLessThan(T other) {
-        return this.compareTo(other) < 0;
+        return this.compareUsing(other) < 0;
     }
 
     /**
      * @return this.t > other
      */
     default boolean isMoreThan(T other) {
-        return this.compareTo(other) > 0;
+        return this.compareUsing(other) > 0;
     }
 
 }
