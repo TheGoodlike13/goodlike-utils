@@ -28,4 +28,4 @@
 
 # Generated files - use gradlew generate to make them
 
-/src/main/generated/
+/src/gen/
