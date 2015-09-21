@@ -52,6 +52,22 @@ public final class IntValidator extends Validate<Integer, IntValidator> {
     }
 
     /**
+     * Adds a predicate which tests if the integer being validated is larger or equal to some amount
+     */
+    public IntValidator atLeast(int amount) {
+        registerCondition(i -> i >= amount);
+        return this;
+    }
+
+    /**
+     * Adds a predicate which tests if the integer being validated is smaller or equal to some amount
+     */
+    public IntValidator atMost(int amount) {
+        registerCondition(i -> i <= amount);
+        return this;
+    }
+
+    /**
      * Adds a predicate which tests if the integer being validated is equal to some amount
      */
     public IntValidator equal(int amount) {

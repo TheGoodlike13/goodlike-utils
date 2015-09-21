@@ -52,6 +52,22 @@ public final class LongValidator extends Validate<Long, LongValidator> {
     }
 
     /**
+     * Adds a predicate which tests if the long being validated is larger or equal to some amount
+     */
+    public LongValidator atLeast(long amount) {
+        registerCondition(i -> i >= amount);
+        return this;
+    }
+
+    /**
+     * Adds a predicate which tests if the long being validated is smaller or equal to some amount
+     */
+    public LongValidator atMost(long amount) {
+        registerCondition(i -> i <= amount);
+        return this;
+    }
+
+    /**
      * Adds a predicate which tests if the long being validated is equal to some amount
      */
     public LongValidator equal(long amount) {
