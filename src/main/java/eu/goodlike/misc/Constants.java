@@ -30,6 +30,16 @@ public final class Constants {
      */
     public static final int DEFAULT_VARCHAR_FIELD_SIZE = 180;
 
+    /**
+     * Default value for "page" parameter in RestController methods
+     */
+    public static final int DEFAULT_PAGE = 0;
+
+    /**
+     * Default value for "per_page" parameter in RestController methods
+     */
+    public static final int DEFAULT_PER_PAGE = 25;
+
     // PRIVATE
 
     private Constants() {
