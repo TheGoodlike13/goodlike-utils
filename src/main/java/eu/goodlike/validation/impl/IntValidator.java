@@ -98,6 +98,30 @@ public final class IntValidator extends Validate<Integer, IntValidator> {
         return this;
     }
 
+    /**
+     * <pre>
+     * Adds a predicate which tests if the integer can describe an hour of day
+     *
+     * This is equivalent to between(0, 23)
+     * </pre>
+     */
+    public IntValidator hourOfDay() {
+        registerCondition(i -> i >= 0 && i <= 23);
+        return this;
+    }
+
+    /**
+     * <pre>
+     * Adds a predicate which tests if the integer can describe a minute of hour
+     *
+     * This is equivalent to between(0, 59)
+     * </pre>
+     */
+    public IntValidator minuteOfHour() {
+        registerCondition(i -> i >= 0 && i <= 59);
+        return this;
+    }
+
     // CONSTRUCTORS
 
     public IntValidator(Integer object) {

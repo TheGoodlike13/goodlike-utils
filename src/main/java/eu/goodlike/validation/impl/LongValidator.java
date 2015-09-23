@@ -98,6 +98,30 @@ public final class LongValidator extends Validate<Long, LongValidator> {
         return this;
     }
 
+    /**
+     * <pre>
+     * Adds a predicate which tests if the long can describe an hour of day
+     *
+     * This is equivalent to between(0, 23)
+     * </pre>
+     */
+    public LongValidator hourOfDay() {
+        registerCondition(i -> i >= 0 && i <= 23);
+        return this;
+    }
+
+    /**
+     * <pre>
+     * Adds a predicate which tests if the long can describe a minute of hour
+     *
+     * This is equivalent to between(0, 59)
+     * </pre>
+     */
+    public LongValidator minuteOfHour() {
+        registerCondition(i -> i >= 0 && i <= 59);
+        return this;
+    }
+
     // CONSTRUCTORS
 
     public LongValidator(Long object) {
