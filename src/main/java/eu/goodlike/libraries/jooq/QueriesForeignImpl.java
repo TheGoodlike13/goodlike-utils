@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.jooq.impl.DSL.falseCondition;
+import static org.jooq.impl.DSL.trueCondition;
 
 public final class QueriesForeignImpl<ID> extends SQL implements QueriesForeign<ID> {
 
@@ -19,7 +20,7 @@ public final class QueriesForeignImpl<ID> extends SQL implements QueriesForeign<
         return sql.fetchExists(
                 sql.selectOne()
                         .from(tables())
-                        .where(condition(id)));
+                        .where(getUniversalCondition().orElse(trueCondition()).and(condition(id))));
     }
 
     // CONSTRUCTORS
@@ -47,7 +48,7 @@ public final class QueriesForeignImpl<ID> extends SQL implements QueriesForeign<
     private Condition condition(ID id) {
         return foreignKeys.stream()
                 .map(key -> key.eq(id))
-                .reduce(getUniversalCondition().orElse(falseCondition()), Condition::or);
+                .reduce(falseCondition(), Condition::or);
     }
 
 }
