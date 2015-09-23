@@ -18,9 +18,10 @@ import java.time.LocalDate;
  * no two adjacent ids will produce the same boolean value;
  *
  * Also, when using the same id across multiple methods, the results will have certain similarities, which can allow
- * to distinguish that the same id was used for all the fields, i.e. date() should end with the same day of month as
- * day(); name() and surname() will have similar suffixes, and so on; in general, this rule is MORE important than the
- * difference rule; i.e. date() and time() will produce as many different values as day() due to dependence
+ * to distinguish that the same id was used for all the fields, i.e. localDate() should end with the same day of month
+ * as day(); name() and surname() will have similar suffixes, and so on; in general, this rule is MORE important than
+ * the difference rule; i.e. localDate() and time() will produce only as many different values as day() due to
+ * their dependence
  *
  * Only non-negative ids are supported; negative ids may produce illegal objects, or violate the rules documented above
  * </pre>
