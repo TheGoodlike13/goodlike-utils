@@ -5,6 +5,21 @@ import java.util.Date;
 
 import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
+/**
+ * <pre>
+ * Mutable wrapper for java.time.Instant, which converts it to all possible forms
+ *
+ * The in-between conversions are lazily stored so that one could do multiple conversions in a row without
+ * unnecessary calculations; however, the class is NOT thread safe, so you should not cache it in a way that
+ * multiple threads can access it
+ *
+ * Notable specifics:
+ *      1) java.sql.Date is handled as a String representation of some date, in format 'yyyy-MM-dd' (i.e. 2015-09-23)
+ *      2) java.util.Date is handled as a timestamp, i.e. 1442994396115
+ *      3) All conversions use java.time.Instant as the base class; those formats that represent a date, i.e.
+ *          LocalDate are considered to have 00:00:00.000 time part, using the timezone given to this converter
+ * </pre>
+ */
 public final class TimeConverter implements DateConverter {
 
     public Instant toInstant() {

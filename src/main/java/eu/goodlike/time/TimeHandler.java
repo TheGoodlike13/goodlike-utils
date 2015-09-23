@@ -6,6 +6,23 @@ import java.time.*;
 
 import static java.time.temporal.ChronoUnit.MILLIS;
 
+/**
+ * <pre>
+ * Immutable wrapper for a ZoneId (represents a timezone) which can be used to convert one kind of time representation
+ * to another
+ *
+ *
+ * Notable specifics:
+ *      1) java.sql.Date is handled as a String representation of some date, in format 'yyyy-MM-dd' (i.e. 2015-09-23)
+ *      2) java.util.Date is handled as a timestamp, i.e. 1442994396115
+ *      3) All conversions use java.time.Instant as the base class; those formats that represent a date, i.e.
+ *          LocalDate are considered to have 00:00:00.000 time part, using the timezone of this handler
+ *
+ * All TimeConverter instances resulting from the methods will already have pre-evaluated all the in-between steps
+ * of the conversion; i.e. from(someInstant).toInstant() returns the same instant; from(localDate).toLocalDate() only
+ * calculates the appropriate Instant representation, but does not try to re-calculate the localDate back from it, etc
+ * </pre>
+ */
 public final class TimeHandler {
 
     /**
