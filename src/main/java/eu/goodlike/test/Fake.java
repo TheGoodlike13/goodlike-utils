@@ -1,8 +1,9 @@
 package eu.goodlike.test;
 
-import org.joda.time.LocalDate;
+import eu.goodlike.time.Time;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * <pre>
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
  * an e-mail will have a structure of an e-mail, rather than just a random String, but other than that they are
  * completely made up
  *
- * The values are all as different from each other as possible, that is, for every id value a different kind of
+ * The values are all as different from each other as it is meaningful, that is, for every id value a different kind of
  * result will be produced; if there are fewer values of expected object than id values, i.e. 31 days of month
  * and 2^63-1 of long values, then any set of adjacent ids will produce unique objects until the limit of expected
  * objects is reached, i.e. for any 31 adjacent ids, 31 different days of month will be produced; another example:
@@ -18,7 +19,8 @@ import java.math.BigDecimal;
  *
  * Also, when using the same id across multiple methods, the results will have certain similarities, which can allow
  * to distinguish that the same id was used for all the fields, i.e. date() should end with the same day of month as
- * day(); name() and surname() will have similar suffixes, and so on;
+ * day(); name() and surname() will have similar suffixes, and so on; in general, this rule is MORE important than the
+ * difference rule; i.e. date() and time() will produce as many different values as day() due to dependence
  *
  * Only non-negative ids are supported; negative ids may produce illegal objects, or violate the rules documented above
  * </pre>
@@ -123,7 +125,7 @@ public final class Fake {
     }
 
     public static long time(long id) {
-        return id * 1000000000;
+        return Time.atUTC().from(localDate(id)).toEpochMilli();
     }
 
     // PRIVATE

@@ -98,8 +98,7 @@ Very simple way to generate some random "fake" value for testing:
     
 also easy to use with Some.of()
     
-    Requires JodaTime (has Fake.date() method)
-    compile "joda-time:joda-time:2.8.2"
+    Does not need external libraries
     
 ## Validation
 
