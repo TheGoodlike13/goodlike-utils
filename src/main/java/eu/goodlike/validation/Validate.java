@@ -226,6 +226,10 @@ public abstract class Validate<T, V extends Validate<T, V>> {
 
     // CONSTRUCTORS
 
+    public static ObjectValidator Object(Object o) {
+        return new ObjectValidator(o);
+    }
+
     public static BooleanValidator Boolean(Boolean bool) {
         return new BooleanValidator(bool);
     }
