@@ -6,7 +6,7 @@ import java.util.Collection;
  * Constructs queries for many-to-many tables, where left and right are identifiers for the two connected
  * relationships
  */
-public interface QueriesMany<Left, Right> extends UniversalSql {
+public interface QueriesMany<Left, Right> {
 
     /**
      * @return true if a record with left value exists; false otherwise

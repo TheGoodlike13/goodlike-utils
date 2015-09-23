@@ -16,7 +16,7 @@ public final class QueriesImpl<R extends Record, ID> extends SQL implements Quer
     public <T> Optional<T> read(ID id, Function<? super R, T> mapper) {
         Null.check(id, mapper).ifAny("Primary key and mapper cannot be null");
         return sql.selectFrom(table)
-                .where(primary(id))
+                .where(getUniversalCondition().orElse(trueCondition()).and(primary(id)))
                 .fetch().stream().findAny()
                 .map(mapper);
     }
