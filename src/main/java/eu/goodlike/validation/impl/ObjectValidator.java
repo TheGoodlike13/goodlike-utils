@@ -19,7 +19,7 @@ import eu.goodlike.validation.Validate;
  *    object was created, if such a need arises;
  *
  * Validation works by chaining predicates one after another; for example:
- *      Validate.string(string).notNull().notEmpty().ifInvalid(...);
+ *      Validate.string(string).not().Null().not().empty().ifInvalid(...);
  *
  * The predicates are evaluated left to right, using normal boolean operator priority rules;
  * the default operator between two predicates is "and()";
