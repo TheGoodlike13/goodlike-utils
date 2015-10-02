@@ -11,7 +11,6 @@ import static java.time.temporal.ChronoUnit.MILLIS;
  * Immutable wrapper for a ZoneId (represents a timezone) which can be used to convert one kind of time representation
  * to another
  *
- *
  * Notable specifics:
  *      1) java.sql.Date is handled as a String representation of some date, in format 'yyyy-MM-dd' (i.e. 2015-09-23)
  *      2) java.util.Date is handled as a timestamp, i.e. 1442994396115

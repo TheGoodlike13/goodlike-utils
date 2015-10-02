@@ -1,4 +1,4 @@
-package eu.goodlike.libraries.mockmvc;
+package eu.goodlike.libraries.spring.mockmvc;
 
 /**
  * <pre>

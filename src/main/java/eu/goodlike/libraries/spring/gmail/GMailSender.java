@@ -1,4 +1,4 @@
-package eu.goodlike.gmail;
+package eu.goodlike.libraries.spring.gmail;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;

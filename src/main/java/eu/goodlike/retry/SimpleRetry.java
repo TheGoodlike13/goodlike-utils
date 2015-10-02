@@ -65,9 +65,9 @@ public final class SimpleRetry<T> {
         try {
             result = callableToRetry.call();
         } catch (Exception e) {
-            return Either.of(null, e);
+            return Either.ofSecondKind(e);
         }
-        return Either.of(result, null);
+        return Either.ofFirstKind(result);
     }
 
     private void executeFailureAction(Either<T, Exception> either) {

@@ -146,7 +146,7 @@ public abstract class Validate<T, V extends Validate<T, V>> {
      * predicate1 is evaluated first, and if it is false, the brackets no longer get evaluated
      *
      * You can consider the brackets a single, large predicate in of itself, which follows the same rules as all
-     * other predicates;
+     * other predicates
      * </pre>
      */
     public final V test() {

@@ -1,4 +1,4 @@
-package eu.goodlike.libraries.jodatime;
+package eu.goodlike.libraries.joda.time;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

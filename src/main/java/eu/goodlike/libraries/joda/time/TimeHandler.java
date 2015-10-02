@@ -1,4 +1,4 @@
-package eu.goodlike.libraries.jodatime;
+package eu.goodlike.libraries.joda.time;
 
 import org.joda.time.*;
 

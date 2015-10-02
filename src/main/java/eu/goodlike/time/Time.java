@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
  * It seems that with the release of Java 8, joda time will no longer be updated a lot, thus I've decided to
  * move to the new standard as well
  *
- * The methods should be very similar to the ones in eu.goodlike.libraries.jodatime.* classes
+ * The methods should be very similar to the ones in eu.goodlike.libraries.joda.time.* classes
  * </pre>
  */
 public final class Time {

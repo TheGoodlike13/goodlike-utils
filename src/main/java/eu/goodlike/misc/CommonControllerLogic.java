@@ -7,6 +7,9 @@ import java.util.function.Function;
 import static eu.goodlike.misc.Constants.DEFAULT_PAGE;
 import static eu.goodlike.misc.Constants.DEFAULT_PER_PAGE;
 
+/**
+ * Basic validation methods, which apply to most controllers I use; they can be overwritten for special cases
+ */
 public interface CommonControllerLogic {
 
     default <T extends Throwable> void validateId(String source, long id, Function<String, T> exceptionSupplier) throws T {

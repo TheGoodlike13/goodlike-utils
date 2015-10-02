@@ -129,7 +129,7 @@ public final class RetryBuilder<T> implements TimesStep<T>, TimeoutStep<T>, Time
 
     @Override
     public FailureConditionStep<T> of(TimeUnit unit) {
-        Null.check(unit).ifAny("Null TimeUnits not allowed");
+        Null.check(unit).ifAny("Null timeUnits not allowed");
         this.timeoutUnit = unit;
         return this;
     }
@@ -141,7 +141,7 @@ public final class RetryBuilder<T> implements TimesStep<T>, TimeoutStep<T>, Time
 
     @Override
     public FailureActionStep<T> failWhen(Predicate<T> failCondition) {
-        Null.check(failCondition).ifAny("Null Predicates not allowed");
+        Null.check(failCondition).ifAny("Null predicates not allowed");
         this.failureCondition = this.failureCondition == null
                 ? failCondition
                 : this.failureCondition.or(failCondition);
@@ -160,7 +160,7 @@ public final class RetryBuilder<T> implements TimesStep<T>, TimeoutStep<T>, Time
 
     @Override
     public PerformStep<T> onFail(Consumer<Either<T, Exception>> failAction) {
-        Null.check(failAction).ifAny("Null Consumers not allowed");
+        Null.check(failAction).ifAny("Null consumers not allowed");
         this.failureAction = this.failureAction == null
                 ? failAction
                 : this.failureAction.andThen(failAction);
@@ -169,19 +169,19 @@ public final class RetryBuilder<T> implements TimesStep<T>, TimeoutStep<T>, Time
 
     @Override
     public PerformStep<T> onError(Consumer<Exception> exceptionAction) {
-        Null.check(exceptionAction).ifAny("Null Consumers not allowed");
+        Null.check(exceptionAction).ifAny("Null consumers not allowed");
         return onFail(either -> either.ifSecondKind(exceptionAction));
     }
 
     @Override
     public PerformStep<T> onNull(Action nullAction) {
-        Null.check(nullAction).ifAny("Null Actions not allowed");
+        Null.check(nullAction).ifAny("Null actions not allowed");
         return onFail(either -> either.ifNeitherKind(nullAction));
     }
 
     @Override
     public PerformStep<T> onInvalid(Consumer<T> invalidAction) {
-        Null.check(invalidAction).ifAny("Null Consumers not allowed");
+        Null.check(invalidAction).ifAny("Null consumers not allowed");
         return onFail(either -> either.ifFirstKind(invalidAction));
     }
 

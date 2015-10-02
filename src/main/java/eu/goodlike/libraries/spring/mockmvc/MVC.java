@@ -1,4 +1,4 @@
-package eu.goodlike.libraries.mockmvc;
+package eu.goodlike.libraries.spring.mockmvc;
 
 import eu.goodlike.libraries.jackson.Json;
 import eu.goodlike.libraries.jackson.JsonDeserializerOfObject;
