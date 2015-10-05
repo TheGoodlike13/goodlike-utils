@@ -1,7 +1,7 @@
 package eu.goodlike.retry.steps;
 
 import eu.goodlike.functional.Action;
-import eu.goodlike.neat.Either;
+import eu.goodlike.functional.Either;
 
 import java.util.function.Consumer;
 

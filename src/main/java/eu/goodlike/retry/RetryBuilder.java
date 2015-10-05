@@ -1,7 +1,7 @@
 package eu.goodlike.retry;
 
 import eu.goodlike.functional.Action;
-import eu.goodlike.neat.Either;
+import eu.goodlike.functional.Either;
 import eu.goodlike.neat.Null;
 import eu.goodlike.retry.steps.*;
 

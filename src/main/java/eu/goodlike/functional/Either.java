@@ -1,6 +1,6 @@
-package eu.goodlike.neat;
+package eu.goodlike.functional;
 
-import eu.goodlike.functional.Action;
+import eu.goodlike.neat.Null;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;

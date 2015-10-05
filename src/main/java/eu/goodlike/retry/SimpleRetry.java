@@ -1,6 +1,6 @@
 package eu.goodlike.retry;
 
-import eu.goodlike.neat.Either;
+import eu.goodlike.functional.Either;
 
 import java.util.Optional;
 import java.util.concurrent.Callable;
