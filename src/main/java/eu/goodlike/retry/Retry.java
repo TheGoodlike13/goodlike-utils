@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 
 /**
  * <pre>
- * Allows customized retrying of a Callable (a Supplier which throws an exception)
+ * Allows customized retrying of a Callable (a Supplier which throws an exception, intended for threaded consumption)
  *
  * Supports:
  *      maximum attempts to retry
