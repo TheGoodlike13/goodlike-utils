@@ -19,7 +19,7 @@ public final class Either<T1, T2> {
 
     /**
      * @return value of first kind if this Either is of first kind
-     * @throws NoSuchElementException if this Either is of second kind
+     * @throws NoSuchElementException if this Either is of second or neither kind
      */
     public T1 getFirstKind() {
         return firstKind.get();
@@ -27,21 +27,21 @@ public final class Either<T1, T2> {
 
     /**
      * @return value of second kind if this Either is of second kind
-     * @throws NoSuchElementException if this Either is of first kind
+     * @throws NoSuchElementException if this Either is of first or neither kind
      */
     public T2 getSecondKind() {
         return secondKind.get();
     }
 
     /**
-     * @return optional value of first kind if this Either is of first kind
+     * @return optional value of first kind of this Either
      */
     public Optional<T1> getFirstOptional() {
         return firstKind;
     }
 
     /**
-     * @return optional value of second kind if this Either is of second kind
+     * @return optional value of second kind of this Either
      */
     public Optional<T2> getSecondOptional() {
         return secondKind;
