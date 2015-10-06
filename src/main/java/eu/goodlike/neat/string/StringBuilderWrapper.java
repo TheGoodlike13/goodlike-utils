@@ -171,11 +171,11 @@ public final class StringBuilderWrapper {
 
     // CONSTRUCTORS
 
-    StringBuilderWrapper() {
+    public StringBuilderWrapper() {
         this(new StringBuilder());
     }
 
-    StringBuilderWrapper(StringBuilder builder) {
+    public StringBuilderWrapper(StringBuilder builder) {
         this.builder = builder;
     }
 
