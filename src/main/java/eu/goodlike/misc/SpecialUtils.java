@@ -1,6 +1,8 @@
 package eu.goodlike.misc;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 
 /**
  * <pre>
@@ -46,6 +48,18 @@ public final class SpecialUtils {
                         : i2 == null
                                 ? -1
                                 : Integer.compare(i1, i2);
+    }
+
+    /**
+     * @return URL encoded string representation of an object; String.valueOf() is used to convert
+     * @throws IllegalStateException if UTF-8 is not supported somehow
+     */
+    public static String urlEncode(Object value) {
+        try {
+            return URLEncoder.encode(String.valueOf(value), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Please add support for UTF-8!", e);
+        }
     }
 
     // PRIVATE
