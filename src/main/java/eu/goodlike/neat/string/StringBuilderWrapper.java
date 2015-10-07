@@ -161,7 +161,7 @@ public final class StringBuilderWrapper {
     }
 
     /**
-     * This is a terminal operation, in case you are done appending
+     * This is a terminal operation, for when you are done appending
      * @return string of the wrapped builder
      */
     @Override
