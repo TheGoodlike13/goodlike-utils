@@ -40,6 +40,11 @@ public final class Constants {
      */
     public static final int DEFAULT_PER_PAGE = 25;
 
+    /**
+     * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
+     */
+    public static final String DEFAULT_CHARSET = "UTF-8";
+
     // PRIVATE
 
     private Constants() {
