@@ -68,7 +68,7 @@ public abstract class SQL {
 
     // PROTECTED
 
-    protected  <T> Condition condition(Collection<T> values, TableField<?, T> field) {
+    protected <T> Condition condition(Collection<T> values, TableField<?, T> field) {
         return values.stream()
                 .map(field::eq)
                 .reduce(getUniversalCondition().orElse(falseCondition()), Condition::or);
