@@ -10,6 +10,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommonControllerLogicTest {
 
+    @Before
+    public void setup() {
+        testLogic = new CommonControllerLogic() {};
+        source = "test";
+        exceptionSupplier = RuntimeException::new;
+    }
+
     @Test
     public void tryPositiveId_shouldPass() {
         testLogic.validateId(source, 1, exceptionSupplier);
@@ -98,13 +105,6 @@ public class CommonControllerLogicTest {
     }
 
     // PRIVATE
-
-    @Before
-    public void setup() {
-        testLogic = new CommonControllerLogic() {};
-        source = "test";
-        exceptionSupplier = RuntimeException::new;
-    }
 
     private CommonControllerLogic testLogic;
     private String source;
