@@ -60,7 +60,7 @@ public final class IntSampler<T> {
      * @return list of int function results, evaluated for all i in {startInclusive, endExclusive}
      */
     public List<T> rangeClosed(int startInclusive, int endInclusive) {
-        return evaluate(IntStream.range(startInclusive, endInclusive));
+        return evaluate(IntStream.rangeClosed(startInclusive, endInclusive));
     }
 
     /**
@@ -102,7 +102,7 @@ public final class IntSampler<T> {
      * @return stream of int function results, evaluated for all i in {startInclusive, endExclusive}
      */
     public Stream<T> rangeStreamClosed(int startInclusive, int endInclusive) {
-        return map(IntStream.range(startInclusive, endInclusive));
+        return map(IntStream.rangeClosed(startInclusive, endInclusive));
     }
 
     /**

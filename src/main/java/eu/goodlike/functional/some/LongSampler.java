@@ -60,7 +60,7 @@ public final class LongSampler<T> {
      * @return list of long function results, evaluated for all i in {startInclusive, endExclusive}
      */
     public List<T> rangeClosed(long startInclusive, long endInclusive) {
-        return evaluate(LongStream.range(startInclusive, endInclusive));
+        return evaluate(LongStream.rangeClosed(startInclusive, endInclusive));
     }
 
     /**
@@ -102,7 +102,7 @@ public final class LongSampler<T> {
      * @return stream of long function results, evaluated for all i in {startInclusive, endExclusive}
      */
     public Stream<T> rangeStreamClosed(long startInclusive, long endInclusive) {
-        return map(LongStream.range(startInclusive, endInclusive));
+        return map(LongStream.rangeClosed(startInclusive, endInclusive));
     }
 
     /**
