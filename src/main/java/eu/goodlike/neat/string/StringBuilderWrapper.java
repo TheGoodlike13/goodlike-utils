@@ -3,6 +3,7 @@ package eu.goodlike.neat.string;
 import eu.goodlike.neat.Null;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -182,5 +183,20 @@ public final class StringBuilderWrapper {
     // PRIVATE
 
     private final StringBuilder builder;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StringBuilderWrapper)) return false;
+        StringBuilderWrapper that = (StringBuilderWrapper) o;
+        return Objects.equals(builder, that.builder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(builder);
+    }
 
 }
