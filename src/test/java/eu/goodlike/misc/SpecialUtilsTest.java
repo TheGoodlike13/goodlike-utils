@@ -80,4 +80,17 @@ public class SpecialUtilsTest {
         assertThat(SpecialUtils.urlEncode(string)).isEqualTo(URLEncoder.encode(string, Constants.DEFAULT_CHARSET));
     }
 
+    @Test
+    public void tryEqualsOnTwoDifferentScaleEqualBigDecimalsUsingScaleless_shouldBeEqual() {
+        BigDecimal big1 = ONE;
+        BigDecimal big2 = ONE.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
+        assertThat(SpecialUtils.equals(big1, big2, Scaleless::bigDecimal)).isTrue();
+    }
+
+    @Test
+    public void tryEqualsOnTwoDifferentStringBuildersFromSameString_shouldBeEqual() {
+        String any = "test";
+        assertThat(SpecialUtils.equals(new StringBuilder(any), new StringBuilder(any), StringBuilder::toString)).isTrue();
+    }
+
 }
