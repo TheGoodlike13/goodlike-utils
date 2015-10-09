@@ -3,6 +3,7 @@ package eu.goodlike.misc;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.function.Function;
 
 /**
  * <pre>
@@ -58,6 +59,21 @@ public final class SpecialUtils {
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException("Please add support for " + Constants.DEFAULT_CHARSET, e);
         }
+    }
+
+    /**
+     * <pre>
+     * This method is useful when both of the objects are nullable, but you cannot compare them directly:
+     *      1) equals(bigDecimal1, bigDecimal2, Scaleless::bigDecimal)
+     *      2) equals(stringBuilder1, stringBuilder2, StringBuilder::toString)
+     * and similar; don't forget to adjust the hashCode with a null check, though!
+     *      1) Scaleless.bigDecimal(bigDecimal) // Scaleless already handles nulls
+     *      2) stringBuilder == null ? null : stringBuilder.toString()
+     * </pre>
+     * @return true if objects are equal given a certain transformation, false otherwise
+     */
+    public static <T, U> boolean equals(T t1, T t2, Function<T, U> converter) {
+        return t1 == null ? t2 == null : converter.apply(t1).equals(converter.apply(t2));
     }
 
     // PRIVATE

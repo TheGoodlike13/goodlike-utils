@@ -1,5 +1,6 @@
 package eu.goodlike.neat.string;
 
+import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.neat.Null;
 
 import java.util.Collection;
@@ -191,12 +192,12 @@ public final class StringBuilderWrapper {
         if (this == o) return true;
         if (!(o instanceof StringBuilderWrapper)) return false;
         StringBuilderWrapper that = (StringBuilderWrapper) o;
-        return Objects.equals(builder, that.builder);
+        return SpecialUtils.equals(builder, that.builder, StringBuilder::toString);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(builder);
+        return Objects.hash(builder == null ? null : builder.toString());
     }
 
 }
