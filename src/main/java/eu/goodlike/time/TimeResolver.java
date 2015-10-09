@@ -1,7 +1,10 @@
 package eu.goodlike.time;
 
+import com.google.common.base.MoreObjects;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Objects;
 
 /**
  * <pre>
@@ -110,5 +113,29 @@ public final class TimeResolver {
 
     private final long startTime;
     private final long endTime;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("startTime", startTime)
+                .add("endTime", endTime)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeResolver)) return false;
+        TimeResolver that = (TimeResolver) o;
+        return Objects.equals(startTime, that.startTime) &&
+                Objects.equals(endTime, that.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startTime, endTime);
+    }
 
 }
