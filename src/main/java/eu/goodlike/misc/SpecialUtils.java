@@ -44,10 +44,8 @@ public final class SpecialUtils {
      */
     public static int compareNullableIntegers(Integer i1, Integer i2) {
         return i1 == null
-                        ? 1
-                        : i2 == null
-                                ? -1
-                                : Integer.compare(i1, i2);
+                        ? i2 == null ? 0 : 1
+                        : i2 == null ? -1 : Integer.compare(i1, i2);
     }
 
     /**
