@@ -50,13 +50,13 @@ public final class SpecialUtils {
 
     /**
      * @return URL encoded string representation of an object; String.valueOf() is used to convert
-     * @throws IllegalStateException if UTF-8 is not supported somehow
+     * @throws IllegalStateException if DEFAULT_CHARSET is not supported
      */
     public static String urlEncode(Object value) {
         try {
-            return URLEncoder.encode(String.valueOf(value), "UTF-8");
+            return URLEncoder.encode(String.valueOf(value), Constants.DEFAULT_CHARSET);
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("Please add support for UTF-8!", e);
+            throw new IllegalStateException("Please add support for " + Constants.DEFAULT_CHARSET, e);
         }
     }
 
