@@ -63,10 +63,13 @@ public interface CommonControllerLogic {
         return per_page;
     }
 
-    default <T extends Throwable> TimeResolver validateTime(String timeZone, String startDate, String endDate,
+    /**
+     * Uses start and end if they are given, otherwise resolves the time from timezone, startDate and endDate
+     */
+    default <T extends Throwable> TimeResolver validateTime(String timezone, String startDate, String endDate,
                                                             Long start, Long end,
                                                             Function<String, T> exceptionSupplier) throws T {
-        TimeResolver timeResolver = TimeResolver.from(timeZone, startDate, endDate, start, end);
+        TimeResolver timeResolver = TimeResolver.from(timezone, startDate, endDate, start, end);
         start = timeResolver.getStartTime();
         end = timeResolver.getEndTime();
 
