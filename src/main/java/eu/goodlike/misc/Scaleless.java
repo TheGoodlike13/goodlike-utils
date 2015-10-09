@@ -33,5 +33,4 @@ public final class Scaleless {
 
     private final BigDecimal bigDecimal;
 
-
 }
