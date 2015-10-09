@@ -1,5 +1,6 @@
 package eu.goodlike.misc;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -12,30 +13,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecialUtilsTest {
 
+    @Before
+    public void setup() {
+        big1 = ONE;
+    }
+
     @Test
     public void tryTwoEqualBigDecimals_shouldBeEqual() {
-        BigDecimal big = ONE;
-        assertThat(SpecialUtils.equalsJavaMathBigDecimal(big, big)).isTrue();
+        assertThat(SpecialUtils.equalsJavaMathBigDecimal(big1, big1)).isTrue();
     }
 
     @Test
     public void tryTwoNotEqualBigDecimals_shouldNotBeEqual() {
-        BigDecimal big1 = ONE;
-        BigDecimal big2 = ONE.add(ONE);
+        BigDecimal big2 = big1.add(ONE);
         assertThat(SpecialUtils.equalsJavaMathBigDecimal(big1, big2)).isFalse();
     }
 
     @Test
     public void tryTwoEqualWhenSameScaleBigDecimals_shouldBeEqual() {
-        BigDecimal big1 = ONE;
-        BigDecimal big2 = ONE.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
+        BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
         assertThat(SpecialUtils.equalsJavaMathBigDecimal(big1, big2)).isTrue();
     }
 
     @Test
     public void tryTwoEqualWhenSameScaleBigDecimals_shouldGiveSameHashCode() {
-        BigDecimal big1 = ONE;
-        BigDecimal big2 = ONE.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
+        BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
         assertThat(SpecialUtils.bigDecimalCustomHashCode(big1)).isEqualTo(SpecialUtils.bigDecimalCustomHashCode(big2));
     }
 
@@ -82,8 +84,7 @@ public class SpecialUtilsTest {
 
     @Test
     public void tryEqualsOnTwoDifferentScaleEqualBigDecimalsUsingScaleless_shouldBeEqual() {
-        BigDecimal big1 = ONE;
-        BigDecimal big2 = ONE.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
+        BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
         assertThat(SpecialUtils.equals(big1, big2, Scaleless::bigDecimal)).isTrue();
     }
 
@@ -92,5 +93,9 @@ public class SpecialUtilsTest {
         String any = "test";
         assertThat(SpecialUtils.equals(new StringBuilder(any), new StringBuilder(any), StringBuilder::toString)).isTrue();
     }
+
+    // PRIVATE
+
+    private BigDecimal big1;
 
 }
