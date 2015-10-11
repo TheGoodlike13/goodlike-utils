@@ -227,9 +227,7 @@ public final class Either<T1, T2> {
      */
     public <U> Optional<U> flatMapFirstKindInto(Function<? super T1, Optional<U>> mapper) {
         Null.check(mapper).ifAny("Null mappers not allowed");
-        return isFirstKind()
-                ? mapper.apply(firstKind.get())
-                : Optional.empty();
+        return firstKind.flatMap(mapper);
     }
 
     /**
@@ -237,9 +235,7 @@ public final class Either<T1, T2> {
      */
     public <U> Optional<U> flatMapSecondKindInto(Function<? super T2, Optional<U>> mapper) {
         Null.check(mapper).ifAny("Null mappers not allowed");
-        return isSecondKind()
-                ? mapper.apply(secondKind.get())
-                : Optional.empty();
+        return secondKind.flatMap(mapper);
     }
 
     /**
@@ -250,6 +246,17 @@ public final class Either<T1, T2> {
         return isFirstKind()
                 ? mapper.apply(firstKind.get(), null)
                 : isSecondKind() ? mapper.apply(null, secondKind.get()) : Optional.empty();
+    }
+
+    /**
+     * @return similar to mapInto(), except that the Functions should return an Optional (to avoid Optional of Optional)
+     */
+    public <U> Optional<U> flatMapInto(Function<? super T1, Optional<U>> mapper1,
+                                       Function<? super T2, Optional<U>> mapper2) {
+        Null.check(mapper1, mapper2).ifAny("Null mappers not allowed");
+        return isFirstKind()
+                ? firstKind.flatMap(mapper1)
+                : secondKind.flatMap(mapper2);
     }
 
     /**
