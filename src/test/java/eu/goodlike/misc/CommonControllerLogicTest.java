@@ -1,7 +1,6 @@
 package eu.goodlike.misc;
 
 import eu.goodlike.time.TimeResolver;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -10,12 +9,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommonControllerLogicTest {
 
-    @Before
-    public void setup() {
-        testLogic = new CommonControllerLogic() {};
-        source = "test";
-        exceptionSupplier = RuntimeException::new;
-    }
+    private final CommonControllerLogic testLogic = new CommonControllerLogic() {};
+    private final String source = "test";
+    private final Function<String, RuntimeException> exceptionSupplier = RuntimeException::new;
 
     @Test
     public void tryPositiveId_shouldPass() {
@@ -103,11 +99,5 @@ public class CommonControllerLogicTest {
         long end = -1;
         testLogic.validateTime(null, null, null, start, end, exceptionSupplier);
     }
-
-    // PRIVATE
-
-    private CommonControllerLogic testLogic;
-    private String source;
-    private Function<String, RuntimeException> exceptionSupplier;
 
 }

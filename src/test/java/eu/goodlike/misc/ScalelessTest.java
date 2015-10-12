@@ -1,6 +1,5 @@
 package eu.goodlike.misc;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -11,10 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ScalelessTest {
 
-    @Before
-    public void setup() {
-        big1 = ONE;
-    }
+    private final BigDecimal big1 = ONE;
 
     @Test
     public void tryTwoEqualBigDecimals_shouldBeEqual() {
@@ -43,9 +39,5 @@ public class ScalelessTest {
         BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
         assertThat(Scaleless.bigDecimal(big1).hashCode()).isEqualTo(Scaleless.bigDecimal(big2).hashCode());
     }
-
-    // PRIVATE
-
-    private BigDecimal big1;
 
 }

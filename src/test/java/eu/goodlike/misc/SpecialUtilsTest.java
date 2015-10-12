@@ -1,6 +1,5 @@
 package eu.goodlike.misc;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -13,10 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SpecialUtilsTest {
 
-    @Before
-    public void setup() {
-        big1 = ONE;
-    }
+    private final BigDecimal big1 = ONE;
 
     @Test
     public void tryTwoEqualBigDecimals_shouldBeEqual() {
@@ -93,9 +89,5 @@ public class SpecialUtilsTest {
         String any = "test";
         assertThat(SpecialUtils.equals(new StringBuilder(any), new StringBuilder(any), StringBuilder::toString)).isTrue();
     }
-
-    // PRIVATE
-
-    private BigDecimal big1;
 
 }
