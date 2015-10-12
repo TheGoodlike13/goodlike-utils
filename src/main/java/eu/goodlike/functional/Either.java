@@ -209,7 +209,7 @@ public final class Either<T1, T2> {
     }
 
     /**
-     * @return Optional of this Either's value, mapped using mapper; mapper MUST expect one of the values to be null!
+     * @return Optional of this Either's value, mapped using mapper; mapper MUST expect values to be null!
      * @throws NullPointerException if mapper is null
      */
     public <U> Optional<U> mapInto(BiFunction<? super T1, ? super T2, ? extends U> mapper) {
