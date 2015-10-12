@@ -62,10 +62,17 @@ public final class Either<T1, T2> {
     }
 
     /**
+     * @return true if this Either is of first or second kind
+     */
+    public boolean isEitherKind() {
+        return isFirstKind() || isSecondKind();
+    }
+
+    /**
      * @return true if this Either is of neither kind
      */
     public boolean isNeitherKind() {
-        return !isFirstKind() && !isSecondKind();
+        return !isEitherKind();
     }
 
     /**
