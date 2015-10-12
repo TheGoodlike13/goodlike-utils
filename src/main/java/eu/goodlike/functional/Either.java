@@ -329,6 +329,10 @@ public final class Either<T1, T2> {
         return empty;
     }
 
+    public static <T1, T2> Either<T1, T2> ofNeitherKind() {
+        return neither();
+    }
+
     public static <T1, T2> Either<T1, T2> ofFirstKind(T1 t) {
         return ofFirstKind(Optional.ofNullable(t));
     }
