@@ -136,8 +136,7 @@ public final class LongSampler<T> {
     }
 
     private Stream<T> map(LongStream stream) {
-        return stream
-                .mapToObj(anyFunction);
+        return stream.mapToObj(anyFunction);
     }
 
     private List<T> toList(Stream<T> stream) {

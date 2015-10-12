@@ -78,8 +78,7 @@ public final class ObjectSampler<T, U> {
     private final Function<T, U> anyFunction;
 
     private Stream<U> map(Stream<T> stream) {
-        return stream
-                .map(anyFunction);
+        return stream.map(anyFunction);
     }
 
     private List<U> toList(Stream<U> stream) {

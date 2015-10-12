@@ -136,8 +136,7 @@ public final class IntSampler<T> {
     }
 
     private Stream<T> map(IntStream stream) {
-        return stream
-                .mapToObj(anyFunction);
+        return stream.mapToObj(anyFunction);
     }
 
     private List<T> toList(Stream<T> stream) {
