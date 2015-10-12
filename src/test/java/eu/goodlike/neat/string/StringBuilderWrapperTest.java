@@ -4,19 +4,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringBuilderWrapperTest {
 
+    private final String o1 = "test";
+    private final int o2 = 1;
+    private final List<Integer> collection = Arrays.asList(1, 2, 3);
+
+    private StringBuilderWrapper stringBuilderWrapper;
+
     @Before
     public void setup() {
         stringBuilderWrapper = new StringBuilderWrapper();
-        o1 = "test";
-        o2 = 1;
-        collection = Arrays.asList(1, 2, 3);
     }
 
     @Test
@@ -164,12 +167,5 @@ public class StringBuilderWrapperTest {
         assertThat(stringBuilderWrapper.andSomeIf(false, collection, (builder, obj) -> builder.append(obj).append(obj)))
                 .isEqualTo(new StringBuilderWrapper());
     }
-
-    // PRIVATE
-
-    private StringBuilderWrapper stringBuilderWrapper;
-    private Object o1;
-    private Object o2;
-    private Collection<Integer> collection;
 
 }

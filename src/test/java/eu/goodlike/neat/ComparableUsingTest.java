@@ -1,16 +1,12 @@
 package eu.goodlike.neat;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ComparableUsingTest {
 
-    @Before
-    public void setup() {
-        zero = i -> Integer.compare(0, i);
-    }
+    private final ComparableUsing<Integer> zero = i -> Integer.compare(0, i);
 
     @Test
     public void tryAtLeast0_shouldBeTrue() {
@@ -86,9 +82,5 @@ public class ComparableUsingTest {
     public void tryMoreThanMinus1_shouldBeTrue() {
         assertThat(zero.isMoreThan(-1)).isTrue();
     }
-
-    // PRIVATE
-
-    private ComparableUsing<Integer> zero;
 
 }

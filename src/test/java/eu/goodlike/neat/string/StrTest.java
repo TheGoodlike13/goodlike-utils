@@ -1,17 +1,13 @@
 package eu.goodlike.neat.string;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StrTest {
 
-    @Before
-    public void setup() {
-        o1 = "test";
-        o2 = 1;
-    }
+    private final String o1 = "test";
+    private final int o2 = 1;
 
     @Test
     public void tryNoArgs_shouldBeEqualToNoArgsConstructor() {
@@ -30,10 +26,5 @@ public class StrTest {
         StringBuilder builder2 = new StringBuilder(builder1).append(o1).append(o2);
         assertThat(Str.of(builder1, o1, o2)).isEqualTo(new StringBuilderWrapper(builder2));
     }
-
-    // PRIVATE
-
-    private Object o1;
-    private Object o2;
 
 }
