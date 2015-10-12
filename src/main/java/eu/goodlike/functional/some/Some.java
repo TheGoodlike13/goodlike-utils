@@ -1,6 +1,5 @@
 package eu.goodlike.functional.some;
 
-import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
 
@@ -34,13 +33,6 @@ public final class Some {
      */
     public static <T> LongSampler<T> ofLong(LongFunction<T> anyFunction) {
         return new LongSampler<>(anyFunction);
-    }
-
-    /**
-     * @return sampler for any function
-     */
-    public static <T, U> ObjectSampler<T, U> valuesOf(Function<T, U> anyFunction) {
-        return new ObjectSampler<>(anyFunction);
     }
 
     // PRIVATE
