@@ -1,9 +1,11 @@
 package eu.goodlike.functional.some;
 
+import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.neat.Null;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -124,6 +126,7 @@ public final class IntSampler<T> {
     // CONSTRUCTORS
 
     public IntSampler(IntFunction<T> anyFunction) {
+        Null.check(anyFunction).ifAny("Integer function cannot be null");
         this.anyFunction = anyFunction;
     }
 
@@ -141,6 +144,21 @@ public final class IntSampler<T> {
 
     private List<T> toList(Stream<T> stream) {
         return stream.collect(Collectors.toList());
+    }
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IntSampler)) return false;
+        IntSampler<?> that = (IntSampler<?>) o;
+        return SpecialUtils.equals(anyFunction, that.anyFunction, f -> f.apply(1));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(anyFunction.apply(1));
     }
 
 }
