@@ -215,13 +215,7 @@ public abstract class Validate<T, V extends Validate<T, V>> {
             return;
         }
 
-        if (!subConditions.isEmpty())
-            updateMainCondition();
-
-        if (condition == null)
-            throw new IllegalStateException("You must have at least one condition to validate something!");
-
-        if (!condition.test(object))
+        if (isInvalid())
             throw exceptionSupplier.get();
     }
 
@@ -240,14 +234,40 @@ public abstract class Validate<T, V extends Validate<T, V>> {
             return;
         }
 
+        if (isInvalid())
+            invalidAction.doIt();
+    }
+
+    /**
+     * This method CAN throw exceptions or execute arbitrary actions if the predicates passed to the validator
+     * allow such things; in general, prefer to simply test validity
+     * @return predicate, which will return true for valid objects and false for invalid objects
+     * @throws IllegalStateException if there are no predicates to validate, i.e. validate(string).toPredicate()
+     */
+    public final Predicate<T> toPredicate() {
+        if (outerValidator != null)
+            return testEnd().toPredicate();
+
         if (!subConditions.isEmpty())
             updateMainCondition();
 
         if (condition == null)
             throw new IllegalStateException("You must have at least one condition to validate something!");
 
-        if (!condition.test(object))
-            invalidAction.doIt();
+        return condition;
+    }
+
+    /**
+     * This method CAN throw exceptions or execute arbitrary actions if the predicates passed to the validator
+     * allow such things; in general, prefer to simply test validity
+     * @return true if object is invalid, false otherwise
+     * @throws IllegalStateException if there are no predicates to validate, i.e. validate(string).isInvalid()
+     */
+    public final boolean isInvalid() {
+        if (outerValidator != null)
+            return testEnd().isInvalid();
+
+        return !toPredicate().test(object);
     }
 
     // CONSTRUCTORS
