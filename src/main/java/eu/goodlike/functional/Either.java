@@ -79,38 +79,39 @@ public final class Either<T1, T2> {
      * Invokes the consumer if this Either is of first kind, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public void ifFirstKind(Consumer<? super T1> consumer) {
+    public Either<T1, T2> ifFirstKind(Consumer<? super T1> consumer) {
         Null.check(consumer).ifAny("Null consumers not allowed");
         firstKind.ifPresent(consumer);
+        return this;
     }
 
     /**
      * Invokes the consumer if this Either is of second kind, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public void ifSecondKind(Consumer<? super T2> consumer) {
+    public Either<T1, T2> ifSecondKind(Consumer<? super T2> consumer) {
         Null.check(consumer).ifAny("Null consumers not allowed");
         secondKind.ifPresent(consumer);
+        return this;
     }
 
     /**
      * Invokes the first consumer if this Either is of first kind, and the second consumer if it is of second kind
      * @throws NullPointerException if any of the consumers are null
      */
-    public void ifEitherKind(Consumer<? super T1> consumer1, Consumer<? super T2> consumer2) {
-        Null.check(consumer1, consumer2).ifAny("Null consumers not allowed");
-        ifFirstKind(consumer1);
-        ifSecondKind(consumer2);
+    public Either<T1, T2> ifEitherKind(Consumer<? super T1> consumer1, Consumer<? super T2> consumer2) {
+        return ifFirstKind(consumer1).ifSecondKind(consumer2);
     }
 
     /**
      * Invokes an action if this Either is of neither kind, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public void ifNeitherKind(Action action) {
+    public Either<T1, T2> ifNeitherKind(Action action) {
         Null.check(action).ifAny("Null actions not allowed");
         if (isNeitherKind())
             action.doIt();
+        return this;
     }
 
     /**
