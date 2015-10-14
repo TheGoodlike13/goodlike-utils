@@ -2,10 +2,11 @@ package eu.goodlike.resty.misc;
 
 import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.neat.Null;
-import eu.goodlike.validation.Validate;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
 
 /**
  * Represents a parameter, as part of query string or response body; mostly used in varargs methods
@@ -79,7 +80,7 @@ public final class Param {
      */
     public Param(String name, Object value) {
         Null.check(name).ifAny("Param name cannot be null");
-        Validate.string(name).not().blank().ifInvalid(Param::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalid(name, Param::emptyNameMessage);
         this.name = name;
         this.value = value == null ? null : SpecialUtils.urlEncode(value);
     }

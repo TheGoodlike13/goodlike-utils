@@ -1,9 +1,10 @@
 package eu.goodlike.resty.misc;
 
 import eu.goodlike.neat.Null;
-import eu.goodlike.validation.Validate;
 
 import java.util.Objects;
+
+import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
 
 /**
  * Represents an HTTP header (for both response and request); used in varargs methods
@@ -51,7 +52,7 @@ public final class Header {
      */
     public Header(String name, String value) {
         Null.check(name, value).ifAny("Header name and value cannot be null");
-        Validate.string(name).not().blank().ifInvalid(this::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalid(name, Header::emptyNameMessage);
         this.name = name;
         this.value = value;
     }
@@ -61,7 +62,7 @@ public final class Header {
     private final String name;
     private final String value;
 
-    private IllegalArgumentException emptyNameMessage() {
+    private static IllegalArgumentException emptyNameMessage() {
         return new IllegalArgumentException("Header name cannot be blank");
     }
 

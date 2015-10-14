@@ -1,5 +1,9 @@
 package eu.goodlike.misc;
 
+import eu.goodlike.v2.validate.impl.StringValidator;
+
+import static eu.goodlike.v2.validate.Validate.string;
+
 /**
  * <pre>
  * Contains various constants, without association to any particular subject
@@ -44,6 +48,11 @@ public final class Constants {
      * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
      */
     public static final String DEFAULT_CHARSET = "UTF-8";
+
+    /**
+     * Validator to check if a string is null or blank
+     */
+    public static final StringValidator NOT_NULL_NOT_BLANK = string().not().isNull().not().isBlank();
 
     // PRIVATE
 

@@ -9,11 +9,11 @@ import eu.goodlike.resty.http.steps.BodyTypeStep;
 import eu.goodlike.resty.http.steps.QueryParamStep;
 import eu.goodlike.resty.http.steps.custom.CustomDynamicStepBuilder;
 import eu.goodlike.resty.misc.PathVar;
-import eu.goodlike.validation.Validate;
 
 import java.util.*;
 import java.util.stream.Stream;
 
+import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
 import static eu.goodlike.resty.http.HttpMethod.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -73,7 +73,7 @@ public final class DynamicURL {
      * @throws IllegalArgumentException if ip is null or blank
      */
     public DynamicURL withIP(String ip) {
-        looselyValidateIP(ip);
+        NOT_NULL_NOT_BLANK.ifInvalid(ip, DynamicURL::invalidIPMessage);
         return this.ip.equals(ip) ? this : new DynamicURL(protocol, ip, port, path);
     }
 
@@ -826,14 +826,6 @@ public final class DynamicURL {
 
     private static final DynamicURL DEFAULT_HTTP_DYNAMIC_URL = new DynamicURL(Protocol.http, "localhost", null, Collections.emptyList());
     private static final DynamicURL DEFAULT_HTTPS_DYNAMIC_URL = new DynamicURL(Protocol.https, "localhost", null, Collections.emptyList());
-
-    /**
-     * Checks if an ip is null or blank, which both are invalid states
-     * @throws IllegalArgumentException if ip is null or blank
-     */
-    private static void looselyValidateIP(String ip) {
-        Validate.string(ip).not().Null().not().blank().ifInvalid(DynamicURL::invalidIPMessage);
-    }
 
     private static IllegalArgumentException invalidIPMessage() {
         return new IllegalArgumentException("IP address cannot be null or blank");

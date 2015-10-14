@@ -3,9 +3,10 @@ package eu.goodlike.resty.misc;
 import com.google.common.base.MoreObjects;
 import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.neat.Null;
-import eu.goodlike.validation.Validate;
 
 import java.util.Objects;
+
+import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
 
 /**
  * Represents a path variable and its value; used in varargs methods
@@ -30,14 +31,14 @@ public final class PathVar {
      * @throws IllegalArgumentException if given name is null or blank, both of which are invalid names
      */
     public static void validateName(String name) {
-        Validate.string(name).not().Null().not().blank().ifInvalid(PathVar::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalid(name, PathVar::emptyNameMessage);
     }
 
     /**
      * @throws IllegalArgumentException if given value is null or blank, both of which are invalid values
      */
     public static void validateValue(String value) {
-        Validate.string(value).not().Null().not().blank().ifInvalid(PathVar::emptyValueMessage);
+        NOT_NULL_NOT_BLANK.ifInvalid(value, PathVar::emptyValueMessage);
     }
 
     // CONSTRUCTORS

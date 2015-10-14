@@ -44,7 +44,6 @@ import java.util.function.Supplier;
  * @param <V> validator for type T
  * @deprecated please use eu.goodlike.v2.validate.Validate instead!
  */
-@Deprecated
 @SuppressWarnings("deprecation")
 public abstract class Validate<T, V extends Validate<T, V>> {
 
@@ -275,34 +274,42 @@ public abstract class Validate<T, V extends Validate<T, V>> {
 
     // CONSTRUCTORS
 
+    @Deprecated
     public static ObjectValidator Object(Object o) {
         return new ObjectValidator(o);
     }
 
+    @Deprecated
     public static BooleanValidator Boolean(Boolean bool) {
         return new BooleanValidator(bool);
     }
 
+    @Deprecated
     public static CharArrayValidator charArray(char[] charArray) {
         return new CharArrayValidator(charArray);
     }
 
+    @Deprecated
     public static StringValidator string(String string) {
         return new StringValidator(string);
     }
 
+    @Deprecated
     public static IntValidator Int(Integer integer) {
         return new IntValidator(integer);
     }
 
+    @Deprecated
     public static LongValidator Long(Long longNumber) {
         return new LongValidator(longNumber);
     }
 
+    @Deprecated
     public static BigDecimalValidator bigDecimal(BigDecimal bigDecimal) {
         return new BigDecimalValidator(bigDecimal);
     }
 
+    @Deprecated
     public static <T> CollectionValidator<T> collection(Collection<T> collection) {
         return new CollectionValidator<>(collection);
     }
