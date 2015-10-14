@@ -119,10 +119,6 @@ public final class Fake {
     }
 
     public static int code(long id) {
-        long code = 3;
-        while (code < 900000)
-            code *= id + code;
-
         return (int)(id % 900000) + 100000;
     }
 
