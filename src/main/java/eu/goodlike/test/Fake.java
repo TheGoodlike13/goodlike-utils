@@ -5,6 +5,8 @@ import eu.goodlike.time.Time;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static java.math.BigDecimal.ROUND_UNNECESSARY;
+
 /**
  * <pre>
  * Used to create various, usually correct values of "fake" objects for testing; they are somewhat context aware, i.e.
@@ -61,7 +63,7 @@ public final class Fake {
     }
 
     public static BigDecimal wage(long id) {
-        return BigDecimal.valueOf(id).setScale(4, BigDecimal.ROUND_UNNECESSARY);
+        return BigDecimal.valueOf(id).setScale(4, ROUND_UNNECESSARY);
     }
 
     public static int day(long id) {
@@ -105,7 +107,6 @@ public final class Fake {
     }
 
     public static String language(long id) {
-        if (id < 0) id = -id;
         return "L" + (id % 100);
     }
 
