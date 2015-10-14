@@ -1,5 +1,6 @@
 package eu.goodlike.validation;
 
+import eu.goodlike.functional.Action;
 import eu.goodlike.validation.impl.*;
 
 import java.math.BigDecimal;
@@ -222,6 +223,31 @@ public abstract class Validate<T, V extends Validate<T, V>> {
 
         if (!condition.test(object))
             throw exceptionSupplier.get();
+    }
+
+    /**
+     * <pre>
+     * Evaluates all the predicates for the object at the start of the predicate chain
+     *
+     * If the result of predicates is true, the object is considered valid; if the result of predicates is false,
+     * the object is considered invalid, and an action that is supplied to this method is executed
+     * </pre>
+     * @throws IllegalStateException if there are no predicates to validate, i.e. validate(string).ifInvalid(...)
+     */
+    public final void ifInvalid(Action invalidAction) {
+        if (outerValidator != null) {
+            testEnd().ifInvalid(invalidAction);
+            return;
+        }
+
+        if (!subConditions.isEmpty())
+            updateMainCondition();
+
+        if (condition == null)
+            throw new IllegalStateException("You must have at least one condition to validate something!");
+
+        if (!condition.test(object))
+            invalidAction.doIt();
     }
 
     // CONSTRUCTORS
