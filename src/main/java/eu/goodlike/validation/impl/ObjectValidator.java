@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 /**
  * <pre>
  * Default Validate implementation, for not null check only;
@@ -37,7 +35,7 @@ import eu.goodlike.validation.Validate;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class ObjectValidator extends Validate<Object, ObjectValidator> {
+public final class ObjectValidator extends eu.goodlike.validation.Validate<Object, ObjectValidator> {
 
     // CONSTRUCTORS
 

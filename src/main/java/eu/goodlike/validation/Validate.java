@@ -44,6 +44,7 @@ import java.util.function.Supplier;
  * @param <V> validator for type T
  * @deprecated please use eu.goodlike.v2.validate.Validate instead!
  */
+@Deprecated
 @SuppressWarnings("deprecation")
 public abstract class Validate<T, V extends Validate<T, V>> {
 

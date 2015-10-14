@@ -1,7 +1,6 @@
 package eu.goodlike.validation.impl;
 
 import com.google.common.primitives.Chars;
-import eu.goodlike.validation.Validate;
 
 /**
  * <pre>
@@ -37,7 +36,7 @@ import eu.goodlike.validation.Validate;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public class CharArrayValidator extends Validate<char[], CharArrayValidator> {
+public class CharArrayValidator extends eu.goodlike.validation.Validate<char[], CharArrayValidator> {
 
     /**
      * Adds a predicate which tests if the char array being validated is empty

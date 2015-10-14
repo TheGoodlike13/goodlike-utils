@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 import java.util.Collection;
 
 /**
@@ -38,7 +36,7 @@ import java.util.Collection;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class StringValidator extends Validate<String, StringValidator> {
+public final class StringValidator extends eu.goodlike.validation.Validate<String, StringValidator> {
 
     /**
      * Adds a predicate which tests if the string being validated is empty

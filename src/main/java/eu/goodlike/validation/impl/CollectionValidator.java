@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +39,7 @@ import java.util.function.Function;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class CollectionValidator<T> extends Validate<Collection<T>, CollectionValidator<T>> {
+public final class CollectionValidator<T> extends eu.goodlike.validation.Validate<Collection<T>, CollectionValidator<T>> {
 
     /**
      * Adds a predicate which tests if the collection being validated is empty
@@ -57,7 +55,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * @param invalidAction validation statement, for example:
      *      string -> string.not().Null().not().empty().ifInvalid(...);
      */
-    public <V extends Validate<T, V>> CollectionValidator<T> forEach(Function<T, V> validatorCreator, Consumer<V> invalidAction) {
+    public <V extends eu.goodlike.validation.Validate<T, V>> CollectionValidator<T> forEach(Function<T, V> validatorCreator, Consumer<V> invalidAction) {
         registerCondition(collection -> {
             collection.stream()
                     .map(validatorCreator::apply)

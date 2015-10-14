@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 /**
  * <pre>
  * Validate implementation for Booleans
@@ -36,7 +34,7 @@ import eu.goodlike.validation.Validate;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public class BooleanValidator extends Validate<Boolean, BooleanValidator> {
+public class BooleanValidator extends eu.goodlike.validation.Validate<Boolean, BooleanValidator> {
 
     /**
      * Adds a predicate which tests if the boolean being validated is true

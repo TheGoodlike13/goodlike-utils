@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 /**
  * <pre>
  * Validate implementation for longs
@@ -36,7 +34,7 @@ import eu.goodlike.validation.Validate;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class LongValidator extends Validate<Long, LongValidator> {
+public final class LongValidator extends eu.goodlike.validation.Validate<Long, LongValidator> {
 
     /**
      * Adds a predicate which tests if the long being validated is larger than some amount

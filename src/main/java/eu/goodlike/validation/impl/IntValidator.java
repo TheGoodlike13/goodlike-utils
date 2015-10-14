@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 /**
  * <pre>
  * Validate implementation for integers
@@ -36,7 +34,7 @@ import eu.goodlike.validation.Validate;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class IntValidator extends Validate<Integer, IntValidator> {
+public final class IntValidator extends eu.goodlike.validation.Validate<Integer, IntValidator> {
 
     /**
      * Adds a predicate which tests if the integer being validated is larger than some amount

@@ -1,7 +1,5 @@
 package eu.goodlike.validation.impl;
 
-import eu.goodlike.validation.Validate;
-
 import java.math.BigDecimal;
 
 /**
@@ -38,7 +36,7 @@ import java.math.BigDecimal;
  */
 @Deprecated
 @SuppressWarnings("deprecation")
-public final class BigDecimalValidator extends Validate<BigDecimal, BigDecimalValidator> {
+public final class BigDecimalValidator extends eu.goodlike.validation.Validate<BigDecimal, BigDecimalValidator> {
 
     /**
      * Adds a predicate which tests if the BigDecimal being validated is positive
