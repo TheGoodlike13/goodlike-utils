@@ -37,7 +37,10 @@ import java.util.function.Function;
  * testEnd() can be omitted if it's the last call before ifInvalid()
  * </pre>
  * @param <T> type of object inside the List
+ * @deprecated please use eu.goodlike.v2.validate.Validate instead!
  */
+@Deprecated
+@SuppressWarnings("deprecation")
 public final class CollectionValidator<T> extends Validate<Collection<T>, CollectionValidator<T>> {
 
     /**

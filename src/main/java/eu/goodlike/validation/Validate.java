@@ -42,7 +42,10 @@ import java.util.function.Supplier;
  * </pre>
  * @param <T> type of the object that is being validated
  * @param <V> validator for type T
+ * @deprecated please use eu.goodlike.v2.validate.Validate instead!
  */
+@Deprecated
+@SuppressWarnings("deprecation")
 public abstract class Validate<T, V extends Validate<T, V>> {
 
     /**

@@ -34,7 +34,10 @@ import java.util.Collection;
  *          .ifInvalid(...)
  * testEnd() can be omitted if it's the last call before ifInvalid()
  * </pre>
+ * @deprecated please use eu.goodlike.v2.validate.Validate instead!
  */
+@Deprecated
+@SuppressWarnings("deprecation")
 public final class StringValidator extends Validate<String, StringValidator> {
 
     /**
