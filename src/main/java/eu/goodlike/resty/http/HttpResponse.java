@@ -178,10 +178,10 @@ public final class HttpResponse {
         StreamReader reader;
         String message;
         if (HttpResponse.isSuccessful(statusCode)) {
-            reader = StreamReader.forInputStream(request.getInputStream());
+            reader = StreamReader.of(request.getInputStream());
             message = reader.read();
         } else {
-            reader = StreamReader.forInputStream(request.getErrorStream());
+            reader = StreamReader.of(request.getErrorStream());
             message = reader.read();
             if (message.isEmpty())
                 message = request.getResponseMessage();

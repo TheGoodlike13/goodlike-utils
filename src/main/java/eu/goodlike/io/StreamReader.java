@@ -29,19 +29,20 @@ public class StreamReader implements Closeable {
 
     // CONSTRUCTORS
 
-    public static StreamReader forInputStream(InputStream input) {
-        return forInputStream(input, DEFAULT_CHARSET);
+    public static StreamReader of(InputStream input) {
+        return of(input, DEFAULT_CHARSET);
     }
 
-    public static StreamReader forInputStream(InputStream input, Charset charset) {
-        return forReader(new BufferedReader(new InputStreamReader(input, charset)));
+    public static StreamReader of(InputStream input, Charset charset) {
+        Null.check(input, charset).ifAny("Input stream and charset cannot be null");
+        return of(new BufferedReader(new InputStreamReader(input, charset)));
     }
 
-    public static StreamReader forReader(Reader reader) {
+    public static StreamReader of(Reader reader) {
         return new StreamReader(reader);
     }
 
-    private StreamReader(Reader reader) {
+    public StreamReader(Reader reader) {
         Null.check(reader).ifAny("Reader cannot be null");
         this.reader = reader;
     }
