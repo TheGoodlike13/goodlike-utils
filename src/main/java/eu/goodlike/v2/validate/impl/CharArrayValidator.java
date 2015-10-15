@@ -6,6 +6,7 @@ import eu.goodlike.neat.Null;
 import eu.goodlike.v2.validate.Validate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -16,6 +17,15 @@ import java.util.function.Supplier;
  * char[] validator implementation
  */
 public final class CharArrayValidator extends Validate<char[], CharArrayValidator> {
+
+    /**
+     * Adds a predicate which tests if the char array being validated is equal to some other char array;
+     * this comparison uses Array.equals() instead of Objects.equals(), to compare its elements as well
+     */
+    @Override
+    public CharArrayValidator isEqual(char[] other) {
+        return registerCondition(array -> Arrays.equals(array, other));
+    }
 
     /**
      * Adds a predicate which tests if the char array being validated is empty

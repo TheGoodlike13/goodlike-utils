@@ -1,5 +1,7 @@
 package eu.goodlike.v2.validate.impl;
 
+import eu.goodlike.misc.Scaleless;
+import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.v2.validate.Validate;
 
 import java.math.BigDecimal;
@@ -11,6 +13,15 @@ import java.util.function.Predicate;
  * BigDecimal validator implementation
  */
 public final class BigDecimalValidator extends Validate<BigDecimal, BigDecimalValidator> {
+
+    /**
+     * Adds a predicate which tests if the BigDecimal being validated is equal to some other bigDecimal;
+     * this comparison ignores scale
+     */
+    @Override
+    public BigDecimalValidator isEqual(BigDecimal other) {
+        return registerCondition(dec -> SpecialUtils.equals(dec, other, Scaleless::bigDecimal));
+    }
 
     /**
      * Adds a predicate which tests if the BigDecimal being validated is positive

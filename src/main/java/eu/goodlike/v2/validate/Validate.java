@@ -4,10 +4,7 @@ import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 import eu.goodlike.v2.validate.impl.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -67,6 +64,17 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @return new instance of implementing validator, so the methods can be chained from extending classes
      */
     protected abstract V newValidator(V outerValidator, Predicate<T> condition, List<Predicate<T>> subConditions, boolean notCondition);
+
+    /**
+     * <pre>
+     * You can override this method to provide custom behaviour
+     *
+     * Adds a predicate which tests if the object being validated is equal to some other object
+     * </pre>
+     */
+    public V isEqual(T t) {
+        return registerCondition(o -> Objects.equals(o, t));
+    }
 
     /**
      * Adds a custom predicate for validating objects

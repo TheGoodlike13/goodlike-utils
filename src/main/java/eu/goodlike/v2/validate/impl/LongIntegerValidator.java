@@ -47,13 +47,6 @@ public final class LongIntegerValidator extends Validate<Long, LongIntegerValida
     }
 
     /**
-     * Adds a predicate which tests if the long being validated is equal to some amount
-     */
-    public LongIntegerValidator isEqual(long amount) {
-        return registerCondition(i -> i == amount);
-    }
-
-    /**
      * Adds a predicate which tests if the long being validated is between some two numbers, both inclusive
      */
     public LongIntegerValidator isBetween(long lowBound, long highBound) {

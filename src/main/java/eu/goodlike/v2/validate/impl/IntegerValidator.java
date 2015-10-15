@@ -47,13 +47,6 @@ public class IntegerValidator extends Validate<Integer, IntegerValidator> {
     }
 
     /**
-     * Adds a predicate which tests if the integer being validated is equal to some amount
-     */
-    public IntegerValidator isEqual(int amount) {
-        return registerCondition(i -> i == amount);
-    }
-
-    /**
      * Adds a predicate which tests if the integer being validated is between some two numbers, both inclusive
      */
     public IntegerValidator isBetween(int lowBound, int highBound) {
