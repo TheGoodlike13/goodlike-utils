@@ -52,7 +52,7 @@ public final class Header {
      */
     public Header(String name, String value) {
         Null.check(name, value).ifAny("Header name and value cannot be null");
-        NOT_NULL_NOT_BLANK.ifInvalid(name, Header::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalidThrow(name, Header::emptyNameMessage);
         this.name = name;
         this.value = value;
     }

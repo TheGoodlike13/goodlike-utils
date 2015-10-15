@@ -80,7 +80,7 @@ public final class Param {
      */
     public Param(String name, Object value) {
         Null.check(name).ifAny("Param name cannot be null");
-        NOT_NULL_NOT_BLANK.ifInvalid(name, Param::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalidThrow(name, Param::emptyNameMessage);
         this.name = name;
         this.value = value == null ? null : SpecialUtils.urlEncode(value);
     }

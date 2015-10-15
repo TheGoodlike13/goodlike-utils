@@ -31,14 +31,14 @@ public final class PathVar {
      * @throws IllegalArgumentException if given name is null or blank, both of which are invalid names
      */
     public static void validateName(String name) {
-        NOT_NULL_NOT_BLANK.ifInvalid(name, PathVar::emptyNameMessage);
+        NOT_NULL_NOT_BLANK.ifInvalidThrow(name, PathVar::emptyNameMessage);
     }
 
     /**
      * @throws IllegalArgumentException if given value is null or blank, both of which are invalid values
      */
     public static void validateValue(String value) {
-        NOT_NULL_NOT_BLANK.ifInvalid(value, PathVar::emptyValueMessage);
+        NOT_NULL_NOT_BLANK.ifInvalidThrow(value, PathVar::emptyValueMessage);
     }
 
     // CONSTRUCTORS

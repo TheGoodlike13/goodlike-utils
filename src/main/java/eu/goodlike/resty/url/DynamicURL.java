@@ -73,7 +73,7 @@ public final class DynamicURL {
      * @throws IllegalArgumentException if ip is null or blank
      */
     public DynamicURL withIP(String ip) {
-        NOT_NULL_NOT_BLANK.ifInvalid(ip, DynamicURL::invalidIPMessage);
+        NOT_NULL_NOT_BLANK.ifInvalidThrow(ip, DynamicURL::invalidIPMessage);
         return this.ip.equals(ip) ? this : new DynamicURL(protocol, ip, port, path);
     }
 
