@@ -2,6 +2,8 @@ package eu.goodlike.misc;
 
 import org.junit.Test;
 
+import java.nio.charset.Charset;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstantsTest {
@@ -32,8 +34,13 @@ public class ConstantsTest {
     }
 
     @Test
-    public void confirmConstantDefaultCharset() {
+    public void confirmConstantDefaultCharsetString() {
         assertThat(Constants.DEFAULT_CHARSET).isEqualTo("UTF-8");
+    }
+
+    @Test
+    public void confirmConstantDefaultCharset() {
+        assertThat(Constants.DEF_CHARSET).isEqualTo(Charset.forName(Constants.DEFAULT_CHARSET));
     }
 
 }

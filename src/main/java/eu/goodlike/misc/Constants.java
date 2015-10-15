@@ -2,6 +2,8 @@ package eu.goodlike.misc;
 
 import eu.goodlike.v2.validate.impl.StringValidator;
 
+import java.nio.charset.Charset;
+
 import static eu.goodlike.v2.validate.Validate.string;
 
 /**
@@ -45,9 +47,14 @@ public final class Constants {
     public static final int DEFAULT_PER_PAGE = 25;
 
     /**
-     * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
+     * Default charset string. It really should be the default charset. Why is it not the default charset? WHY?
      */
     public static final String DEFAULT_CHARSET = "UTF-8";
+
+    /**
+     * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
+     */
+    public static final Charset DEF_CHARSET = Charset.forName(DEFAULT_CHARSET);
 
     /**
      * Validator to check if a string is null or blank
