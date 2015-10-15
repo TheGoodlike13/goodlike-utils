@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * <pre>
- * java.time.* version of joda time conversion; requires no additional libraries
+ * java.time.* version of joda time conversion; requires no additional libraries besides Guava
  *
  * It seems that with the release of Java 8, joda time will no longer be updated a lot, thus I've decided to
  * move to the new standard as well
