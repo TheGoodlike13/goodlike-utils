@@ -59,7 +59,7 @@ public final class JsonObject {
 
     @JsonIgnore
     public JsonNode toJsonNode() {
-        return JsonMapper.defaultMapper().valueToTree(this);
+        return JsonMapper.newMapper().valueToTree(this);
     }
 
     @JsonIgnore
