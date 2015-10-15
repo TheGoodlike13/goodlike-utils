@@ -1,23 +1,20 @@
 package eu.goodlike.libraries.jackson;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.io.Files;
-import org.jooq.lambda.Unchecked;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.UUID;
 
-import static eu.goodlike.misc.Constants.DEFAULT_CHARSET;
-import static eu.goodlike.misc.Constants.DEF_CHARSET;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonTest {
 
     private final JsonObject jsonObject = new JsonObject();
     private final String jsonString = jsonObject.toString();
-    private final byte[] jsonBytes = Unchecked.supplier(() -> jsonString.getBytes(DEFAULT_CHARSET)).get();
+    private final byte[] jsonBytes = jsonObject.getBytes();
+    private final File tempFile = jsonObject.createTempFile();
 
     @Test
     public void tryMapper_shouldBeSingleton() {
@@ -32,30 +29,26 @@ public class JsonTest {
 
     @Test
     public void tryReadTypeReference_shouldUseConstructor() throws IOException {
-        JsonObject fromClass = Json.read(JsonObject.getTypeReference()).from(jsonString);
-        assertThat(fromClass).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getTypeReference())).from(jsonString));
+        JsonObject fromType = Json.read(JsonObject.getTypeReference()).from(jsonString);
+        assertThat(fromType).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getTypeReference())).from(jsonString));
     }
 
     @Test
     public void tryReadJavaType_shouldUseConstructor() throws IOException {
-        JsonObject fromClass = Json.read(JsonObject.getJavaType()).from(jsonString);
-        assertThat(fromClass).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getJavaType())).from(jsonString));
+        JsonObject fromType = Json.read(JsonObject.getJavaType()).from(jsonString);
+        assertThat(fromType).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getJavaType())).from(jsonString));
     }
 
     @Test
     public void tryFromInputStream_shouldUseConstructor() throws IOException {
-        InputStream jsonInputSteam1 = new ByteArrayInputStream(jsonBytes);
-        InputStream jsonInputSteam2 = new ByteArrayInputStream(jsonBytes);
-        assertThat(Json.from(jsonInputSteam1).to(JsonObject.class))
-                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(jsonInputSteam2)).to(JsonObject.class));
+        assertThat(Json.from(jsonObject.newInputStream()).to(JsonObject.class))
+                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(jsonObject.newInputStream())).to(JsonObject.class));
     }
 
     @Test
     public void tryFromReader_shouldUseConstructor() throws IOException {
-        Reader jsonReader1 = new StringReader(jsonString);
-        Reader jsonReader2 = new StringReader(jsonString);
-        assertThat(Json.from(jsonReader1).to(JsonObject.class))
-                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(jsonReader2)).to(JsonObject.class));
+        assertThat(Json.from(jsonObject.newReader()).to(JsonObject.class))
+                .isEqualTo(new JsonDeserializerOfObject(r -> r.readValue(jsonObject.newReader())).to(JsonObject.class));
     }
 
     @Test
@@ -72,34 +65,27 @@ public class JsonTest {
 
     @Test
     public void tryFromBytesOffset_shouldUseConstructor() throws IOException {
-        byte[] jsonBytesCopy = new byte[jsonBytes.length + 2];
-        System.arraycopy(jsonBytes, 0, jsonBytesCopy, 1, jsonBytes.length);
+        byte[] jsonBytesCopy = jsonObject.getBytesWithPaddingOf1();
         assertThat(Json.from(jsonBytesCopy, 1, jsonBytes.length).to(JsonObject.class))
-                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(jsonBytesCopy, 1, jsonBytes.length)).to(JsonObject.class));
+                .isEqualTo(new JsonDeserializerOfObject(r -> r.readValue(jsonBytesCopy, 1, jsonBytes.length)).to(JsonObject.class));
     }
 
     @Test
     public void tryFromFile_shouldUseConstructor() throws IOException {
-        File file = File.createTempFile(UUID.randomUUID().toString(), ".txt");
-        Files.write(jsonString, file, DEF_CHARSET);
-        assertThat(Json.from(file).to(JsonObject.class))
-                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(file)).to(JsonObject.class));
-        file.deleteOnExit();
+        assertThat(Json.from(tempFile).to(JsonObject.class))
+                .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(tempFile)).to(JsonObject.class));
     }
 
     @Test
     public void tryFromURL_shouldUseConstructor() throws IOException {
-        File file = File.createTempFile(UUID.randomUUID().toString(), ".txt");
-        Files.write(jsonString, file, DEF_CHARSET);
-        URL url = file.toURI().toURL();
+        URL url = tempFile.toURI().toURL();
         assertThat(Json.from(url).to(JsonObject.class))
                 .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(url)).to(JsonObject.class));
-        file.deleteOnExit();
     }
 
     @Test
     public void tryFromJsonNode_shouldUseConstructor() throws IOException {
-        JsonNode node = JsonMapper.defaultMapper().valueToTree(jsonObject);
+        JsonNode node = jsonObject.toJsonNode();
         assertThat(Json.from(node).to(JsonObject.class))
                 .isEqualTo(new JsonDeserializerOfObject(reader -> reader.readValue(node)).to(JsonObject.class));
     }
