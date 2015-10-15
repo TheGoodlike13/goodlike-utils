@@ -18,7 +18,7 @@ public enum JsonMapper {
     /**
      * @return a copy of an ObjectMapper used by the JsonMapper singleton; useful when customized behaviour is needed
      */
-    public static ObjectMapper defaultMapper() {
+    public static ObjectMapper newMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper;
@@ -49,7 +49,7 @@ public enum JsonMapper {
     // PRIVATE
 
     JsonMapper() {
-        this.mapper = defaultMapper();
+        this.mapper = newMapper();
     }
 
     private final ObjectMapper mapper;
