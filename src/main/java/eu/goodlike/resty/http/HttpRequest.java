@@ -231,7 +231,7 @@ public final class HttpRequest implements BodyTypeStep, HeaderStep, JsonBodyStep
                 .andSome(headers.entrySet(),
                         (builder, header) -> builder.append(header.getKey()).append(": ").append(header.getValue()).append("\n"))
                 .andSomeIf(isMultipart, "\n", multipartParams)
-                .andSomeIf(isMultipart, "\n", multipartFiles.keySet())
+                .andSomeIf(isMultipart, "\n", multipartFiles == null ? null : multipartFiles.keySet())
                 .andIf(!isMultipart, "\n", simpleBody)
                 .toString();
     }
