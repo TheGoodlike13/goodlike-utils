@@ -95,7 +95,7 @@ public final class StringBuilderWrapper {
 
     /**
      * Appends all the objects, one after another, to the wrapped StringBuilder, but only if condition is true
-     * @throws NullPointerException if object array is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if object array is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public StringBuilderWrapper andIf(boolean condition, Object... objects) {
         return condition ? and(objects) : this;
@@ -104,7 +104,7 @@ public final class StringBuilderWrapper {
     /**
      * Appends all the objects in the collection, one after another, to the wrapped StringBuilder,
      * but only if condition is true
-     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public StringBuilderWrapper andSomeIf(boolean condition, Collection<?> collection) {
         return condition ? andSome(collection) : this;
@@ -115,7 +115,7 @@ public final class StringBuilderWrapper {
      * Appends all the objects in the collection to the wrapped StringBuilder, but only if condition is true
      * Every object will have a prefix appended before it (can be null)
      * </pre>
-     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public StringBuilderWrapper andSomeIf(boolean condition, Object prefix, Collection<?> collection) {
         return condition ? andSome(prefix, collection) : this;
@@ -126,7 +126,7 @@ public final class StringBuilderWrapper {
      * Appends all the objects in the collection to the wrapped StringBuilder, but only if condition is true
      * Every object will have a suffix appended after it (can be null)
      * </pre>
-     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public StringBuilderWrapper andSomeIf(boolean condition, Collection<?> collection, Object suffix) {
         return condition ? andSome(collection, suffix) : this;
@@ -137,7 +137,7 @@ public final class StringBuilderWrapper {
      * Appends all the objects in the collection to the wrapped StringBuilder, but only if condition is true
      * Every object will have a prefix and suffix appended before and after it (can be null)
      * </pre>
-     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public StringBuilderWrapper andSomeIf(boolean condition, Object prefix, Collection<?> collection, Object suffix) {
         return condition ? andSome(prefix, collection, suffix) : this;
@@ -148,7 +148,7 @@ public final class StringBuilderWrapper {
      * Appends all the objects in the collection to the wrapped StringBuilder, but only if condition is true
      * Every object will have a prefix and suffix appended before and after it (can be null)
      * </pre>
-     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed)
+     * @throws NullPointerException if collection is null (NOT if it contains null, that is allowed); ONLY IF CONDITION IS TRUE
      */
     public <T> StringBuilderWrapper andSomeIf(boolean condition, Collection<T> collection, BiConsumer<StringBuilder, T> customAppender) {
         return condition ? andSome(collection, customAppender) : this;

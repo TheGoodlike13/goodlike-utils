@@ -168,4 +168,24 @@ public class StringBuilderWrapperTest {
                 .isEqualTo(new StringBuilderWrapper());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void tryNullArrayWithTrueCondition_shouldThrowNullPointer() {
+        stringBuilderWrapper.andIf(true, (Object[])null);
+    }
+
+    @Test
+    public void tryNullArrayWithFalseCondition_shouldPass() {
+        stringBuilderWrapper.andIf(false, (Object[])null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void tryNullCollectionWithTrueCondition_shouldThrowNullPointer() {
+        stringBuilderWrapper.andSomeIf(true, null);
+    }
+
+    @Test
+    public void tryNullCollectionWithFalseCondition_shouldPass() {
+        stringBuilderWrapper.andSomeIf(false, null);
+    }
+
 }
