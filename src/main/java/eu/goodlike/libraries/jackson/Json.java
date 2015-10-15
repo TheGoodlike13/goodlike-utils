@@ -47,56 +47,56 @@ public final class Json {
     /**
      * @return JSON deserializer for an input stream
      */
-    public static JsonDeserializerOfObject from(InputStream inputStream) throws IOException {
+    public static JsonDeserializerOfObject from(InputStream inputStream) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(inputStream));
     }
 
     /**
      * @return JSON deserializer for a reader
      */
-    public static JsonDeserializerOfObject from(Reader reader) throws IOException {
+    public static JsonDeserializerOfObject from(Reader reader) {
         return new JsonDeserializerOfObject(objectReader -> objectReader.readValue(reader));
     }
 
     /**
      * @return JSON deserializer for a string
      */
-    public static JsonDeserializerOfObject from(String string) throws IOException {
+    public static JsonDeserializerOfObject from(String string) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(string));
     }
 
     /**
      * @return JSON deserializer for a byte array
      */
-    public static JsonDeserializerOfObject from(byte[] bytes) throws IOException {
+    public static JsonDeserializerOfObject from(byte[] bytes) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(bytes));
     }
 
     /**
      * @return JSON deserializer for a part of byte array, using offset and length
      */
-    public static JsonDeserializerOfObject from(byte[] bytes, int offset, int length) throws IOException {
+    public static JsonDeserializerOfObject from(byte[] bytes, int offset, int length) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(bytes, offset, length));
     }
 
     /**
      * @return JSON deserializer for a file
      */
-    public static JsonDeserializerOfObject from(File file) throws IOException {
+    public static JsonDeserializerOfObject from(File file) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(file));
     }
 
     /**
      * @return JSON deserializer for an URL
      */
-    public static JsonDeserializerOfObject from(URL url) throws IOException {
+    public static JsonDeserializerOfObject from(URL url) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(url));
     }
 
     /**
      * @return JSON deserializer for a JsonNode
      */
-    public static JsonDeserializerOfObject from(JsonNode jsonNode) throws IOException {
+    public static JsonDeserializerOfObject from(JsonNode jsonNode) {
         return new JsonDeserializerOfObject(reader -> reader.readValue(jsonNode));
     }
 
