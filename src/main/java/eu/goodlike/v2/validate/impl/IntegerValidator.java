@@ -8,7 +8,13 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
 /**
+ * <pre>
  * Boxed Integer validator implementation
+ *
+ * Primitive and boxed versions are separate, because IntPredicate is not compatible with Predicate of Integer; more
+ * specifically, their methods or() and and() require those two different kind of predicates; as a result, there is no
+ * way to decide which is which by just looking at the lambda expressions
+ * </pre>
  */
 public class IntegerValidator extends Validate<Integer, IntegerValidator> {
 

@@ -10,7 +10,13 @@ import java.util.List;
 import java.util.function.*;
 
 /**
- * primitive int validator implementation; also can be used to validate code points (which are ints)
+ * <pre>
+ * Primitive int validator implementation; also can be used to validate code points (which are ints)
+ *
+ * Primitive and boxed versions are separate, because IntPredicate is not compatible with Predicate of Integer; more
+ * specifically, their methods or() and and() require those two different kind of predicates; as a result, there is no
+ * way to decide which is which by just looking at the lambda expressions
+ * </pre>
  */
 public final class IntValidator implements IntPredicate {
 

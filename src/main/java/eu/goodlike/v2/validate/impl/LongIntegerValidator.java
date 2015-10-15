@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
+/**
+ * <pre>
+ * Boxed Long validator implementation
+ *
+ * Primitive and boxed versions are separate, because LongPredicate is not compatible with Predicate of Long; more
+ * specifically, their methods or() and and() require those two different kind of predicates; as a result, there is no
+ * way to decide which is which by just looking at the lambda expressions
+ * </pre>
+ */
 public final class LongIntegerValidator extends Validate<Long, LongIntegerValidator> {
 
     /**
