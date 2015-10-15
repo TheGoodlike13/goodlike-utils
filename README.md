@@ -127,7 +127,7 @@ Jackson API wrapper which has:
     
 and many more similar methods
 
-    Requires Jackson (obviously)
+    Requires Jackson
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
 
 ### JodaTime
@@ -141,15 +141,16 @@ Conversion between various java and joda time classes:
     
 and many more similar methods
 
-    Requires JodaTime (obviously)
+    Requires JodaTime, Guava for LoadingCache
     compile "joda-time:joda-time:2.8.2"
+    compile 'com.google.guava:guava:18.0'
 
 ### JooL
 
 Intellij idea seems to whine about Seq.of(T[]) and similar (clashes with Stream.of(T[])), so I made a class that
 works around that without explicit need to do it myself
 
-    Requires JooL (obviously)
+    Requires JooL
     compile 'org.jooq:jool:0.9.7'
 
 ### MockMvc
@@ -157,7 +158,7 @@ works around that without explicit need to do it myself
 I got sick of copying this stuff when doing integration tests, so I made a basic wrapper which follows some basic
 logic that works for me
 
-    Requires some Spring imports (sadly)
+    Requires some Spring imports
     compile 'org.springframework:spring-test:4.2.1.RELEASE'
     compile 'org.springframework:spring-web:4.2.1.RELEASE'
     compile 'org.springframework:spring-beans:4.2.1.RELEASE'
