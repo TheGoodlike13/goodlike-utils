@@ -70,9 +70,11 @@ public final class DynamicURL {
 
     /**
      * @return this DynamicURL with given IP; only constructs a new one if needed
-     * @throws IllegalArgumentException if ip is null or blank
+     * @throws NullPointerException if ip is null
+     * @throws IllegalArgumentException if ip is blank
      */
     public DynamicURL withIP(String ip) {
+        Null.check(ip).ifAny("IP cannot be null");
         NOT_NULL_NOT_BLANK.ifInvalidThrow(ip, DynamicURL::invalidIPMessage);
         return this.ip.equals(ip) ? this : new DynamicURL(protocol, ip, port, path);
     }
@@ -828,7 +830,7 @@ public final class DynamicURL {
     private static final DynamicURL DEFAULT_HTTPS_DYNAMIC_URL = new DynamicURL(Protocol.https, "localhost", null, Collections.emptyList());
 
     private static IllegalArgumentException invalidIPMessage() {
-        return new IllegalArgumentException("IP address cannot be null or blank");
+        return new IllegalArgumentException("IP address cannot be blank");
     }
 
     /**
