@@ -104,7 +104,7 @@ public final class TimeResolver {
         return new TimeResolver(start, end);
     }
 
-    private TimeResolver(long startTime, long endTime) {
+    public TimeResolver(long startTime, long endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
