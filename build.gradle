@@ -6,11 +6,6 @@ jar {
     version = '0.6'
 }
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = 1.8
-//noinspection GroovyUnusedAssignment
-targetCompatibility = 1.8
-
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     options.encoding = 'UTF-8'
@@ -21,8 +16,11 @@ repositories {
 }
 
 dependencies {
+    // used for various collections/loading cache
     compile 'com.google.guava:guava:18.0'
+    // mostly used in json and resty packages
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
+    // mostly used for Unchecked versions of functional interfaces
     compile 'org.jooq:jool:0.9.7'
 
     // needed for jooq package only
@@ -31,7 +29,7 @@ dependencies {
     // needed for joda.time package only
     compile "joda-time:joda-time:2.8.2"
 
-    //needed for spring.mockmvc package only
+    // needed for spring.mockmvc package only
     compile 'org.springframework:spring-test:4.2.1.RELEASE'
     compile 'org.springframework:spring-web:4.2.1.RELEASE'
     compile 'org.springframework:spring-beans:4.2.1.RELEASE'
@@ -41,9 +39,12 @@ dependencies {
     compile 'org.springframework:spring-context-support:4.2.1.RELEASE'
     compile 'javax.mail:javax.mail-api:1.5.4'
 
+    // unit tests
     testCompile 'junit:junit:4.12'
+    // better assertions
     testCompile 'org.assertj:assertj-core:3.2.0'
+    // mocking various objects
     testCompile 'org.mockito:mockito-all:1.10.19'
+    // a little bit of reflection
     testCompile 'org.jooq:joor:0.9.5'
-
 }
