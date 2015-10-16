@@ -99,4 +99,24 @@ public class TimeHandlerTest {
                 .isEqualTo(new TimeConverter(UTC, timestamp, null, null, null, null, null, null));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void tryTooManyHours_shouldThrowIllegalArgument() {
+        timeHandler.from(localDate, 25);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void tryTooManyMinutes_shouldThrowIllegalArgument() {
+        timeHandler.from(localDate, 23, 65);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void tryTooManySeconds_shouldThrowIllegalArgument() {
+        timeHandler.from(localDate, 23, 59, 65);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void tryTooManyMilliseconds_shouldThrowIllegalArgument() {
+        timeHandler.from(localDate, 23, 59, 59, 1500);
+    }
+
 }
