@@ -101,22 +101,42 @@ public class TimeHandlerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void tryTooManyHours_shouldThrowIllegalArgument() {
-        timeHandler.from(localDate, 25);
+        timeHandler.from(localDate, 24);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void tryTooManyMinutes_shouldThrowIllegalArgument() {
-        timeHandler.from(localDate, 23, 65);
+        timeHandler.from(localDate, 23, 60);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void tryTooManySeconds_shouldThrowIllegalArgument() {
-        timeHandler.from(localDate, 23, 59, 65);
+        timeHandler.from(localDate, 23, 59, 60);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void tryTooManyMilliseconds_shouldThrowIllegalArgument() {
-        timeHandler.from(localDate, 23, 59, 59, 1500);
+        timeHandler.from(localDate, 23, 59, 59, 1000);
+    }
+
+    @Test
+    public void tryJustEnoughManyHours_shouldPass() {
+        timeHandler.from(localDate, 23);
+    }
+
+    @Test
+    public void tryJustEnoughMinutes_shouldPass() {
+        timeHandler.from(localDate, 23, 59);
+    }
+
+    @Test
+    public void tryJustEnoughSeconds_shouldPass() {
+        timeHandler.from(localDate, 23, 59, 59);
+    }
+
+    @Test
+    public void tryJustEnoughMilliseconds_shouldPass() {
+        timeHandler.from(localDate, 23, 59, 59, 999);
     }
 
 }
