@@ -35,6 +35,11 @@ public class TimeTest {
     }
 
     @Test
+    public void tryForZone_shouldBeEqualToNewHandler() {
+        assertThat(Time.forZone(UTC)).isEqualTo(new TimeHandler(UTC));
+    }
+
+    @Test
     public void tryForZoneTwice_shouldBeSame() {
         assertThat(Time.forZone(UTC)).isSameAs(Time.forZone(UTC));
     }
