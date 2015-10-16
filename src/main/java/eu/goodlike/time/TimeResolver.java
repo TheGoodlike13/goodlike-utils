@@ -77,7 +77,7 @@ public final class TimeResolver {
     /**
      * Resolves the time using JodaTimeZoneHandler for given zoneId and given LocalDates
      */
-    private static TimeResolver from(ZoneId zoneId, LocalDate localStartDate, LocalDate localEndDate) {
+    public static TimeResolver from(ZoneId zoneId, LocalDate localStartDate, LocalDate localEndDate) {
         return from(Time.at(zoneId), localStartDate, localEndDate);
     }
 
@@ -90,7 +90,7 @@ public final class TimeResolver {
      * 3) use start and end to resolve time
      * </pre>
      */
-    private static TimeResolver from(TimeHandler handler, LocalDate localStartDate, LocalDate localEndDate) {
+    public static TimeResolver from(TimeHandler handler, LocalDate localStartDate, LocalDate localEndDate) {
         long start = handler.from(localStartDate).toEpochMilli();
         long end = handler.from(localEndDate.plusDays(1)).toEpochMilli();
         return from(start, end);
