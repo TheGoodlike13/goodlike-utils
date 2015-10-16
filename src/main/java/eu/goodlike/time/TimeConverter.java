@@ -2,6 +2,7 @@ package eu.goodlike.time;
 
 import java.time.*;
 import java.util.Date;
+import java.util.Objects;
 
 import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
@@ -125,5 +126,21 @@ public final class TimeConverter implements DateConverter {
     private LocalTime localTime;
     private java.util.Date utilDate;
     private java.sql.Date sqlDate;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeConverter)) return false;
+        TimeConverter that = (TimeConverter) o;
+        return Objects.equals(timezone, that.timezone) &&
+                Objects.equals(instant, that.instant);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timezone, instant);
+    }
 
 }

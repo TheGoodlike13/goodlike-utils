@@ -3,6 +3,7 @@ package eu.goodlike.time;
 import eu.goodlike.neat.Null;
 
 import java.time.*;
+import java.util.Objects;
 
 import static java.time.temporal.ChronoUnit.MILLIS;
 
@@ -163,5 +164,20 @@ public final class TimeHandler {
     // PRIVATE
 
     private final ZoneId timezone;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeHandler)) return false;
+        TimeHandler that = (TimeHandler) o;
+        return Objects.equals(timezone, that.timezone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timezone);
+    }
 
 }
