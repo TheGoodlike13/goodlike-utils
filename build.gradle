@@ -22,25 +22,28 @@ repositories {
 
 dependencies {
     compile 'com.google.guava:guava:18.0'
-    compile "joda-time:joda-time:2.8.2"
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
     compile 'org.jooq:jool:0.9.7'
+
+    // needed for jooq package only
     compile 'org.jooq:jooq:3.6.2'
 
-    //needed for mockmvc package only
+    // needed for joda.time package only
+    compile "joda-time:joda-time:2.8.2"
+
+    //needed for spring.mockmvc package only
     compile 'org.springframework:spring-test:4.2.1.RELEASE'
     compile 'org.springframework:spring-web:4.2.1.RELEASE'
     compile 'org.springframework:spring-beans:4.2.1.RELEASE'
     compile 'javax.servlet:javax.servlet-api:3.1.0'
 
-    // needed for GMail only
+    // needed for spring.gmail package only
     compile 'org.springframework:spring-context-support:4.2.1.RELEASE'
+    compile 'javax.mail:javax.mail-api:1.5.4'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.2.0'
     testCompile 'org.mockito:mockito-all:1.10.19'
     testCompile 'org.jooq:joor:0.9.5'
 
-    testCompile 'io.gatling.uncommons.maths:uncommons-maths:1.2.3'
-    testCompile fileTree(dir: 'libs', include: ['*.jar'])
 }
