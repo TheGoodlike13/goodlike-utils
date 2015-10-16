@@ -2,6 +2,8 @@ package eu.goodlike.libraries.joda.time;
 
 import org.joda.time.*;
 
+import java.util.Objects;
+
 /**
  * <pre>
  * Converts to and from any of the following formats:
@@ -145,5 +147,20 @@ public final class TimeHandler {
     // PRIVATE
 
     private final DateTimeZone timeZone;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeHandler)) return false;
+        TimeHandler that = (TimeHandler) o;
+        return Objects.equals(timeZone, that.timeZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timeZone);
+    }
 
 }

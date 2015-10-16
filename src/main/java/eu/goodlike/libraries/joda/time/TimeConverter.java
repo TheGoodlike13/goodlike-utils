@@ -3,6 +3,8 @@ package eu.goodlike.libraries.joda.time;
 import org.joda.time.*;
 import org.joda.time.chrono.ISOChronology;
 
+import java.util.Objects;
+
 /**
  * <pre>
  * Converts to and from any of the following formats:
@@ -137,5 +139,21 @@ public final class TimeConverter implements DateConverter {
     private java.time.Instant javaInstant;
     private java.util.Date javaDate;
     private java.sql.Date sqlDate;
+
+    // OBJECT OVERRIDES
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeConverter)) return false;
+        TimeConverter that = (TimeConverter) o;
+        return Objects.equals(epochMillis, that.epochMillis) &&
+                Objects.equals(chronology, that.chronology);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chronology, epochMillis);
+    }
 
 }
