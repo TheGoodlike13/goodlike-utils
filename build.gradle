@@ -16,12 +16,14 @@ repositories {
 }
 
 dependencies {
-    // used for various collections/loading cache
+    // used for various collections/loading cache across the board
     compile 'com.google.guava:guava:18.0'
-    // mostly used in json and resty packages
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
-    // mostly used for Unchecked versions of functional interfaces
+
+    // mostly used for Unchecked versions of functional interfaces in various places
     compile 'org.jooq:jool:0.9.7'
+
+    // needed for jackson and resty packages only
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
 
     // needed for jooq package only
     compile 'org.jooq:jooq:3.6.2'
