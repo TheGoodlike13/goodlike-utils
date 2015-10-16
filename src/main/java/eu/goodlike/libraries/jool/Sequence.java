@@ -18,6 +18,14 @@ public final class Sequence {
         return Seq.seq(Stream.of(array));
     }
 
+    /**
+     * This method replaces Seq.of(T[]), which intellij idea dislikes for some reason; static import version
+     */
+    @SafeVarargs
+    public static <T> Seq<T> seq(T... array) {
+        return Seq.seq(Stream.of(array));
+    }
+
     // PRIVATE
 
     private Sequence() {
