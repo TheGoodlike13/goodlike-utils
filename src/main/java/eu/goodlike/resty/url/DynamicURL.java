@@ -151,7 +151,7 @@ public final class DynamicURL {
      */
     public DynamicURL appendPath(String... path) {
         Null.checkAlone(path).ifAny("Path cannot be null");
-        return appendPath(Arrays.asList(path));
+        return path.length == 0 ? this : appendPath(Arrays.asList(path));
     }
 
     /**
@@ -168,6 +168,9 @@ public final class DynamicURL {
      */
     public DynamicURL appendPath(List<String> path) {
         Null.checkCollection(path).ifAny("Path cannot be or contain null");
+        if (path.size() == 0)
+            return this;
+
         List<String> newPath = new ArrayList<>(this.path);
         newPath.addAll(parsedPath(path));
         return new DynamicURL(protocol, ip, port, newPath);
