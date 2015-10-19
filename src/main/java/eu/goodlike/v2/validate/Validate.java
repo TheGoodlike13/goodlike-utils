@@ -2,7 +2,6 @@ package eu.goodlike.v2.validate;
 
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
-import eu.goodlike.v2.validate.actors.ValidationActor;
 import eu.goodlike.v2.validate.impl.*;
 
 import java.util.*;
