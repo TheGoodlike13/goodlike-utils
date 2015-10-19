@@ -26,6 +26,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
 
     /**
      * Adds a predicate which checks if every char in the array passes the predicate
+     * @throws NullPointerException is elementPredicate is null
      */
     public CollectionValidator<T> allMatch(Predicate<T> elementPredicate) {
         Null.check(elementPredicate).ifAny("Predicate cannot be null");
@@ -34,10 +35,19 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
 
     /**
      * Adds a predicate which checks if any char in the array passes the predicate
+     * @throws NullPointerException is elementPredicate is null
      */
     public CollectionValidator<T> anyMatch(Predicate<T> elementPredicate) {
         Null.check(elementPredicate).ifAny("Predicate cannot be null");
         return registerCondition(collection -> collection.stream().anyMatch(elementPredicate));
+    }
+
+    /**
+     * @return validator actor, which allows specifying an action if an element of collection is invalid
+     * @throws NullPointerException is elementValidator is null
+     */
+    public <V extends Validate<T, V>> ElementValidatorActor<T, V> forEachIfNot(V elementValidator) {
+        return new ElementValidatorActor<>(this, elementValidator);
     }
 
     /**
@@ -46,9 +56,10 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      *
      * The action will be executed for every invalid element, not just the first one found
      * </pre>
+     * @throws NullPointerException is elementValidator or customAction is null
      */
-    public <V extends Validate<T, V>> CollectionValidator<T> forEachIf(V elementValidator, Action customAction) {
-        Null.check(elementValidator, customAction).ifAny("Predicate and action cannot be null");
+    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Action customAction) {
+        Null.check(elementValidator, customAction).ifAny("Element validator and action cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customAction));
     }
 
@@ -58,9 +69,10 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      *
      * The consumer will be executed for every invalid element, not just the first one found
      * </pre>
+     * @throws NullPointerException is elementValidator or customConsumer is null
      */
-    public <V extends Validate<T, V>> CollectionValidator<T> forEachIf(V elementValidator, Consumer<T> customConsumer) {
-        Null.check(elementValidator, customConsumer).ifAny("Predicate and consumer cannot be null");
+    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Consumer<T> customConsumer) {
+        Null.check(elementValidator, customConsumer).ifAny("Element validator and consumer cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customConsumer));
     }
 
@@ -70,9 +82,10 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      *
      * The exception will be thrown just for the first invalid element
      * </pre>
+     * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachThrowIf(V elementValidator, Supplier<X> customException) {
-        Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachInvalidThrow(V elementValidator, Supplier<X> customException) {
+        Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
 
@@ -82,9 +95,10 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      *
      * The exception will be thrown just for the first invalid element
      * </pre>
+     * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachThrowIf(V elementValidator, Function<T, X> customException) {
-        Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachInvalidThrow(V elementValidator, Function<T, X> customException) {
+        Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
 
@@ -138,6 +152,44 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
     private static <T, V extends Validate<T, V>, X extends RuntimeException> boolean forEach(Collection<T> collection, V elementValidator, Function<T, X> customException) {
         collection.forEach(e -> elementValidator.ifInvalidThrow(e, customException));
         return true;
+    }
+
+    /**
+     * <pre>
+     * Used by forEachIfNot() method, to postpone defining the action into a separate method call, i.e.
+     *      collectionValidator.forEachIfNot(someValidator, someAction);
+     * becomes
+     *      collectionValidator.forEachIfNot(someValidator).Do(someAction);
+     * </pre>
+     */
+    public static final class ElementValidatorActor<T, V extends Validate<T, V>> {
+        public CollectionValidator<T> Do(Action action) {
+            return collectionValidator.forEachIfNot(elementValidator, action);
+        }
+
+        public CollectionValidator<T> Do(Consumer<T> elementConsumer) {
+            return collectionValidator.forEachIfNot(elementValidator, elementConsumer);
+        }
+
+        public <X extends RuntimeException> CollectionValidator<T> Throw(Supplier<X> exceptionSupplier) {
+            return collectionValidator.forEachInvalidThrow(elementValidator, exceptionSupplier);
+        }
+
+        public <X extends RuntimeException> CollectionValidator<T> Throw(Function<T, X> exceptionFunction) {
+            return collectionValidator.forEachInvalidThrow(elementValidator, exceptionFunction);
+        }
+
+        // CONSTRUCTORS
+
+        private ElementValidatorActor(CollectionValidator<T> collectionValidator, V elementValidator) {
+            this.collectionValidator = collectionValidator;
+            this.elementValidator = elementValidator;
+        }
+
+        // PRIVATE
+
+        private final CollectionValidator<T> collectionValidator;
+        private final V elementValidator;
     }
 
 }

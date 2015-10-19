@@ -2,6 +2,7 @@ package eu.goodlike.v2.validate;
 
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
+import eu.goodlike.v2.validate.actors.ValidationActor;
 import eu.goodlike.v2.validate.impl.*;
 
 import java.util.*;
@@ -27,14 +28,14 @@ import java.util.function.Supplier;
  * Examples (using static import):
  *      listOfStrings.stream().allMatch(string().not().isNull().not().isBlank());
  *      string.chars().allMatch(codePoint().isDigit().or().equal(','));
- *      Int().isDayOfMonth().ifInvalid(50, () -> System.out.println("An invalid day of month was passed));
- *      bigDecimal().not().isPositive().ifInvalid(ZERO, invalidBigDecimals::add);
+ *      Int().isDayOfMonth().ifInvalid(50).thenDo(() -> System.out.println("An invalid day of month was passed));
+ *      bigDecimal().not().isPositive().ifInvalid(ZERO).thenDo(invalidBigDecimalList::add);
  *      collectionOf(String.class).not().isNull()
- *          .forEach(string().not().isNull().not().isBlank().isEmail(),
- *              str -> new IllegalArgumentException("List cannot contain null, blank or non-emails: " + str))
- *          .ifInvalid(listOfEmails, () -> new IllegalArgumentException("List cannot be null"));
+ *          .forEachIfNot(string().not().isNull().not().isBlank().isEmail())
+ *              .Throw(str -> new IllegalArgumentException("List cannot contain null, blank or non-emails: " + str))
+ *          .ifInvalid(listOfEmails).thenThrow(() -> new IllegalArgumentException("List cannot be null"));
  *
- * Only or() needs to be explicitly called, and() is assumed by default, though you can add it if you want for readability
+ * Only or() needs to be explicitly called, and() is assumed by default, though you can add it if you want more readability
  *
  * In case of brackets:
  *      1) use openBracket() and closeBracket()
@@ -192,6 +193,13 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      */
     public final boolean isInvalid(T object) {
         return !test(object);
+    }
+
+    /**
+     * @return validator actor, which allows specifying an action if the object is invalid
+     */
+    public final ValidationActor<T> ifInvalid(T object) {
+        return ValidationActor.of(this, object);
     }
 
     /**
