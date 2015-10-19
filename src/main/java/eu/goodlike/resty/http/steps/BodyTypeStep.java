@@ -10,12 +10,15 @@ package eu.goodlike.resty.http.steps;
  *      3) With multipart(), MultipartRequest will be used (at the final step) and you will be asked to specify
  *         params and files to send
  *      4) With form(), you will be asked to give params, which will be sent like a query String in the body
+ *
+ * You can skip this step and move directly to HeaderStep
  * </pre>
  */
-public interface BodyTypeStep {
+public interface BodyTypeStep extends HeaderStep {
 
     /**
-     * Sends no body with this request, immediately move on to headers
+     * Sends no body with this request, but sets content type to "application/x-www-form-urlencoded",
+     * then immediately moves on to headers
      */
     HeaderStep noBody();
 
