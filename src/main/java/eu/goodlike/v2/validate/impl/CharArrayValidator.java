@@ -28,6 +28,15 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
     }
 
     /**
+     * Shorthand for isEqual(string.toCharArray())
+     * @throws NullPointerException if string is null
+     */
+    public CharArrayValidator isEqual(String string) {
+        Null.check(string).ifAny("String cannot be null");
+        return isEqual(string.toCharArray());
+    }
+
+    /**
      * Adds a predicate which tests if the char array being validated is empty
      */
     public CharArrayValidator isEmpty() {
