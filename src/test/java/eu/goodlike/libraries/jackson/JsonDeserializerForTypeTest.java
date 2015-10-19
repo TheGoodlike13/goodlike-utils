@@ -14,59 +14,53 @@ public class JsonDeserializerForTypeTest {
     private final byte[] jsonBytes = jsonObject.getBytes();
     private final File tempFile = jsonObject.createTempFile();
 
-    private JsonDeserializerForType jsonDeserializer;
+    private JsonDeserializerForType<JsonObject> jsonDeserializer;
 
     @Before
     public void setup() throws IOException {
-        jsonDeserializer = new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.class));
+        jsonDeserializer = new JsonDeserializerForType<>(Json.mapper().readerFor(JsonObject.class));
     }
 
     @Test
     public void tryFromInputStream_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.newInputStream());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.newInputStream()))
+                .isEqualTo(jsonDeserializer.from(jsonObject.newInputStream()));
     }
 
     @Test
     public void tryFromReader_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.newReader());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.newReader())).isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromString_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.toString());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.toString())).isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromBytes_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.getBytes());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.getBytes())).isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromBytesWithOffset_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.getBytesWithPaddingOf1(), 1, jsonBytes.length);
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.getBytesWithPaddingOf1(), 1, jsonBytes.length))
+                .isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromFile_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(tempFile);
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(tempFile)).isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromURL_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(tempFile.toURI().toURL());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(tempFile.toURI().toURL())).isEqualTo(jsonObject);
     }
 
     @Test
     public void tryFromJsonNode_shouldReturnObject() throws IOException {
-        JsonObject o = jsonDeserializer.from(jsonObject.toJsonNode());
-        assertThat(o).isEqualTo(jsonObject);
+        assertThat(jsonDeserializer.from(jsonObject.toJsonNode())).isEqualTo(jsonObject);
     }
 
 }

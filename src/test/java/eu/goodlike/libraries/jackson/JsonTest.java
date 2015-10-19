@@ -23,20 +23,14 @@ public class JsonTest {
 
     @Test
     public void tryReadClass_shouldUseConstructor() throws IOException {
-        JsonObject fromClass = Json.read(JsonObject.class).from(jsonString);
-        assertThat(fromClass).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.class)).from(jsonString));
+        assertThat(Json.read(JsonObject.class).from(jsonString))
+                .isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.class)).from(jsonString));
     }
 
     @Test
     public void tryReadTypeReference_shouldUseConstructor() throws IOException {
-        JsonObject fromType = Json.read(JsonObject.getTypeReference()).from(jsonString);
-        assertThat(fromType).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getTypeReference())).from(jsonString));
-    }
-
-    @Test
-    public void tryReadJavaType_shouldUseConstructor() throws IOException {
-        JsonObject fromType = Json.read(JsonObject.getJavaType()).from(jsonString);
-        assertThat(fromType).isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getJavaType())).from(jsonString));
+        assertThat(Json.read(JsonObject.getTypeReference()).from(jsonString))
+                .isEqualTo(new JsonDeserializerForType(Json.mapper().readerFor(JsonObject.getTypeReference())).from(jsonString));
     }
 
     @Test

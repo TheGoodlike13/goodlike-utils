@@ -1,7 +1,6 @@
 package eu.goodlike.libraries.jackson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.File;
@@ -26,22 +25,15 @@ public final class Json {
     /**
      * @return JSON deserializer for a class
      */
-    public static <T> JsonDeserializerForType read(Class<T> clazz) throws IOException {
-        return new JsonDeserializerForType(mapper().readerFor(clazz));
+    public static <T> JsonDeserializerForType<T> read(Class<T> clazz) throws IOException {
+        return new JsonDeserializerForType<>(mapper().readerFor(clazz));
     }
 
     /**
      * @return JSON deserializer for a type
      */
-    public static <T> JsonDeserializerForType read(TypeReference<T> type) throws IOException {
-        return new JsonDeserializerForType(mapper().readerFor(type));
-    }
-
-    /**
-     * @return JSON deserializer for a JavaType
-     */
-    public static JsonDeserializerForType read(JavaType javaType) throws IOException {
-        return new JsonDeserializerForType(mapper().readerFor(javaType));
+    public static <T> JsonDeserializerForType<T> read(TypeReference<T> type) throws IOException {
+        return new JsonDeserializerForType<>(mapper().readerFor(type));
     }
 
     /**
