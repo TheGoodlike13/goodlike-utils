@@ -85,6 +85,7 @@ public final class Time {
 
     private static final DateTimeZone DEFAULT_TIME_ZONE = DateTimeZone.forID("UTC");
     private static final LoadingCache<DateTimeZone, TimeHandler> HANDLER_CACHE = CacheBuilder.newBuilder()
+            .softValues()
             .build(CacheLoader.from(TimeHandler::new));
 
     private Time() {

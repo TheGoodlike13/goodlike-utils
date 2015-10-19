@@ -82,6 +82,7 @@ public final class Time {
 
     private static final ZoneId DEFAULT_TIME_ZONE = ZoneId.of("UTC");
     private static final LoadingCache<ZoneId, TimeHandler> HANDLER_CACHE = CacheBuilder.newBuilder()
+            .softValues()
             .build(CacheLoader.from(TimeHandler::new));
 
     private Time() {
