@@ -98,7 +98,7 @@ public final class StringValidator extends Validate<String, StringValidator> {
      */
     public static boolean isCommaSeparatedListOfIntegers(String string) {
         return !startsEndsOrContainsConsecutive(string, ",")
-                && string.chars().allMatch(codePoint().isDigit().or().isEqual('-'));
+                && string.chars().allMatch(codePoint().isDigit().or().isEqual(','));
     }
 
     // CONSTRUCTORS
