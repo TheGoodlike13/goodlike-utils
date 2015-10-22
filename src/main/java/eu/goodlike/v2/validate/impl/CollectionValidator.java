@@ -18,7 +18,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
     /**
      * Adds a predicate which tests if the collection being validated is empty
      */
-    public CollectionValidator<T> empty() {
+    public CollectionValidator<T> isEmpty() {
         return registerCondition(Collection::isEmpty);
     }
 
