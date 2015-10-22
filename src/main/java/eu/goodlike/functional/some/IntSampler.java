@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  *              .collect(toList());
  *
  * which turns into:
- *      List list = Some.of(this::getSomethingForInt).get(limit);
+ *      List list = Some.of(this::getSomethingForInt).zeroTo(limit);
  * </pre>
  * @param <T> type returned by given integer function
  */
@@ -38,14 +38,14 @@ public final class IntSampler<T> {
     /**
      * @return list of int function results, evaluated for all i in {0, amount-1}
      */
-    public List<T> get(int amount) {
+    public List<T> zeroTo(int amount) {
         return evaluate(IntStream.range(0, amount));
     }
 
     /**
      * @return list of int function results, evaluated for all i in {1, amount}
      */
-    public List<T> fetch(int amount) {
+    public List<T> oneUpTo(int amount) {
         return evaluate(IntStream.rangeClosed(1, amount));
     }
 

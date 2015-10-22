@@ -16,7 +16,7 @@ import java.util.function.LongFunction;
  *              .collect(toList());
  *
  * which turns into:
- *      List list = Some.of(this::getSomethingForInt).get(limit);
+ *      List list = Some.of(this::getSomethingForInt).zeroTo(limit);
  * </pre>
  */
 public final class Some {

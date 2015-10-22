@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  *              .collect(toList());
  *
  * which turns into:
- *      List list = Some.Of(this::getSomethingForLong).get(limit);
+ *      List list = Some.Of(this::getSomethingForLong).zeroTo(limit);
  * </pre>
  * @param <T> type returned by given long function
  */
@@ -38,14 +38,14 @@ public final class LongSampler<T> {
     /**
      * @return list of long function results, evaluated for all i in {0, amount-1}
      */
-    public List<T> get(long amount) {
+    public List<T> zeroTo(long amount) {
         return evaluate(LongStream.range(0, amount));
     }
 
     /**
      * @return list of long function results, evaluated for all i in {1, amount}
      */
-    public List<T> fetch(long amount) {
+    public List<T> oneUpTo(long amount) {
         return evaluate(LongStream.rangeClosed(1, amount));
     }
 
