@@ -29,10 +29,24 @@ public final class Some {
     }
 
     /**
+     * @return sampler of just integers
+     */
+    public static IntSampler<Integer> ints() {
+        return of(i -> i);
+    }
+
+    /**
      * @return sampler for a long function
      */
     public static <T> LongSampler<T> ofLong(LongFunction<T> anyFunction) {
         return new LongSampler<>(anyFunction);
+    }
+
+    /**
+     * @return sampler of just longs
+     */
+    public static LongSampler<Long> longs() {
+        return ofLong(i -> i);
     }
 
     // PRIVATE
