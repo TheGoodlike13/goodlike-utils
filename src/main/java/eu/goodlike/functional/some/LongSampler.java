@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  *              .collect(toList());
  *
  * which turns into:
- *      List list = Some.ofLong(this::getSomethingForLong).get(limit);
+ *      List list = Some.Of(this::getSomethingForLong).get(limit);
  * </pre>
  * @param <T> type returned by given long function
  */

@@ -36,17 +36,38 @@ public final class Some {
     }
 
     /**
-     * @return sampler for a long function
+     * @return sampler of just longs
      */
-    public static <T> LongSampler<T> ofLong(LongFunction<T> anyFunction) {
-        return new LongSampler<>(anyFunction);
+    public static IntSampler<Long> longs() {
+        return of(Long::valueOf);
     }
 
     /**
-     * @return sampler of just longs
+     * @return sampler of just strings of integers
      */
-    public static LongSampler<Long> longs() {
-        return ofLong(i -> i);
+    public static IntSampler<String> strings() {
+        return of(String::valueOf);
+    }
+
+    /**
+     * @return sampler of just an integer
+     */
+    public static IntSampler<Integer> ofInt(int integer) {
+        return of(i -> integer);
+    }
+
+    /**
+     * @return sampler of just a long
+     */
+    public static IntSampler<Long> ofLong(long longInteger) {
+        return of(i -> longInteger);
+    }
+
+    /**
+     * @return sampler for a long function
+     */
+    public static <T> LongSampler<T> Of(LongFunction<T> anyFunction) {
+        return new LongSampler<>(anyFunction);
     }
 
     // PRIVATE
