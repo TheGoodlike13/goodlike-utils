@@ -108,7 +108,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forEachInvalidThrow(V elementValidator, Supplier<X> customException) {
+    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Supplier<X> customException) {
         Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
         return registerCondition(chars -> forEach(chars, elementValidator, customException));
     }
@@ -121,7 +121,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forEachInvalidThrow(V elementValidator, Function<Character, X> customException) {
+    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Function<Character, X> customException) {
         Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
         return registerCondition(chars -> forEach(chars, elementValidator, customException));
     }
@@ -200,11 +200,11 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
         }
 
         public <X extends RuntimeException> CharArrayValidator Throw(Supplier<X> exceptionSupplier) {
-            return charArrayValidator.forEachInvalidThrow(elementValidator, exceptionSupplier);
+            return charArrayValidator.forAnyInvalidThrow(elementValidator, exceptionSupplier);
         }
 
         public <X extends RuntimeException> CharArrayValidator Throw(Function<Character, X> exceptionFunction) {
-            return charArrayValidator.forEachInvalidThrow(elementValidator, exceptionFunction);
+            return charArrayValidator.forAnyInvalidThrow(elementValidator, exceptionFunction);
         }
 
         // CONSTRUCTORS

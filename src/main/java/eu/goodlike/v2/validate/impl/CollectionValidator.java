@@ -82,7 +82,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachInvalidThrow(V elementValidator, Supplier<X> customException) {
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Supplier<X> customException) {
         Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
@@ -95,7 +95,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forEachInvalidThrow(V elementValidator, Function<T, X> customException) {
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Function<T, X> customException) {
         Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
@@ -170,11 +170,11 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
         }
 
         public <X extends RuntimeException> CollectionValidator<T> Throw(Supplier<X> exceptionSupplier) {
-            return collectionValidator.forEachInvalidThrow(elementValidator, exceptionSupplier);
+            return collectionValidator.forAnyInvalidThrow(elementValidator, exceptionSupplier);
         }
 
         public <X extends RuntimeException> CollectionValidator<T> Throw(Function<T, X> exceptionFunction) {
-            return collectionValidator.forEachInvalidThrow(elementValidator, exceptionFunction);
+            return collectionValidator.forAnyInvalidThrow(elementValidator, exceptionFunction);
         }
 
         // CONSTRUCTORS
