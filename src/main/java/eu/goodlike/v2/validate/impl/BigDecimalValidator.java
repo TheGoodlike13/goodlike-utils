@@ -5,8 +5,6 @@ import eu.goodlike.misc.SpecialUtils;
 import eu.goodlike.v2.validate.Validate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -40,11 +38,11 @@ public final class BigDecimalValidator extends Validate<BigDecimal, BigDecimalVa
     // CONSTRUCTORS
 
     public BigDecimalValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected BigDecimalValidator(BigDecimalValidator outerValidator, Predicate<BigDecimal> condition, List<Predicate<BigDecimal>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected BigDecimalValidator(BigDecimalValidator outerValidator, Predicate<BigDecimal> mainCondition, Predicate<BigDecimal> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -55,8 +53,8 @@ public final class BigDecimalValidator extends Validate<BigDecimal, BigDecimalVa
     }
 
     @Override
-    protected BigDecimalValidator newValidator(BigDecimalValidator outerValidator, Predicate<BigDecimal> condition, List<Predicate<BigDecimal>> subConditions, boolean notCondition) {
-        return new BigDecimalValidator(outerValidator, condition, subConditions, notCondition);
+    protected BigDecimalValidator newValidator(BigDecimalValidator outerValidator, Predicate<BigDecimal> mainCondition, Predicate<BigDecimal> accumulatedCondition, boolean notCondition) {
+        return new BigDecimalValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
 }

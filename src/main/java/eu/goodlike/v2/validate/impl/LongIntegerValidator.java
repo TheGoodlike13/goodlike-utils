@@ -2,8 +2,6 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
@@ -96,11 +94,11 @@ public final class LongIntegerValidator extends Validate<Long, LongIntegerValida
     // CONSTRUCTORS
 
     public LongIntegerValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected LongIntegerValidator(LongIntegerValidator outerValidator, Predicate<Long> condition, List<Predicate<Long>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected LongIntegerValidator(LongIntegerValidator outerValidator, Predicate<Long> mainCondition, Predicate<Long> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -111,8 +109,8 @@ public final class LongIntegerValidator extends Validate<Long, LongIntegerValida
     }
 
     @Override
-    protected LongIntegerValidator newValidator(LongIntegerValidator outerValidator, Predicate<Long> condition, List<Predicate<Long>> subConditions, boolean notCondition) {
-        return new LongIntegerValidator(outerValidator, condition, subConditions, notCondition);
+    protected LongIntegerValidator newValidator(LongIntegerValidator outerValidator, Predicate<Long> mainCondition, Predicate<Long> accumulatedCondition, boolean notCondition) {
+        return new LongIntegerValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
 }

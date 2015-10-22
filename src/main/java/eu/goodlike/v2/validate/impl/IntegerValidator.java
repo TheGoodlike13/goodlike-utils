@@ -2,8 +2,6 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
@@ -96,11 +94,11 @@ public class IntegerValidator extends Validate<Integer, IntegerValidator> {
     // CONSTRUCTORS
 
     public IntegerValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected IntegerValidator(IntegerValidator outerValidator, Predicate<Integer> condition, List<Predicate<Integer>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected IntegerValidator(IntegerValidator outerValidator, Predicate<Integer> mainCondition, Predicate<Integer> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -111,8 +109,8 @@ public class IntegerValidator extends Validate<Integer, IntegerValidator> {
     }
 
     @Override
-    protected IntegerValidator newValidator(IntegerValidator outerValidator, Predicate<Integer> condition, List<Predicate<Integer>> subConditions, boolean notCondition) {
-        return new IntegerValidator(outerValidator, condition, subConditions, notCondition);
+    protected IntegerValidator newValidator(IntegerValidator outerValidator, Predicate<Integer> mainCondition, Predicate<Integer> accumulatedCondition, boolean notCondition) {
+        return new IntegerValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
 }

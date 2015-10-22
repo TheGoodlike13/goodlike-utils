@@ -5,9 +5,7 @@ import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -131,11 +129,11 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
     // CONSTRUCTORS
 
     public CharArrayValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected CharArrayValidator(CharArrayValidator outerValidator, Predicate<char[]> condition, List<Predicate<char[]>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected CharArrayValidator(CharArrayValidator outerValidator, Predicate<char[]> mainCondition, Predicate<char[]> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -146,8 +144,8 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
     }
 
     @Override
-    protected CharArrayValidator newValidator(CharArrayValidator outerValidator, Predicate<char[]> condition, List<Predicate<char[]>> subConditions, boolean notCondition) {
-        return new CharArrayValidator(outerValidator, condition, subConditions, notCondition);
+    protected CharArrayValidator newValidator(CharArrayValidator outerValidator, Predicate<char[]> mainCondition, Predicate<char[]> accumulatedCondition, boolean notCondition) {
+        return new CharArrayValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PRIVATE

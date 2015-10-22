@@ -4,9 +4,7 @@ import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -105,11 +103,11 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
     // CONSTRUCTORS
 
     public CollectionValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected CollectionValidator(CollectionValidator<T> outerValidator, Predicate<Collection<T>> condition, List<Predicate<Collection<T>>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected CollectionValidator(CollectionValidator<T> outerValidator, Predicate<Collection<T>> mainCondition, Predicate<Collection<T>> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -120,8 +118,8 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
     }
 
     @Override
-    protected CollectionValidator<T> newValidator(CollectionValidator<T> outerValidator, Predicate<Collection<T>> condition, List<Predicate<Collection<T>>> subConditions, boolean notCondition) {
-        return new CollectionValidator<>(outerValidator, condition, subConditions, notCondition);
+    protected CollectionValidator<T> newValidator(CollectionValidator<T> outerValidator, Predicate<Collection<T>> mainCondition, Predicate<Collection<T>> accumulatedCondition, boolean notCondition) {
+        return new CollectionValidator<>(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PRIVATE

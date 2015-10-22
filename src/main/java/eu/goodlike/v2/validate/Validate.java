@@ -4,7 +4,9 @@ import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 import eu.goodlike.v2.validate.impl.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -63,7 +65,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * return new V(outerValidator, condition, subConditions, notCondition);
      * @return new instance of implementing validator, so the methods can be chained from extending classes
      */
-    protected abstract V newValidator(V outerValidator, Predicate<T> condition, List<Predicate<T>> subConditions, boolean notCondition);
+    protected abstract V newValidator(V outerValidator, Predicate<T> mainCondition, Predicate<T> accumulatedCondition, boolean notCondition);
 
     /**
      * <pre>
@@ -113,8 +115,12 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
 
     /**
      * Does nothing, only useful for readability
+     * @throws IllegalStateException if and() is used before any condition, i.e. string().and()..
      */
     public final V and() {
+        if (hasAccumulatedAnyConditions())
+            throw new IllegalStateException("There must be at least a single condition before every and()");
+
         return thisValidator();
     }
 
@@ -124,10 +130,10 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws IllegalStateException if or() is used before any condition, i.e. string().or()...
      */
     public final V or() {
-        if (subConditions.isEmpty())
+        if (hasAccumulatedAnyConditions())
             throw new IllegalStateException("There must be at least a single condition before every or()");
 
-        return newValidator(outerValidator, mainCondition(), new ArrayList<>(), false);
+        return newValidator(outerValidator, mainCondition(), null, false);
     }
 
     /**
@@ -138,7 +144,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * </pre>
      */
     public final V not() {
-        return newValidator(outerValidator, condition, subConditions, !notCondition);
+        return newValidator(outerValidator, mainCondition, accumulatedCondition, !notCondition);
     }
 
     /**
@@ -151,7 +157,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * </pre>
      */
     public final V openBracket() {
-        return newValidator(thisValidator(), null, new ArrayList<>(), false);
+        return newValidator(thisValidator(), null, null, false);
     }
 
     /**
@@ -371,21 +377,14 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
         return new StringValidator();
     }
 
-    protected Validate(V outerValidator, Predicate<T> condition, List<Predicate<T>> subConditions, boolean notCondition) {
+    protected Validate(V outerValidator, Predicate<T> mainCondition, Predicate<T> accumulatedCondition, boolean notCondition) {
         this.outerValidator = outerValidator;
-        this.condition = condition;
-        this.subConditions = subConditions;
+        this.mainCondition = mainCondition;
+        this.accumulatedCondition = accumulatedCondition;
         this.notCondition = notCondition;
     }
 
     // PROTECTED
-
-    /**
-     * @return true if this validator is used for bracket simulation, false otherwise
-     */
-    protected final boolean hasOuterValidator() {
-        return outerValidator != null;
-    }
 
     /**
      * <pre>
@@ -395,20 +394,33 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * </pre>
      */
     protected final V registerCondition(Predicate<T> predicate) {
-        List<Predicate<T>> subConditions = new ArrayList<>(this.subConditions);
-        subConditions.add(notCondition ? predicate.negate() : predicate);
-        return newValidator(outerValidator, condition, subConditions, false);
+        Null.check(predicate).ifAny("Registered predicate cannot be null");
+        if (notCondition)
+            predicate = predicate.negate();
+        return newValidator(outerValidator, mainCondition,
+                accumulatedCondition == null ? predicate : accumulatedCondition.and(predicate), false);
     }
 
     // PRIVATE
 
     private final V outerValidator;
-    private final Predicate<T> condition;
-    private final List<Predicate<T>> subConditions;
+    private final Predicate<T> mainCondition;
+    private final Predicate<T> accumulatedCondition;
     private final boolean notCondition;
 
+    /**
+     * @return true if this validator is used for bracket simulation, false otherwise
+     */
+    private boolean hasOuterValidator() {
+        return outerValidator != null;
+    }
+
+    private boolean hasAccumulatedAnyConditions() {
+        return accumulatedCondition != null;
+    }
+
     private Predicate<T> collapseCondition() {
-        Predicate<T> condition = subConditions.isEmpty() ? this.condition : mainCondition();
+        Predicate<T> condition = hasAccumulatedAnyConditions() ? mainCondition() : mainCondition;
 
         if (condition == null)
             throw new IllegalStateException("You must have at least one condition total, or between openBracket() and closeBracket()");
@@ -417,12 +429,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
     }
 
     private Predicate<T> mainCondition() {
-        return this.condition == null ? accumulatedCondition() : this.condition.or(accumulatedCondition());
-    }
-
-    private Predicate<T> accumulatedCondition() {
-        return subConditions.stream().reduce(Predicate::and)
-                .orElseThrow(() -> new IllegalStateException("Cannot accumulate an empty list"));
+        return mainCondition == null ? accumulatedCondition : mainCondition.or(accumulatedCondition);
     }
 
 }

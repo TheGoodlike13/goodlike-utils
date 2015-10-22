@@ -4,9 +4,7 @@ import com.google.common.primitives.Ints;
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.*;
 
 /**
@@ -47,21 +45,25 @@ public final class IntValidator implements IntPredicate {
 
     /**
      * Does nothing, only useful for readability
+     * @throws IllegalStateException if and() is used before any condition, i.e. Int().and()...
      */
     public IntValidator and() {
+        if (!hasAccumulatedAnyConditions())
+            throw new IllegalStateException("There must be at least a single condition before every and()");
+
         return this;
     }
 
     /**
      * Accumulates all predicates before this or() that haven't been accumulated previously using && operator, then
      * adds it to the previously accumulated condition (if such exists) using || operator
-     * @throws IllegalStateException if or() is used before any condition, i.e. Long().or()...
+     * @throws IllegalStateException if or() is used before any condition, i.e. Int().or()...
      */
     public IntValidator or() {
-        if (subConditions.isEmpty())
+        if (!hasAccumulatedAnyConditions())
             throw new IllegalStateException("There must be at least a single condition before every or()");
 
-        return new IntValidator(outerValidator, mainCondition(), new ArrayList<>(), false);
+        return new IntValidator(outerValidator, mainCondition(), null, false);
     }
 
     /**
@@ -72,7 +74,7 @@ public final class IntValidator implements IntPredicate {
      * </pre>
      */
     public IntValidator not() {
-        return new IntValidator(outerValidator, condition, subConditions, !notCondition);
+        return new IntValidator(outerValidator, mainCondition, accumulatedCondition, !notCondition);
     }
 
     /**
@@ -85,7 +87,7 @@ public final class IntValidator implements IntPredicate {
      * </pre>
      */
     public IntValidator openBracket() {
-        return new IntValidator(this, null, new ArrayList<>(), false);
+        return new IntValidator(this, null, null, false);
     }
 
     /**
@@ -445,22 +447,33 @@ public final class IntValidator implements IntPredicate {
     // CONSTRUCTORS
 
     public IntValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    private IntValidator(IntValidator outerValidator, IntPredicate condition, List<IntPredicate> subConditions, boolean notCondition) {
+    private IntValidator(IntValidator outerValidator, IntPredicate mainCondition, IntPredicate accumulatedCondition, boolean notCondition) {
         this.outerValidator = outerValidator;
-        this.condition = condition;
-        this.subConditions = subConditions;
+        this.mainCondition = mainCondition;
+        this.accumulatedCondition = accumulatedCondition;
         this.notCondition = notCondition;
     }
 
     // PRIVATE
 
     private final IntValidator outerValidator;
-    private final IntPredicate condition;
-    private final List<IntPredicate> subConditions;
+    private final IntPredicate mainCondition;
+    private final IntPredicate accumulatedCondition;
     private final boolean notCondition;
+
+    /**
+     * Adds a predicate to subCondition list, negating if not() was called before this method
+     */
+    private IntValidator registerCondition(IntPredicate predicate) {
+        Null.check(predicate).ifAny("Registered predicate cannot be null");
+        if (notCondition)
+            predicate = predicate.negate();
+        return new IntValidator(outerValidator, mainCondition,
+                accumulatedCondition == null ? predicate : accumulatedCondition.and(predicate), false);
+    }
 
     /**
      * @return true if this validator is used for bracket simulation, false otherwise
@@ -469,17 +482,12 @@ public final class IntValidator implements IntPredicate {
         return outerValidator != null;
     }
 
-    /**
-     * Adds a predicate to subCondition list, negating if not() was called before this method
-     */
-    private IntValidator registerCondition(IntPredicate predicate) {
-        List<IntPredicate> subConditions = new ArrayList<>(this.subConditions);
-        subConditions.add(notCondition ? predicate.negate() : predicate);
-        return new IntValidator(outerValidator, condition, subConditions, false);
+    private boolean hasAccumulatedAnyConditions() {
+        return accumulatedCondition != null;
     }
 
     private IntPredicate collapseCondition() {
-        IntPredicate condition = subConditions.isEmpty() ? this.condition : mainCondition();
+        IntPredicate condition = hasAccumulatedAnyConditions() ? mainCondition() : mainCondition;
 
         if (condition == null)
             throw new IllegalStateException("You must have at least one condition total, or between openBracket() and closeBracket()");
@@ -488,12 +496,7 @@ public final class IntValidator implements IntPredicate {
     }
 
     private IntPredicate mainCondition() {
-        return this.condition == null ? accumulatedCondition() : this.condition.or(accumulatedCondition());
-    }
-
-    private IntPredicate accumulatedCondition() {
-        return subConditions.stream().reduce(IntPredicate::and)
-                .orElseThrow(() -> new IllegalStateException("Cannot accumulate an empty list"));
+        return mainCondition == null ? accumulatedCondition : mainCondition.or(accumulatedCondition);
     }
 
 }

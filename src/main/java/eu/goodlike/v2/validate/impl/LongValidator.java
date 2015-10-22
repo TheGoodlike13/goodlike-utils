@@ -4,9 +4,7 @@ import com.google.common.primitives.Longs;
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.*;
 
 /**
@@ -47,8 +45,12 @@ public final class LongValidator implements LongPredicate {
 
     /**
      * Does nothing, only useful for readability
+     * @throws IllegalStateException if and() is used before any condition, i.e. Long().and()..
      */
     public LongValidator and() {
+        if (!hasAccumulatedAnyConditions())
+            throw new IllegalStateException("There must be at least a single condition before every and()");
+
         return this;
     }
 
@@ -58,10 +60,10 @@ public final class LongValidator implements LongPredicate {
      * @throws IllegalStateException if or() is used before any condition, i.e. Long().or()...
      */
     public LongValidator or() {
-        if (subConditions.isEmpty())
+        if (!hasAccumulatedAnyConditions())
             throw new IllegalStateException("There must be at least a single condition before every or()");
 
-        return new LongValidator(outerValidator, mainCondition(), new ArrayList<>(), false);
+        return new LongValidator(outerValidator, mainCondition(), null, false);
     }
 
     /**
@@ -72,7 +74,7 @@ public final class LongValidator implements LongPredicate {
      * </pre>
      */
     public LongValidator not() {
-        return new LongValidator(outerValidator, condition, subConditions, !notCondition);
+        return new LongValidator(outerValidator, mainCondition, accumulatedCondition, !notCondition);
     }
 
     /**
@@ -85,7 +87,7 @@ public final class LongValidator implements LongPredicate {
      * </pre>
      */
     public LongValidator openBracket() {
-        return new LongValidator(this, null, new ArrayList<>(), false);
+        return new LongValidator(this, null, null, false);
     }
 
     /**
@@ -267,22 +269,33 @@ public final class LongValidator implements LongPredicate {
     // CONSTRUCTORS
 
     public LongValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    private LongValidator(LongValidator outerValidator, LongPredicate condition, List<LongPredicate> subConditions, boolean notCondition) {
+    private LongValidator(LongValidator outerValidator, LongPredicate mainCondition, LongPredicate accumulatedCondition, boolean notCondition) {
         this.outerValidator = outerValidator;
-        this.condition = condition;
-        this.subConditions = subConditions;
+        this.mainCondition = mainCondition;
+        this.accumulatedCondition = accumulatedCondition;
         this.notCondition = notCondition;
     }
 
     // PRIVATE
 
     private final LongValidator outerValidator;
-    private final LongPredicate condition;
-    private final List<LongPredicate> subConditions;
+    private final LongPredicate mainCondition;
+    private final LongPredicate accumulatedCondition;
     private final boolean notCondition;
+
+    /**
+     * Adds a predicate to subCondition list, negating if not() was called before this method
+     */
+    private LongValidator registerCondition(LongPredicate predicate) {
+        Null.check(predicate).ifAny("Registered predicate cannot be null");
+        if (notCondition)
+            predicate = predicate.negate();
+        return new LongValidator(outerValidator, mainCondition,
+                accumulatedCondition == null ? predicate : accumulatedCondition.and(predicate), false);
+    }
 
     /**
      * @return true if this validator is used for bracket simulation, false otherwise
@@ -291,17 +304,12 @@ public final class LongValidator implements LongPredicate {
         return outerValidator != null;
     }
 
-    /**
-     * Adds a predicate to subCondition list, negating if not() was called before this method
-     */
-    private LongValidator registerCondition(LongPredicate predicate) {
-        List<LongPredicate> subConditions = new ArrayList<>(this.subConditions);
-        subConditions.add(notCondition ? predicate.negate() : predicate);
-        return new LongValidator(outerValidator, condition, subConditions, false);
+    private boolean hasAccumulatedAnyConditions() {
+        return accumulatedCondition != null;
     }
 
     private LongPredicate collapseCondition() {
-        LongPredicate condition = subConditions.isEmpty() ? this.condition : mainCondition();
+        LongPredicate condition = hasAccumulatedAnyConditions() ? mainCondition() : mainCondition;
 
         if (condition == null)
             throw new IllegalStateException("You must have at least one condition total, or between openBracket() and closeBracket()");
@@ -310,12 +318,7 @@ public final class LongValidator implements LongPredicate {
     }
 
     private LongPredicate mainCondition() {
-        return this.condition == null ? accumulatedCondition() : this.condition.or(accumulatedCondition());
-    }
-
-    private LongPredicate accumulatedCondition() {
-        return subConditions.stream().reduce(LongPredicate::and)
-                .orElseThrow(() -> new IllegalStateException("Cannot accumulate an empty list"));
+        return mainCondition == null ? accumulatedCondition : mainCondition.or(accumulatedCondition);
     }
 
 }

@@ -2,8 +2,6 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -106,11 +104,11 @@ public final class StringValidator extends Validate<String, StringValidator> {
     // CONSTRUCTORS
 
     public StringValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected StringValidator(StringValidator outerValidator, Predicate<String> condition, List<Predicate<String>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected StringValidator(StringValidator outerValidator, Predicate<String> mainCondition, Predicate<String> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -121,8 +119,8 @@ public final class StringValidator extends Validate<String, StringValidator> {
     }
 
     @Override
-    protected StringValidator newValidator(StringValidator outerValidator, Predicate<String> condition, List<Predicate<String>> subConditions, boolean notCondition) {
-        return new StringValidator(outerValidator, condition, subConditions, notCondition);
+    protected StringValidator newValidator(StringValidator outerValidator, Predicate<String> mainCondition, Predicate<String> accumulatedCondition, boolean notCondition) {
+        return new StringValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
 }

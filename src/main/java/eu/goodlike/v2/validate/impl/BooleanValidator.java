@@ -2,8 +2,6 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -28,11 +26,11 @@ public final class BooleanValidator extends Validate<Boolean, BooleanValidator> 
     // CONSTRUCTORS
 
     public BooleanValidator() {
-        this(null, null, new ArrayList<>(), false);
+        this(null, null, null, false);
     }
 
-    protected BooleanValidator(BooleanValidator outerValidator, Predicate<Boolean> condition, List<Predicate<Boolean>> subConditions, boolean notCondition) {
-        super(outerValidator, condition, subConditions, notCondition);
+    protected BooleanValidator(BooleanValidator outerValidator, Predicate<Boolean> mainCondition, Predicate<Boolean> accumulatedCondition, boolean notCondition) {
+        super(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
     // PROTECTED
@@ -43,8 +41,8 @@ public final class BooleanValidator extends Validate<Boolean, BooleanValidator> 
     }
 
     @Override
-    protected BooleanValidator newValidator(BooleanValidator outerValidator, Predicate<Boolean> condition, List<Predicate<Boolean>> subConditions, boolean notCondition) {
-        return new BooleanValidator(outerValidator, condition, subConditions, notCondition);
+    protected BooleanValidator newValidator(BooleanValidator outerValidator, Predicate<Boolean> mainCondition, Predicate<Boolean> accumulatedCondition, boolean notCondition) {
+        return new BooleanValidator(outerValidator, mainCondition, accumulatedCondition, notCondition);
     }
 
 }
