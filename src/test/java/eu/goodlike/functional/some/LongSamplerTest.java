@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LongSamplerTest {
 
-    private final LongSampler<String> toString = Some.ofLong(String::valueOf);
+    private final LongSampler<String> toString = Some.Of(String::valueOf);
 
     @Test
     public void trySampling_shouldReturnSample() {
@@ -18,12 +18,12 @@ public class LongSamplerTest {
 
     @Test
     public void tryGetting_shouldReturnFrom0ToGivenMinus1() {
-        assertThat(toString.get(5)).isEqualTo(Arrays.asList("0", "1", "2", "3", "4"));
+        assertThat(toString.zeroTo(5)).isEqualTo(Arrays.asList("0", "1", "2", "3", "4"));
     }
 
     @Test
     public void tryFetching_shouldReturnFrom1ToGiven() {
-        assertThat(toString.fetch(5)).isEqualTo(Arrays.asList("1", "2", "3", "4", "5"));
+        assertThat(toString.oneUpTo(5)).isEqualTo(Arrays.asList("1", "2", "3", "4", "5"));
     }
 
     @Test
