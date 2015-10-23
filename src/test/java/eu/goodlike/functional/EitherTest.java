@@ -646,18 +646,78 @@ public class EitherTest {
     }
 
     @Test
-    public void tryIfNeitherThrowWhenFirstKind_shouldThrowPass() {
+    public void tryIfNeitherThrowWhenFirstKind_shouldPass() {
         firstKind.ifNeitherThrow(RuntimeException::new);
     }
 
     @Test
-    public void tryIfNeitherThrowWhenSecondKind_shouldThrowPass() {
+    public void tryIfNeitherThrowWhenSecondKind_shouldPass() {
         secondKind.ifNeitherThrow(RuntimeException::new);
     }
 
     @Test(expected = RuntimeException.class)
-    public void tryIfNeitherThrowWhenNeitherKind_shouldThrowPass() {
+    public void tryIfNeitherThrowWhenNeitherKind_shouldThrow() {
         neitherKind.ifNeitherThrow(RuntimeException::new);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void tryIfFirstThrowWhenFirstKind_shouldThrow() {
+        firstKind.ifFirstThrow(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfFirstThrowWhenSecondKind_shouldPass() {
+        secondKind.ifFirstThrow(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfFirstThrowWhenNeitherKind_shouldPass() {
+        neitherKind.ifFirstThrow(RuntimeException::new);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void tryIfFirstThrowItWhenFirstKind_shouldThrow() {
+        firstKind.ifFirstThrowIt(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfFirstThrowItWhenSecondKind_shouldPass() {
+        secondKind.ifFirstThrowIt(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfFirstThrowItWhenNeitherKind_shouldPass() {
+        neitherKind.ifFirstThrowIt(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfSecondThrowWhenFirstKind_shouldPass() {
+        firstKind.ifSecondThrow(RuntimeException::new);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void tryIfSecondThrowWhenSecondKind_shouldThrow() {
+        secondKind.ifSecondThrow(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfSecondThrowWhenNeitherKind_shouldPass() {
+        neitherKind.ifSecondThrow(RuntimeException::new);
+    }
+
+    @Test
+    public void tryIfSecondThrowItWhenFirstKind_shouldPass() {
+        firstKind.ifSecondThrowIt(i -> new RuntimeException("Second present: " + i));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void tryIfSecondThrowItWhenSecondKind_shouldThrow() {
+        secondKind.ifSecondThrowIt(i -> new RuntimeException("Second present: " + i));
+    }
+
+    @Test
+    public void tryIfSecondThrowItWhenNeitherKind_shouldPass() {
+        neitherKind.ifSecondThrowIt(i -> new RuntimeException("Second present: " + i));
     }
 
 }

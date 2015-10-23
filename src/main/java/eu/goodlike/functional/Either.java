@@ -313,6 +313,50 @@ public final class Either<T1, T2> {
 
     /**
      * @return this Either
+     * @throws X if this Either is of first kind
+     */
+    public <X extends Throwable> Either<T1, T2> ifFirstThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        if (isFirstKind())
+            throw exceptionSupplier.get();
+
+        return this;
+    }
+
+    /**
+     * @return this Either
+     * @throws X if this Either is of first kind
+     */
+    public <X extends Throwable> Either<T1, T2> ifFirstThrowIt(Function<T1, ? extends X> exceptionSupplier) throws X {
+        if (isFirstKind())
+            throw exceptionSupplier.apply(firstKind.get());
+
+        return this;
+    }
+
+    /**
+     * @return this Either
+     * @throws X if this Either is of second kind
+     */
+    public <X extends Throwable> Either<T1, T2> ifSecondThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        if (isSecondKind())
+            throw exceptionSupplier.get();
+
+        return this;
+    }
+
+    /**
+     * @return this Either
+     * @throws X if this Either is of second kind
+     */
+    public <X extends Throwable> Either<T1, T2> ifSecondThrowIt(Function<T2, ? extends X> exceptionSupplier) throws X {
+        if (isSecondKind())
+            throw exceptionSupplier.apply(secondKind.get());
+
+        return this;
+    }
+
+    /**
+     * @return this Either
      * @throws X if this Either is of neither kind
      */
     public <X extends Throwable> Either<T1, T2> ifNeitherThrow(Supplier<? extends X> exceptionSupplier) throws X {
