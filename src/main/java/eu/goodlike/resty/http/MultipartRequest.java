@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static eu.goodlike.misc.Constants.DEFAULT_CHARSET;
@@ -127,6 +128,24 @@ public final class MultipartRequest {
                 .andSome("\n", multipartParams)
                 .andSome("\n", multipartFiles.keySet())
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MultipartRequest)) return false;
+        MultipartRequest that = (MultipartRequest) o;
+        return Objects.equals(httpMethod, that.httpMethod) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(headers, that.headers) &&
+                Objects.equals(boundary, that.boundary) &&
+                Objects.equals(multipartParams, that.multipartParams) &&
+                Objects.equals(multipartFiles, that.multipartFiles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpMethod, url, headers, boundary, multipartParams, multipartFiles);
     }
 
 }

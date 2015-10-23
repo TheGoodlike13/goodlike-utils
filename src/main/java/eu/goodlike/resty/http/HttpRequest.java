@@ -236,4 +236,24 @@ public final class HttpRequest implements BodyTypeStep, HeaderStep, JsonBodyStep
                 .toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HttpRequest)) return false;
+        HttpRequest that = (HttpRequest) o;
+        return Objects.equals(isMultipart, that.isMultipart) &&
+                Objects.equals(httpMethod, that.httpMethod) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(headers, that.headers) &&
+                Objects.equals(simpleBody, that.simpleBody) &&
+                Objects.equals(boundary, that.boundary) &&
+                Objects.equals(multipartParams, that.multipartParams) &&
+                Objects.equals(multipartFiles, that.multipartFiles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpMethod, url, headers, simpleBody, isMultipart, boundary, multipartParams, multipartFiles);
+    }
+
 }
