@@ -159,8 +159,10 @@ public final class Endpoints {
     // CONSTRUCTORS
 
     /**
-     * Constructs a cache of DynamicURLs, which uses the seed as basis and appends paths to it when needed
+     * Constructs a cache of DynamicURLs, which uses the seed as basis and appends paths to it when needed; uses
+     * DynamicURL.of(String) to construct the initial DynamicURL
      * @throws NullPointerException if seedUrl is null
+     * @throws IllegalArgumentException if url format is not supported
      */
     public static Endpoints of(String seedUrl) {
         return new Endpoints(DynamicURL.of(seedUrl));
