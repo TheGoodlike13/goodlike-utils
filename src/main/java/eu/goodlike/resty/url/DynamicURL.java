@@ -127,7 +127,7 @@ public final class DynamicURL {
      */
     public DynamicURL withPath(List<String> path) {
         Null.checkCollection(path).ifAny("Path cannot be or contain null");
-        return this.path.equals(path) ? this : new DynamicURL(protocol, ip, null, parsedPath(path));
+        return this.path.equals(path) ? this : new DynamicURL(protocol, ip, port, parsedPath(path));
     }
 
     /**
@@ -247,13 +247,13 @@ public final class DynamicURL {
      * </pre>
      * @return this DynamicUrl with first of its variables replaced by given object
      * @throws NullPointerException if variable is null
-     * @throws IllegalArgumentException if there are no path variables in the URL
+     * @throws IllegalStateException if there are no path variables in the URL
      * @throws IllegalArgumentException if the object, when encoded returns a blank String
      */
     public DynamicURL withNextValue(Object variable) {
         Null.check(variable).ifAny("Variable value cannot be null");
         if (!hasVariables())
-            throw new IllegalArgumentException("No more variables left to pass values into");
+            throw new IllegalStateException("No more variables left to pass values into");
 
         String value = SpecialUtils.urlEncode(variable);
         PathVar.validateValue(value);
