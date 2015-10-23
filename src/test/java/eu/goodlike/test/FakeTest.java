@@ -21,117 +21,117 @@ public class FakeTest {
 
     @Test
     public void tryNames_shouldBeUnique() {
-        assertThat(Some.of(Fake::name).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::name).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void trySurnames_shouldBeUnique() {
-        assertThat(Some.of(Fake::surname).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::surname).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryEmails_shouldBeUnique() {
-        assertThat(Some.of(Fake::email).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::email).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryCities_shouldBeUnique() {
-        assertThat(Some.of(Fake::city).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::city).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryPhones_shouldBeUnique() {
-        assertThat(Some.of(Fake::phone).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::phone).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryPictures_shouldBeUnique() {
-        assertThat(Some.of(Fake::picture).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::picture).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryDocuments_shouldBeUnique() {
-        assertThat(Some.of(Fake::document).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::document).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryComments_shouldBeUnique() {
-        assertThat(Some.of(Fake::comment).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::comment).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryWages_shouldBeUnique() {
-        assertThat(Some.of(Fake::wage).fetchStream(10).map(Scaleless::bigDecimal).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::wage).oneUpToStream(10).map(Scaleless::bigDecimal).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryDays_shouldBeUnique() {
-        assertThat(Some.of(Fake::day).fetchStream(31).collect(toSet())).hasSize(31);
+        assertThat(Some.of(Fake::day).oneUpToStream(31).collect(toSet())).hasSize(31);
     }
 
     @Test
     public void tryWebsites_shouldBeUnique() {
-        assertThat(Some.of(Fake::website).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::website).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryBooleans_shouldBeUnique() {
-        assertThat(Some.of(Fake::Boolean).fetchStream(2).collect(toSet())).hasSize(2);
+        assertThat(Some.of(Fake::Boolean).oneUpToStream(2).collect(toSet())).hasSize(2);
     }
 
     @Test
     public void tryLanguageLevels_shouldBeUnique() {
-        assertThat(Some.of(Fake::languageLevel).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::languageLevel).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryHours_shouldBeUnique() {
-        assertThat(Some.of(Fake::hour).getStream(24).collect(toSet())).hasSize(24);
+        assertThat(Some.of(Fake::hour).zeroToStream(24).collect(toSet())).hasSize(24);
     }
 
     @Test
     public void tryMinutes_shouldBeUnique() {
-        assertThat(Some.of(Fake::minute).getStream(60).collect(toSet())).hasSize(60);
+        assertThat(Some.of(Fake::minute).zeroToStream(60).collect(toSet())).hasSize(60);
     }
 
     @Test
     public void tryIds_shouldBeUnique() {
-        assertThat(Some.of(Fake::id).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::id).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryLocalDates_shouldBeUnique() {
-        assertThat(Some.of(Fake::localDate).fetchStream(31).collect(toSet())).hasSize(31);
+        assertThat(Some.of(Fake::localDate).oneUpToStream(31).collect(toSet())).hasSize(31);
     }
 
     @Test
     public void tryDayStrings_shouldBeUnique() {
-        assertThat(Some.of(Fake::dayString).fetchStream(31).collect(toSet())).hasSize(31);
+        assertThat(Some.of(Fake::dayString).oneUpToStream(31).collect(toSet())).hasSize(31);
     }
 
     @Test
     public void tryLanguages_shouldBeUnique() {
-        assertThat(Some.of(Fake::language).getStream(100).collect(toSet())).hasSize(100);
+        assertThat(Some.of(Fake::language).zeroToStream(100).collect(toSet())).hasSize(100);
     }
 
     @Test
     public void tryPasswords_shouldBeUnique() {
-        assertThat(Some.of(Fake::password).fetchStream(10).collect(toSet())).hasSize(10);
+        assertThat(Some.of(Fake::password).oneUpToStream(10).collect(toSet())).hasSize(10);
     }
 
     @Test
     public void tryDurations_shouldBeUnique() {
-        assertThat(Some.of(Fake::duration).fetchStream(31).collect(toSet())).hasSize(31);
+        assertThat(Some.of(Fake::duration).oneUpToStream(31).collect(toSet())).hasSize(31);
     }
 
     @Test
     public void tryCodes_shouldBeUnique() {
-        assertThat(Some.of(Fake::code).getStream(900000).collect(toSet())).hasSize(900000);
+        assertThat(Some.of(Fake::code).zeroToStream(900000).collect(toSet())).hasSize(900000);
     }
 
     @Test
     public void tryTimes_shouldBeUnique() {
-        assertThat(Some.of(Fake::time).fetchStream(31).collect(toSet())).hasSize(31);
+        assertThat(Some.of(Fake::time).oneUpToStream(31).collect(toSet())).hasSize(31);
     }
 
     @Test

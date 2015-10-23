@@ -80,14 +80,14 @@ public final class IntSampler<T> {
     /**
      * @return stream of int function results, evaluated for all i in {0, amount-1}
      */
-    public Stream<T> getStream(int amount) {
+    public Stream<T> zeroToStream(int amount) {
         return map(IntStream.range(0, amount));
     }
 
     /**
      * @return stream of int function results, evaluated for all i in {1, amount}
      */
-    public Stream<T> fetchStream(int amount) {
+    public Stream<T> oneUpToStream(int amount) {
         return map(IntStream.rangeClosed(1, amount));
     }
 

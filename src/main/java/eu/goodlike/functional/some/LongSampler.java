@@ -80,14 +80,14 @@ public final class LongSampler<T> {
     /**
      * @return stream of long function results, evaluated for all i in {0, amount-1}
      */
-    public Stream<T> getStream(long amount) {
+    public Stream<T> zeroToStream(long amount) {
         return map(LongStream.range(0, amount));
     }
 
     /**
      * @return stream of long function results, evaluated for all i in {1, amount}
      */
-    public Stream<T> fetchStream(long amount) {
+    public Stream<T> oneUpToStream(long amount) {
         return map(LongStream.rangeClosed(1, amount));
     }
 

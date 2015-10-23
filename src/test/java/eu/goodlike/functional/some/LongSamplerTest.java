@@ -48,12 +48,12 @@ public class LongSamplerTest {
 
     @Test
     public void tryGettingStream_shouldReturnFrom0ToGivenMinus1() {
-        assertThat(toString.getStream(5).collect(toList())).isEqualTo(Arrays.asList("0", "1", "2", "3", "4"));
+        assertThat(toString.zeroToStream(5).collect(toList())).isEqualTo(Arrays.asList("0", "1", "2", "3", "4"));
     }
 
     @Test
     public void tryFetchingStream_shouldReturnFrom1ToGiven() {
-        assertThat(toString.fetchStream(5).collect(toList())).isEqualTo(Arrays.asList("1", "2", "3", "4", "5"));
+        assertThat(toString.oneUpToStream(5).collect(toList())).isEqualTo(Arrays.asList("1", "2", "3", "4", "5"));
     }
 
     @Test
