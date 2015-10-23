@@ -181,7 +181,7 @@ public final class HttpRequest implements BodyTypeStep, HeaderStep, JsonBodyStep
 
     @Override
     public TimesStep<HttpResponse> retry() {
-        return Retry.This(performLater());
+        return Retry.calling(performLater());
     }
 
     // CONSTRUCTORS

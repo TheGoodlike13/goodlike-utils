@@ -26,7 +26,7 @@ public final class SimpleRetry<T> {
 
             Either<T, Exception> either = attempt();
             if (either.isFirstKind()) {
-                Optional<T> result = either.filterFirstKind(this::passesFailureTest).getFirstOptional();
+                Optional<T> result = either.getFirstOptional().filter(this::passesFailureTest);
                 if (result.isPresent())
                     return result;
             }
@@ -86,13 +86,8 @@ public final class SimpleRetry<T> {
             e.printStackTrace();
         }
         return isTimeoutIncreasing
-                ? timeoutInMillis >= maxTimeoutInMillis ? maxTimeoutInMillis : nextTimeoutValue(timeoutMillis)
+                ? Math.min(timeoutMillis << 1, maxTimeoutInMillis)
                 : timeoutMillis;
-    }
-
-    private long nextTimeoutValue(long timeoutMillis) {
-        long next = timeoutMillis << 1;
-        return next >= maxTimeoutInMillis ? maxTimeoutInMillis : next;
     }
 
 }

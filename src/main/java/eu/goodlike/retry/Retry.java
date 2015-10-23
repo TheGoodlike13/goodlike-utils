@@ -25,8 +25,8 @@ public final class Retry {
      * @return a step builder for options for given Callable to retry
      * @throws NullPointerException if callableToRetry is null
      */
-    public static <T> TimesStep<T> This(Callable<T> callableToRetry) {
-        Null.check(callableToRetry).ifAny("Null callables not allowed");
+    public static <T> TimesStep<T> calling(Callable<T> callableToRetry) {
+        Null.check(callableToRetry).ifAny("Null callable not allowed");
         return new RetryBuilder<>(callableToRetry);
     }
 
