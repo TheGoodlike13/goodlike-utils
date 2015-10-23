@@ -28,6 +28,13 @@ public final class PathVar {
     }
 
     /**
+     * @return the prefix which causes a path part to be considered a variable, should be ':'
+     */
+    public static String varToken() {
+        return ":";
+    }
+
+    /**
      * @throws IllegalArgumentException if given name is null or blank, both of which are invalid names
      */
     public static void validateName(String name) {
@@ -87,7 +94,7 @@ public final class PathVar {
     public PathVar(String name, Object value) {
         Null.check(name, value).ifAny("Name and value cannot be null");
         validateName(name);
-        this.name = name.startsWith(":") ? name : ":" + name;
+        this.name = name.startsWith(varToken()) ? name : varToken() + name;
         this.value = SpecialUtils.urlEncode(value);
         validateValue(this.value());
     }
