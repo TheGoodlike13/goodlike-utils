@@ -96,4 +96,15 @@ public class CharArrayValidatorTest {
         assertThat(validator.anyMatch(Character::isDigit).test("abc".toCharArray())).isFalse();
     }
 
+    @Test
+    public void tryBlankWithBlank_shouldBeTrue() {
+        char[] blank = {' ', ' '};
+        assertThat(validator.isBlank().test(blank)).isTrue();
+    }
+
+    @Test
+    public void tryBlankWithNotBlank_shouldBeFalse() {
+        assertThat(validator.isBlank().test(testArray)).isFalse();
+    }
+
 }

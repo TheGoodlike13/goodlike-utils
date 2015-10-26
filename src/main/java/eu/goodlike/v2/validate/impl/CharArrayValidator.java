@@ -41,6 +41,10 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
         return registerCondition(array -> array.length == 0);
     }
 
+    public CharArrayValidator isBlank() {
+        return registerCondition(array -> Chars.asList(array).stream().allMatch(Character::isWhitespace));
+    }
+
     /**
      * Adds a predicate which tests if the char array being validated fits into a limited amount of characters
      */
