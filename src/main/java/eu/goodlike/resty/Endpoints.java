@@ -1,9 +1,7 @@
 package eu.goodlike.resty;
 
-import com.google.common.base.Function;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.goodlike.neat.Null;
 import eu.goodlike.resty.http.steps.BodyTypeStep;
 import eu.goodlike.resty.http.steps.QueryParamStep;
@@ -53,7 +51,7 @@ public final class Endpoints {
      * @throws IllegalArgumentException if any of paths contains '//' or is equal to '/' or empty
      */
     public DynamicURL at(List<String> path) {
-        return urlCache.getUnchecked(path);
+        return urlCache.get(path);
     }
 
     /**
@@ -179,10 +177,9 @@ public final class Endpoints {
     public Endpoints(DynamicURL seed) {
         Null.check(seed).ifAny("Seed URL cannot be null");
         this.seed = seed;
-        Function<List<String>, DynamicURL> loadingFunction = seed::appendPath;
-        this.urlCache = CacheBuilder.newBuilder()
+        this.urlCache = Caffeine.newBuilder()
                 .softValues()
-                .build(CacheLoader.from(loadingFunction));
+                .build(seed::appendPath);
     }
 
     // PRIVATE

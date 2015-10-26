@@ -1,13 +1,11 @@
 package eu.goodlike.libraries.joda.time;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
 
 /**
  * <pre>
@@ -22,11 +20,7 @@ public final class Time {
      * @return lazily cached TimeHandler for a given joda timezone
      */
     public static TimeHandler forZone(DateTimeZone timeZone) {
-        try {
-            return HANDLER_CACHE.get(timeZone);
-        } catch (ExecutionException e) {
-            throw new AssertionError("Some unexpected error happened while caching TimeHandler", e);
-        }
+        return HANDLER_CACHE.get(timeZone);
     }
 
     /**
@@ -84,9 +78,9 @@ public final class Time {
     // PRIVATE
 
     private static final DateTimeZone DEFAULT_TIME_ZONE = DateTimeZone.forID("UTC");
-    private static final LoadingCache<DateTimeZone, TimeHandler> HANDLER_CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<DateTimeZone, TimeHandler> HANDLER_CACHE = Caffeine.newBuilder()
             .softValues()
-            .build(CacheLoader.from(TimeHandler::new));
+            .build(TimeHandler::new);
 
     private Time() {
         throw new AssertionError("Do not instantiate, use static methods!");

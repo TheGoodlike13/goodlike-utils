@@ -1,3 +1,3 @@
 Read about and update to CompletableFuture for retry
 
-Change Scaleless (and other equals) into a separate class
+Replace Guava cache with Caffeine cache: https://github.com/ben-manes/caffeine

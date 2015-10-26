@@ -1,13 +1,11 @@
 package eu.goodlike.time;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.goodlike.neat.Null;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.concurrent.ExecutionException;
 
 /**
  * <pre>
@@ -34,11 +32,7 @@ public final class Time {
      */
     public static TimeHandler at(ZoneId timezone) {
         Null.check(timezone).ifAny("Timezone cannot be null");
-        try {
-            return HANDLER_CACHE.get(timezone);
-        } catch (ExecutionException e) {
-            throw new AssertionError("Some unexpected error happened while caching TimeHandler", e);
-        }
+        return HANDLER_CACHE.get(timezone);
     }
 
     /**
@@ -81,9 +75,9 @@ public final class Time {
     // PRIVATE
 
     private static final ZoneId DEFAULT_TIME_ZONE = ZoneId.of("UTC");
-    private static final LoadingCache<ZoneId, TimeHandler> HANDLER_CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<ZoneId, TimeHandler> HANDLER_CACHE = Caffeine.newBuilder()
             .softValues()
-            .build(CacheLoader.from(TimeHandler::new));
+            .build(TimeHandler::new);
 
     private Time() {
         throw new AssertionError("Do not instantiate, use static methods!");
