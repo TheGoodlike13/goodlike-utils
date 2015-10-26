@@ -118,7 +118,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws IllegalStateException if and() is used before any condition, i.e. string().and()..
      */
     public final V and() {
-        if (hasAccumulatedAnyConditions())
+        if (!hasAccumulatedAnyConditions())
             throw new IllegalStateException("There must be at least a single condition before every and()");
 
         return thisValidator();
@@ -130,7 +130,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws IllegalStateException if or() is used before any condition, i.e. string().or()...
      */
     public final V or() {
-        if (hasAccumulatedAnyConditions())
+        if (!hasAccumulatedAnyConditions())
             throw new IllegalStateException("There must be at least a single condition before every or()");
 
         return newValidator(outerValidator, mainCondition(), null, false);

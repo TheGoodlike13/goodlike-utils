@@ -99,4 +99,14 @@ public class ObjectValidatorTest {
         validator.isNull().ifInvalidThrow(null, i -> new RuntimeException("Not null found: " + i));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void tryOrFirst_shouldThrowException() {
+        validator.or();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void tryAndFirst_shouldThrowException() {
+        validator.and();
+    }
+
 }
