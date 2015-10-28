@@ -157,4 +157,9 @@ public class FakeTest {
                 .isEqualTo(Some.of(Fake::localDate).with(indexes));
     }
 
+    @Test
+    public void tryString_shouldBeOfGivenLength() {
+        assertThat(Fake.string(10)).hasSize(10);
+    }
+
 }

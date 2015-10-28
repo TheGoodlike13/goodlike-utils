@@ -126,6 +126,20 @@ public final class Fake {
         return Time.atUTC().from(localDate(id)).toEpochMilli();
     }
 
+    public static String username(long id) {
+        return name(id);
+    }
+
+    /**
+     * @return string of given length, with nothing else specific
+     */
+    public static String string(int length) {
+        StringBuilder builder = new StringBuilder(length);
+        for (int i = 0; i < length; i++)
+            builder.append('a');
+        return builder.toString();
+    }
+
     // PRIVATE
 
     private Fake() {
