@@ -3,6 +3,7 @@ package eu.goodlike.test;
 import eu.goodlike.time.Time;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 
 import static java.math.BigDecimal.ROUND_UNNECESSARY;
@@ -128,6 +129,10 @@ public final class Fake {
 
     public static String username(long id) {
         return name(id);
+    }
+
+    public static Instant instant(long id) {
+        return Instant.ofEpochMilli(time(id));
     }
 
     /**

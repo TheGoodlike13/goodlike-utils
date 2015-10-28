@@ -6,6 +6,7 @@ import eu.goodlike.time.DateConverter;
 import eu.goodlike.time.Time;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -160,6 +161,17 @@ public class FakeTest {
     @Test
     public void tryString_shouldBeOfGivenLength() {
         assertThat(Fake.string(10)).hasSize(10);
+    }
+
+    @Test
+    public void testUsername_shouldBeSameAsName() {
+        assertThat(Some.of(Fake::username).with(indexes)).isEqualTo(Some.of(Fake::name).with(indexes));
+    }
+
+    @Test
+    public void testInstant_shouldBeSameAsTime() {
+        assertThat(Some.of(Fake::instant).with(indexes))
+                .isEqualTo(Some.of(Fake::time).stream(indexes).map(Instant::ofEpochMilli).collect(toList()));
     }
 
 }
