@@ -81,7 +81,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
     /**
      * Adds a custom predicate for validating objects
      */
-    public final V passes(Predicate<T> customPredicate) {
+    public final V passes(Predicate<? super T> customPredicate) {
         return registerCondition(customPredicate);
     }
 
@@ -203,7 +203,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
     /**
      * @return validator actor, which allows specifying an action if the object is invalid
      */
-    public final ValidationActor<T, V> ifInvalid(T object) {
+    public final <E extends T> ValidationActor<T, E, V> ifInvalid(E object) {
         return ValidationActor.of(object, thisValidator());
     }
 
@@ -212,7 +212,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final V ifInvalid(T object, Action invalidAction) {
+    public final <E extends T> V ifInvalid(E object, Action invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(object))
             invalidAction.doIt();
@@ -224,7 +224,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if invalidConsumer is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final V ifInvalid(T object, Consumer<T> invalidConsumer) {
+    public final <E extends T> V ifInvalid(E object, Consumer<? super E> invalidConsumer) {
         Null.check(invalidConsumer).ifAny("Consumer cannot be null");
         if (isInvalid(object))
             invalidConsumer.accept(object);
@@ -236,7 +236,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final <X extends Throwable> V ifInvalidThrow(T object, Supplier<? extends X> exceptionSupplier) throws X {
+    public final <E extends T, X extends Throwable> V ifInvalidThrow(E object, Supplier<? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(object))
             throw exceptionSupplier.get();
@@ -248,7 +248,7 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final <X extends Throwable> V ifInvalidThrow(T object, Function<T, ? extends X> exceptionSupplier) throws X {
+    public final <E extends T, X extends Throwable> V ifInvalidThrow(E object, Function<? super E, ? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(object))
             throw exceptionSupplier.apply(object);
@@ -397,12 +397,12 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * All extending classes should use this method to register ALL conditions
      * </pre>
      */
-    protected final V registerCondition(Predicate<T> predicate) {
+    protected final V registerCondition(Predicate<? super T> predicate) {
         Null.check(predicate).ifAny("Registered predicate cannot be null");
         if (notCondition)
             predicate = predicate.negate();
         return newValidator(outerValidator, mainCondition,
-                accumulatedCondition == null ? predicate : accumulatedCondition.and(predicate), false);
+                accumulatedCondition == null ? toT(predicate) : accumulatedCondition.and(predicate), false);
     }
 
     // PRIVATE
@@ -434,6 +434,11 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
 
     private Predicate<T> mainCondition() {
         return mainCondition == null ? accumulatedCondition : mainCondition.or(accumulatedCondition);
+    }
+
+    private static <T> Predicate<T> toT(Predicate<? super T> predicate) {
+        Predicate<T> truePredicate = t -> true;
+        return truePredicate.and(predicate);
     }
 
 }

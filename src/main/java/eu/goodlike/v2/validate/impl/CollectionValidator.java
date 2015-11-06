@@ -26,7 +26,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * Adds a predicate which checks if every char in the array passes the predicate
      * @throws NullPointerException is elementPredicate is null
      */
-    public CollectionValidator<T> allMatch(Predicate<T> elementPredicate) {
+    public CollectionValidator<T> allMatch(Predicate<? super T> elementPredicate) {
         Null.check(elementPredicate).ifAny("Predicate cannot be null");
         return registerCondition(collection -> collection.stream().allMatch(elementPredicate));
     }
@@ -35,7 +35,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * Adds a predicate which checks if any char in the array passes the predicate
      * @throws NullPointerException is elementPredicate is null
      */
-    public CollectionValidator<T> anyMatch(Predicate<T> elementPredicate) {
+    public CollectionValidator<T> anyMatch(Predicate<? super T> elementPredicate) {
         Null.check(elementPredicate).ifAny("Predicate cannot be null");
         return registerCondition(collection -> collection.stream().anyMatch(elementPredicate));
     }
@@ -69,7 +69,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customConsumer is null
      */
-    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Consumer<T> customConsumer) {
+    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Consumer<? super T> customConsumer) {
         Null.check(elementValidator, customConsumer).ifAny("Element validator and consumer cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customConsumer));
     }
@@ -82,7 +82,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Supplier<X> customException) {
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Supplier<? extends X> customException) {
         Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
@@ -95,7 +95,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Function<T, X> customException) {
+    public <V extends Validate<T, V>, X extends RuntimeException> CollectionValidator<T> forAnyInvalidThrow(V elementValidator, Function<? super T, ? extends X> customException) {
         Null.check(elementValidator, customException).ifAny("Element validator and exception supplier cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customException));
     }
@@ -133,7 +133,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
         return result;
     }
 
-    private static <T, V extends Validate<T, V>> boolean forEach(Collection<T> collection, V elementValidator, Consumer<T> customConsumer) {
+    private static <T, V extends Validate<T, V>> boolean forEach(Collection<T> collection, V elementValidator, Consumer<? super T> customConsumer) {
         boolean result = true;
         for (T e : collection) {
             elementValidator.ifInvalid(e, customConsumer);
@@ -142,12 +142,12 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
         return result;
     }
 
-    private static <T, V extends Validate<T, V>, X extends RuntimeException> boolean forEach(Collection<T> collection, V elementValidator, Supplier<X> customException) {
+    private static <T, V extends Validate<T, V>, X extends RuntimeException> boolean forEach(Collection<T> collection, V elementValidator, Supplier<? extends X> customException) {
         collection.forEach(e -> elementValidator.ifInvalidThrow(e, customException));
         return true;
     }
 
-    private static <T, V extends Validate<T, V>, X extends RuntimeException> boolean forEach(Collection<T> collection, V elementValidator, Function<T, X> customException) {
+    private static <T, V extends Validate<T, V>, X extends RuntimeException> boolean forEach(Collection<T> collection, V elementValidator, Function<? super T, ? extends X> customException) {
         collection.forEach(e -> elementValidator.ifInvalidThrow(e, customException));
         return true;
     }
@@ -165,15 +165,15 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
             return collectionValidator.forEachIfNot(elementValidator, action);
         }
 
-        public CollectionValidator<T> Do(Consumer<T> elementConsumer) {
+        public CollectionValidator<T> Do(Consumer<? super T> elementConsumer) {
             return collectionValidator.forEachIfNot(elementValidator, elementConsumer);
         }
 
-        public <X extends RuntimeException> CollectionValidator<T> Throw(Supplier<X> exceptionSupplier) {
+        public <X extends RuntimeException> CollectionValidator<T> Throw(Supplier<? extends X> exceptionSupplier) {
             return collectionValidator.forAnyInvalidThrow(elementValidator, exceptionSupplier);
         }
 
-        public <X extends RuntimeException> CollectionValidator<T> Throw(Function<T, X> exceptionFunction) {
+        public <X extends RuntimeException> CollectionValidator<T> Throw(Function<? super T, ? extends X> exceptionFunction) {
             return collectionValidator.forAnyInvalidThrow(elementValidator, exceptionFunction);
         }
 

@@ -112,7 +112,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Supplier<X> customException) {
+    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Supplier<? extends X> customException) {
         Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
         return registerCondition(chars -> forEach(chars, elementValidator, customException));
     }
@@ -125,7 +125,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      * @throws NullPointerException is elementValidator or customException is null
      */
-    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Function<Character, X> customException) {
+    public <V extends Validate<Character, V>, X extends RuntimeException> CharArrayValidator forAnyInvalidThrow(V elementValidator, Function<Character, ? extends X> customException) {
         Null.check(elementValidator, customException).ifAny("Predicate and exception supplier cannot be null");
         return registerCondition(chars -> forEach(chars, elementValidator, customException));
     }
@@ -172,14 +172,14 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
         return result;
     }
 
-    private static <V extends Validate<Character, V>, X extends RuntimeException> boolean forEach(char[] chars, V elementValidator, Supplier<X> customException) {
+    private static <V extends Validate<Character, V>, X extends RuntimeException> boolean forEach(char[] chars, V elementValidator, Supplier<? extends X> customException) {
         for (char c : chars)
             elementValidator.ifInvalidThrow(c, customException);
 
         return true;
     }
 
-    private static <V extends Validate<Character, V>, X extends RuntimeException> boolean forEach(char[] chars, V elementValidator, Function<Character, X> customException) {
+    private static <V extends Validate<Character, V>, X extends RuntimeException> boolean forEach(char[] chars, V elementValidator, Function<Character, ? extends X> customException) {
         for (char c : chars)
             elementValidator.ifInvalidThrow(c, customException);
 
@@ -203,11 +203,11 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
             return charArrayValidator.forEachIfNot(elementValidator, elementConsumer);
         }
 
-        public <X extends RuntimeException> CharArrayValidator Throw(Supplier<X> exceptionSupplier) {
+        public <X extends RuntimeException> CharArrayValidator Throw(Supplier<? extends X> exceptionSupplier) {
             return charArrayValidator.forAnyInvalidThrow(elementValidator, exceptionSupplier);
         }
 
-        public <X extends RuntimeException> CharArrayValidator Throw(Function<Character, X> exceptionFunction) {
+        public <X extends RuntimeException> CharArrayValidator Throw(Function<Character, ? extends X> exceptionFunction) {
             return charArrayValidator.forAnyInvalidThrow(elementValidator, exceptionFunction);
         }
 
