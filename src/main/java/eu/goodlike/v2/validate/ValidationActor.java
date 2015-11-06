@@ -5,124 +5,61 @@ import eu.goodlike.neat.Null;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
  * Actor which allows to specify what to do when an invalid value is passed to a validator
  * @param <T> type being validated
  */
-public abstract class ValidationActor<T> {
+public final class ValidationActor<T, V extends Validate<T, V>> {
 
     /**
      * Executes an arbitrary action if and only if an invalid value is passed
      * @throws NullPointerException if someAction is null
      */
-    public abstract void thenDo(Action someAction);
+    public V thenDo(Action someAction) {
+        return validator.ifInvalid(value, someAction);
+    }
 
     /**
      * Consumes the value if and only if an invalid value is passed
      * @throws NullPointerException if valueConsumer is null
      */
-    public abstract void thenDo(Consumer<T> valueConsumer);
+    public V thenDo(Consumer<T> valueConsumer) {
+        return validator.ifInvalid(value, valueConsumer);
+    }
 
     /**
      * Throws an arbitrary exception if and only if an invalid value is passed
      * @throws NullPointerException if exceptionSupplier is null
      */
-    public abstract <X extends Throwable> void thenThrow(Supplier<X> exceptionSupplier) throws X;
+    public <X extends Throwable> V thenThrow(Supplier<X> exceptionSupplier) throws X {
+        return validator.ifInvalidThrow(value, exceptionSupplier);
+    }
 
     /**
      * Throws an exception using the value if and only if an invalid value is passed
      * @throws NullPointerException if exceptionFunction is null
      */
-    public abstract <X extends Throwable> void thenThrow(Function<T, X> exceptionFunction) throws X;
+    public <X extends Throwable> V thenThrow(Function<T, X> exceptionFunction) throws X {
+        return validator.ifInvalidThrow(value, exceptionFunction);
+    }
 
     // CONSTRUCTORS
 
-    /**
-     * Evaluates the predicate using given value and returns an appropriate validator actor
-     * @throws NullPointerException if validationPredicate is null
-     */
-    public static <T> ValidationActor<T> of(Predicate<T> validationPredicate, T value) {
-        Null.check(validationPredicate).ifAny("Validation predicate cannot be null");
-        return validationPredicate.test(value) ? new ValidActor<>() : new InvalidActor<>(value);
+    public static <T, V extends Validate<T, V>> ValidationActor<T, V> of(T value, V validator) {
+        Null.check(validator).ifAny("Validator cannot be null");
+        return new ValidationActor<>(value, validator);
     }
 
-    protected ValidationActor(T value) {
+    private ValidationActor(T value, V validator) {
         this.value = value;
+        this.validator = validator;
     }
 
-    // PROTECTED
+    // PRIVATE
 
-    protected final T value;
-
-    /**
-     * Validator for invalid values; always executes methods
-     * @param <T> type being validated
-     */
-    private static final class InvalidActor<T> extends ValidationActor<T> {
-        @Override
-        public void thenDo(Action someAction) {
-            Null.check(someAction).ifAny("Action cannot be null");
-            someAction.doIt();
-        }
-
-        @Override
-        public void thenDo(Consumer<T> valueConsumer) {
-            Null.check(valueConsumer).ifAny("Consumer cannot be null");
-            valueConsumer.accept(value);
-        }
-
-        @Override
-        public <X extends Throwable> void thenThrow(Supplier<X> exceptionSupplier) throws X {
-            Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
-            throw exceptionSupplier.get();
-        }
-
-        @Override
-        public <X extends Throwable> void thenThrow(Function<T, X> exceptionFunction) throws X {
-            Null.check(exceptionFunction).ifAny("Exception function cannot be null");
-            throw exceptionFunction.apply(value);
-        }
-
-        // CONSTRUCTORS
-
-        private InvalidActor(T value) {
-            super(value);
-        }
-    }
-
-    /**
-     * Validator for valid values; never executes methods
-     * @param <T> type being validated
-     */
-    private static final class ValidActor<T> extends ValidationActor<T> {
-        @Override
-        public void thenDo(Action someAction) {
-            Null.check(someAction).ifAny("Action cannot be null");
-        }
-
-        @Override
-        public void thenDo(Consumer<T> valueConsumer) {
-            Null.check(valueConsumer).ifAny("Consumer cannot be null");
-        }
-
-        @Override
-        public <X extends Throwable> void thenThrow(Supplier<X> exceptionSupplier) throws X {
-            Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
-        }
-
-        @Override
-        public <X extends Throwable> void thenThrow(Function<T, X> exceptionFunction) throws X {
-            Null.check(exceptionFunction).ifAny("Exception function cannot be null");
-        }
-
-        // CONSTRUCTORS
-
-        private ValidActor() {
-            super(null);
-        }
-    }
+    private final T value;
+    private final V validator;
 
 }

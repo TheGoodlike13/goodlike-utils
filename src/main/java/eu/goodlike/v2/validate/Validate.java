@@ -203,8 +203,8 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
     /**
      * @return validator actor, which allows specifying an action if the object is invalid
      */
-    public final ValidationActor<T> ifInvalid(T object) {
-        return ValidationActor.of(this, object);
+    public final ValidationActor<T, V> ifInvalid(T object) {
+        return ValidationActor.of(object, thisValidator());
     }
 
     /**
@@ -212,10 +212,11 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final void ifInvalid(T object, Action invalidAction) {
+    public final V ifInvalid(T object, Action invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(object))
             invalidAction.doIt();
+        return thisValidator();
     }
 
     /**
@@ -223,10 +224,11 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if invalidConsumer is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final void ifInvalid(T object, Consumer<T> invalidConsumer) {
+    public final V ifInvalid(T object, Consumer<T> invalidConsumer) {
         Null.check(invalidConsumer).ifAny("Consumer cannot be null");
         if (isInvalid(object))
             invalidConsumer.accept(object);
+        return thisValidator();
     }
 
     /**
@@ -234,10 +236,11 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final <X extends Throwable> void ifInvalidThrow(T object, Supplier<? extends X> exceptionSupplier) throws X {
+    public final <X extends Throwable> V ifInvalidThrow(T object, Supplier<? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(object))
             throw exceptionSupplier.get();
+        return thisValidator();
     }
 
     /**
@@ -245,10 +248,11 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final <X extends Throwable> void ifInvalidThrow(T object, Function<T, ? extends X> exceptionSupplier) throws X {
+    public final <X extends Throwable> V ifInvalidThrow(T object, Function<T, ? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(object))
             throw exceptionSupplier.apply(object);
+        return thisValidator();
     }
 
     /**

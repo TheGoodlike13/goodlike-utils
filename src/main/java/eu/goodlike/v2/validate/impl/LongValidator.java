@@ -131,14 +131,22 @@ public final class LongValidator implements LongPredicate {
     }
 
     /**
+     * @return validator actor, which allows specifying an action if the object is invalid
+     */
+    public final LongValidationActor ifInvalid(long object) {
+        return LongValidationActor.of(object, this);
+    }
+
+    /**
      * Executes an arbitrary action if and only if the given long is NOT valid
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public void ifInvalid(long integer, Action invalidAction) {
+    public LongValidator ifInvalid(long integer, Action invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(integer))
             invalidAction.doIt();
+        return this;
     }
 
     /**
@@ -146,10 +154,11 @@ public final class LongValidator implements LongPredicate {
      * @throws NullPointerException if invalidConsumer is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public void ifInvalid(long integer, LongConsumer invalidConsumer) {
+    public LongValidator ifInvalid(long integer, LongConsumer invalidConsumer) {
         Null.check(invalidConsumer).ifAny("Consumer cannot be null");
         if (isInvalid(integer))
             invalidConsumer.accept(integer);
+        return this;
     }
 
     /**
@@ -157,10 +166,11 @@ public final class LongValidator implements LongPredicate {
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public <X extends Throwable> void ifInvalidThrow(long integer, Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> LongValidator ifInvalidThrow(long integer, Supplier<? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(integer))
             throw exceptionSupplier.get();
+        return this;
     }
 
     /**
@@ -168,10 +178,11 @@ public final class LongValidator implements LongPredicate {
      * @throws NullPointerException if exceptionSupplier is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public <X extends Throwable> void ifInvalidThrow(long integer, LongFunction<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> LongValidator ifInvalidThrow(long integer, LongFunction<? extends X> exceptionSupplier) throws X {
         Null.check(exceptionSupplier).ifAny("Exception supplier cannot be null");
         if (isInvalid(integer))
             throw exceptionSupplier.apply(integer);
+        return this;
     }
 
     /**
@@ -319,6 +330,59 @@ public final class LongValidator implements LongPredicate {
 
     private LongPredicate mainCondition() {
         return mainCondition == null ? accumulatedCondition : mainCondition.or(accumulatedCondition);
+    }
+
+    public static final class LongValidationActor {
+
+        /**
+         * Executes an arbitrary action if and only if an invalid value is passed
+         * @throws NullPointerException if someAction is null
+         */
+        public LongValidator thenDo(Action someAction) {
+            return validator.ifInvalid(value, someAction);
+        }
+
+        /**
+         * Consumes the value if and only if an invalid value is passed
+         * @throws NullPointerException if valueConsumer is null
+         */
+        public LongValidator thenDo(LongConsumer valueConsumer) {
+            return validator.ifInvalid(value, valueConsumer);
+        }
+
+        /**
+         * Throws an arbitrary exception if and only if an invalid value is passed
+         * @throws NullPointerException if exceptionSupplier is null
+         */
+        public <X extends Throwable> LongValidator thenThrow(Supplier<X> exceptionSupplier) throws X {
+            return validator.ifInvalidThrow(value, exceptionSupplier);
+        }
+
+        /**
+         * Throws an exception using the value if and only if an invalid value is passed
+         * @throws NullPointerException if exceptionFunction is null
+         */
+        public <X extends Throwable> LongValidator thenThrow(LongFunction<X> exceptionFunction) throws X {
+            return validator.ifInvalidThrow(value, exceptionFunction);
+        }
+
+        // CONSTRUCTORS
+
+        public static LongValidationActor of(long value, LongValidator validator) {
+            Null.check(validator).ifAny("Validator cannot be null");
+            return new LongValidationActor(value, validator);
+        }
+
+        private LongValidationActor(long value, LongValidator validator) {
+            this.value = value;
+            this.validator = validator;
+        }
+
+        // PRIVATE
+
+        private final long value;
+        private final LongValidator validator;
+
     }
 
 }

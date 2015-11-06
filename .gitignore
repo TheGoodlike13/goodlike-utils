@@ -29,3 +29,7 @@
 # Generated files - use gradlew generate to make them
 
 /src/gen/
+
+# Random stuff
+
+RandomTests.java
