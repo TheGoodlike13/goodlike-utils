@@ -28,6 +28,14 @@ import java.util.function.Supplier;
 public class Null {
 
     /**
+     * Convenience method to check if any of the items is null without throwing exception
+     * @return true if any of elements being checked are null
+     */
+    public boolean containsNull() {
+        return objects.containsNull();
+    }
+
+    /**
      * <pre>
      * Allows customizing the kind of exception that is thrown using lambda expression:
      *      () -> new X()
@@ -106,12 +114,21 @@ public class Null {
      */
     public static final class DefinitelyNull extends Null {
         /**
+         * @return true because this object is definitely null
+         */
+        @Override
+        public boolean containsNull() {
+            return true;
+        }
+
+        /**
          * <pre>
          * Allows customizing the kind of exception that is thrown using lambda expression:
          *      () -> new X()
          * </pre>
          * @throws X because this object is definitely null
          */
+        @Override
         public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {
             throw exceptionSupplier.get();
         }
@@ -119,6 +136,7 @@ public class Null {
         /**
          * @throws NullPointerException because this object is definitely null
          */
+        @Override
         public void ifAny(String message) {
             throw new NullPointerException(message);
         }
@@ -139,17 +157,27 @@ public class Null {
      */
     public static final class DefinitelyNotNull extends Null {
         /**
+         * @return false because this object is definitely not null
+         */
+        @Override
+        public boolean containsNull() {
+            return false;
+        }
+
+        /**
          * <pre>
          * Allows customizing the kind of exception that is thrown using lambda expression:
          *      () -> new X()
          * </pre>
          * @throws X never, because this object is definitely not null
          */
+        @Override
         public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {}
 
         /**
          * @throws NullPointerException never because this object is definitely not null
          */
+        @Override
         public void ifAny(String message) {}
 
         private DefinitelyNotNull() {

@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class NullTest {
 
     @Test
@@ -143,6 +145,18 @@ public class NullTest {
     @Test(expected = RuntimeException.class)
     public void tryCollectionArrayCustom_shouldThrowGivenException() {
         Null.checkCollection(null).ifAny(RuntimeException::new);
+    }
+
+    public void tryContainsNullWhenNull_shouldBeTrue() {
+        assertThat(Null.checkAlone(null).containsNull()).isTrue();
+    }
+
+    public void tryContainsNullWhenContainsNull_shouldBeTrue() {
+        assertThat(Null.check(1, null, 3).containsNull()).isTrue();
+    }
+
+    public void tryContainsNullWhenDoesNotContainNull_shouldBeFalse() {
+        assertThat(Null.check(1, 2, 3).containsNull()).isFalse();
     }
 
 }
