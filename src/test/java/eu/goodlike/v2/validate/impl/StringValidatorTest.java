@@ -86,6 +86,21 @@ public class StringValidatorTest {
     }
 
     @Test
+    public void tryCommaSeparatedListOfIntegersWithCommaSeparatedListOfNegativeIntegers_shouldBeFalse() {
+        assertThat(validator.isCommaSeparatedListOfIntegers().test("-1,2,-3")).isFalse();
+    }
+
+    @Test
+    public void tryCommaSeparatedListOfIntegersWithZero_shouldBeFalse() {
+        assertThat(validator.isCommaSeparatedListOfIntegers().test("0")).isFalse();
+    }
+
+    @Test
+    public void tryCommaSeparatedListOfIntegersWithOne_shouldBeTrue() {
+        assertThat(validator.isCommaSeparatedListOfIntegers().test("1")).isTrue();
+    }
+
+    @Test
     public void tryNoSmallerThanWithSmaller_shouldBeFalse() {
         assertThat(validator.isNoSmallerThan(10).test("small")).isFalse();
     }

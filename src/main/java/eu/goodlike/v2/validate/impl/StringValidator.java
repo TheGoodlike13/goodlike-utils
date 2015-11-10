@@ -130,10 +130,10 @@ public final class StringValidator extends Validate<String, StringValidator> {
 
     /**
      * ASSUMES string has been checked for null/blank
-     * @return true if string is a comma separated list of non-negative integers, false otherwise
+     * @return true if string is a comma separated list of positive integers, false otherwise
      */
     public static boolean isCommaSeparatedListOfIntegers(String string) {
-        return Stream.of(string.split(",")).allMatch(string().not().isBlank().isInteger());
+        return Stream.of(string.split(",")).allMatch(string().not().isBlank().isInteger(Int().isMoreThan(0)));
     }
 
     /**
