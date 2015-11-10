@@ -4,6 +4,9 @@ import com.google.common.primitives.Ints;
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ValueRange;
 import java.util.Collection;
 import java.util.function.*;
 
@@ -264,6 +267,33 @@ public final class IntValidator implements IntPredicate {
     }
 
     /**
+     * <pre>
+     * Adds a predicate which tests if the integer can describe a month of year
+     *
+     * This is equivalent to isBetween(1, 12)
+     * </pre>
+     */
+    public IntValidator isMonthOfYear() {
+        return isBetween(1, 12);
+    }
+
+    /**
+     * Adds a predicate which tests if the integer is a valid day at a certain year and month; it is assumed
+     * year and month values are already validated
+     */
+    public IntValidator isDayOfMonth(int year, int month) {
+        ValueRange dayRange = ChronoField.DAY_OF_MONTH.rangeRefinedBy(LocalDate.of(year, month, 1));
+        return registerCondition(dayRange::isValidIntValue);
+    }
+
+    /**
+     * This method treats the integer as a code point; it checks if the integer is representing a digit between 0 and 9
+     */
+    public IntValidator isSimpleDigit() {
+        return registerCondition(i -> i >= '0' && i <= '9');
+    }
+
+    /**
      * This method treats the integer as a code point; please refer to equivalent Character method for documentation
      */
     public IntValidator isWhitespace() {
@@ -476,7 +506,11 @@ public final class IntValidator implements IntPredicate {
     private final boolean notCondition;
 
     /**
+     * <pre>
      * Adds a predicate to subCondition list, negating if not() was called before this method
+     *
+     * DO NOT use this method more than once per method call, as this will cause not() to malfunction
+     * </pre>
      */
     private IntValidator registerCondition(IntPredicate predicate) {
         Null.check(predicate).ifAny("Registered predicate cannot be null");

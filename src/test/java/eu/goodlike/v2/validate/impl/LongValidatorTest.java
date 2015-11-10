@@ -264,4 +264,29 @@ public class LongValidatorTest {
         validator.isLessThan(5).ifInvalidThrow(4, i -> new RuntimeException("Invalid number found: " + i));
     }
 
+    @Test
+    public void tryIsMonthOfYearWithMonth_shouldBeTrue() {
+        assertThat(validator.isMonthOfYear().test(10)).isTrue();
+    }
+
+    @Test
+    public void tryIsMonthOfYearWithNotMonth_shouldBeFalse() {
+        assertThat(validator.isMonthOfYear().test(13)).isFalse();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithCorrectDay_shouldBeTrue() {
+        assertThat(validator.isDayOfMonth(2015, 2).test(10)).isTrue();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithIncorrectDay_shouldBeFalse() {
+        assertThat(validator.isDayOfMonth(2015, 2).test(30)).isFalse();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithExtraDay_shouldBeTrue() {
+        assertThat(validator.isDayOfMonth(2016, 2).test(29)).isTrue();
+    }
+
 }

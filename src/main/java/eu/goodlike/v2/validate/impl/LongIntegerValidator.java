@@ -2,6 +2,9 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ValueRange;
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
@@ -85,6 +88,26 @@ public final class LongIntegerValidator extends Validate<Long, LongIntegerValida
      */
     public LongIntegerValidator isMinuteOfHour() {
         return isBetween(0, 59);
+    }
+
+    /**
+     * <pre>
+     * Adds a predicate which tests if the long can describe a month of year
+     *
+     * This is equivalent to isBetween(1, 12)
+     * </pre>
+     */
+    public LongIntegerValidator isMonthOfYear() {
+        return isBetween(1, 12);
+    }
+
+    /**
+     * Adds a predicate which tests if the long is a valid day at a certain year and month; it is assumed
+     * year and month values are already validated
+     */
+    public LongIntegerValidator isDayOfMonth(int year, int month) {
+        ValueRange dayRange = ChronoField.DAY_OF_MONTH.rangeRefinedBy(LocalDate.of(year, month, 1));
+        return registerCondition(dayRange::isValidIntValue);
     }
 
     public LongPredicate asLongPredicate() {

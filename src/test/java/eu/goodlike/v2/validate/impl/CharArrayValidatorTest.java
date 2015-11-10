@@ -107,4 +107,20 @@ public class CharArrayValidatorTest {
         assertThat(validator.isBlank().test(testArray)).isFalse();
     }
 
+    @Test
+    public void tryNoSmallerThanWithSmaller_shouldBeFalse() {
+        char[] small = {'1', '2'};
+        assertThat(validator.isNoSmallerThan(10).test(small)).isFalse();
+    }
+
+    @Test
+    public void tryNoSmallerThanWithExact_shouldBeTrue() {
+        assertThat(validator.isNoSmallerThan(testArray.length).test(testArray)).isTrue();
+    }
+
+    @Test
+    public void tryNoSmallerThanWithBigger_shouldBeTrue() {
+        assertThat(validator.isNoSmallerThan(2).test(testArray)).isTrue();
+    }
+
 }

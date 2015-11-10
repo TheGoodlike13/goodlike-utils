@@ -46,6 +46,13 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
     }
 
     /**
+     * Adds a predicate which tests if the char array being validated has no less than limited amount of characters
+     */
+    public CharArrayValidator isNoSmallerThan(int limit) {
+        return registerCondition(array -> array.length >= limit);
+    }
+
+    /**
      * Adds a predicate which tests if the char array being validated fits into a limited amount of characters
      */
     public CharArrayValidator isNoLargerThan(int limit) {

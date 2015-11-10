@@ -2,6 +2,9 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ValueRange;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
@@ -85,6 +88,26 @@ public class IntegerValidator extends Validate<Integer, IntegerValidator> {
      */
     public IntegerValidator isMinuteOfHour() {
         return isBetween(0, 59);
+    }
+
+    /**
+     * <pre>
+     * Adds a predicate which tests if the integer can describe a month of year
+     *
+     * This is equivalent to isBetween(1, 12)
+     * </pre>
+     */
+    public IntegerValidator isMonthOfYear() {
+        return isBetween(1, 12);
+    }
+
+    /**
+     * Adds a predicate which tests if the integer is a valid day at a certain year and month; it is assumed
+     * year and month values are already validated
+     */
+    public IntegerValidator isDayOfMonth(int year, int month) {
+        ValueRange dayRange = ChronoField.DAY_OF_MONTH.rangeRefinedBy(LocalDate.of(year, month, 1));
+        return registerCondition(dayRange::isValidIntValue);
     }
 
     public IntPredicate asIntPredicate() {

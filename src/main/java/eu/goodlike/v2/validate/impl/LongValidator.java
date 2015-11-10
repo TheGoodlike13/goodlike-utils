@@ -4,6 +4,9 @@ import com.google.common.primitives.Longs;
 import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ValueRange;
 import java.util.Collection;
 import java.util.function.*;
 
@@ -264,6 +267,26 @@ public final class LongValidator implements LongPredicate {
     }
 
     /**
+     * <pre>
+     * Adds a predicate which tests if the long can describe a month of year
+     *
+     * This is equivalent to isBetween(1, 12)
+     * </pre>
+     */
+    public LongValidator isMonthOfYear() {
+        return isBetween(1, 12);
+    }
+
+    /**
+     * Adds a predicate which tests if the long is a valid day at a certain year and month; it is assumed
+     * year and month values are already validated
+     */
+    public LongValidator isDayOfMonth(int year, int month) {
+        ValueRange dayRange = ChronoField.DAY_OF_MONTH.rangeRefinedBy(LocalDate.of(year, month, 1));
+        return registerCondition(dayRange::isValidIntValue);
+    }
+
+    /**
      * @return this validator as just a Predicate
      */
     public Predicate<Long> asPredicate() {
@@ -298,7 +321,11 @@ public final class LongValidator implements LongPredicate {
     private final boolean notCondition;
 
     /**
+     * <pre>
      * Adds a predicate to subCondition list, negating if not() was called before this method
+     *
+     * DO NOT use this method more than once per method call, as this will cause not() to malfunction
+     * </pre>
      */
     private LongValidator registerCondition(LongPredicate predicate) {
         Null.check(predicate).ifAny("Registered predicate cannot be null");

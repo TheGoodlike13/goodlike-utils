@@ -395,6 +395,8 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * Adds a predicate to subCondition list, negating if not() was called before this method
      *
      * All extending classes should use this method to register ALL conditions
+     *
+     * DO NOT use this method more than once per method call, as this will cause not() to malfunction
      * </pre>
      */
     protected final V registerCondition(Predicate<? super T> predicate) {

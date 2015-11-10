@@ -85,4 +85,75 @@ public class StringValidatorTest {
         assertThat(validator.isCommaSeparatedListOfIntegers().test("1.2.3")).isFalse();
     }
 
+    @Test
+    public void tryNoSmallerThanWithSmaller_shouldBeFalse() {
+        assertThat(validator.isNoSmallerThan(10).test("small")).isFalse();
+    }
+
+    @Test
+    public void tryNoSmallerThanWithExact_shouldBeTrue() {
+        String test = "test";
+        assertThat(validator.isNoSmallerThan(test.length()).test(test)).isTrue();
+    }
+
+    @Test
+    public void tryNoSmallerThanWithBigger_shouldBeTrue() {
+        assertThat(validator.isNoSmallerThan(2).test("large")).isTrue();
+    }
+
+    @Test
+    public void tryIntegerWithInteger_shouldBeTrue() {
+        assertThat(validator.isInteger().test("123456789")).isTrue();
+    }
+
+    @Test
+    public void tryIntegerWithNegativeInteger_shouldBeTrue() {
+        assertThat(validator.isInteger().test("-123456789")).isTrue();
+    }
+
+    @Test
+    public void tryIntegerWithNotInteger_shouldBeFalse() {
+        assertThat(validator.isInteger().test("not integer")).isFalse();
+    }
+
+    @Test
+    public void tryIntegerCustomWithPassingInteger_shouldBeTrue() {
+        assertThat(validator.isInteger(i -> i >= 0).test("123456789")).isTrue();
+    }
+
+    @Test
+    public void tryIntegerCustomWithNotPassingInteger_shouldBeFalse() {
+        assertThat(validator.isInteger(i -> i >= 0).test("-123456789")).isFalse();
+    }
+
+    @Test
+    public void tryIntegerCustomWithNotInteger_shouldBeFalse() {
+        assertThat(validator.isInteger(i -> i >= 0).test("not integer")).isFalse();
+    }
+
+    @Test
+    public void tryDateWithDate_shouldBeTrue() {
+        assertThat(validator.isDate().test("2015-11-10")).isTrue();
+    }
+
+    @Test
+    public void tryDateWithNotDate_shouldBeFalse() {
+        assertThat(validator.isDate().test("not date")).isFalse();
+    }
+
+    @Test
+    public void tryDateWithPoorlyFormattedDate_shouldBeFalse() {
+        assertThat(validator.isDate().test("2015-1-15")).isFalse();
+    }
+
+    @Test
+    public void tryDateWithImpossibleDate_shouldBeFalse() {
+        assertThat(validator.isDate().test("2015-13-15")).isFalse();
+    }
+
+    @Test
+    public void tryDateWithNegativeZeroYears_shouldBeFalse() {
+        assertThat(validator.isDate().test("-0000-11-10")).isFalse();
+    }
+
 }

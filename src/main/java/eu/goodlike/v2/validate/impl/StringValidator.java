@@ -2,7 +2,11 @@ package eu.goodlike.v2.validate.impl;
 
 import eu.goodlike.v2.validate.Validate;
 
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
 
 /**
  * String validator implementation
@@ -14,6 +18,13 @@ public final class StringValidator extends Validate<String, StringValidator> {
      */
     public StringValidator isEmpty() {
         return registerCondition(String::isEmpty);
+    }
+
+    /**
+     * Adds a predicate which tests if the string being validated has no less than limited amount of characters
+     */
+    public StringValidator isNoSmallerThan(int limit) {
+        return registerCondition(string -> string.length() >= limit);
     }
 
     /**
@@ -50,6 +61,31 @@ public final class StringValidator extends Validate<String, StringValidator> {
      */
     public StringValidator isCommaSeparatedListOfIntegers() {
         return registerCondition(StringValidator::isCommaSeparatedListOfIntegers);
+    }
+
+    /**
+     * Adds a predicate which tests if the string being validated is a date of format YYYY-MM-DD; more specifically, if
+     * it can be parsed using DateTimeFormatter.ISO_LOCAL_DATE
+     */
+    public StringValidator isDate() {
+        return registerCondition(StringValidator::isDate);
+    }
+
+    /**
+     * Adds a predicate which tests if the string being validated is an integer; more specifically, it tests if
+     * Integer.parseInt() would pass
+     */
+    public StringValidator isInteger() {
+        return registerCondition(StringValidator::isInteger);
+    }
+
+    /**
+     * Adds a predicate which tests if the string being validated is an integer that also passes custom IntPredicate test;
+     * more specifically, it tests if  Integer.parseInt() would pass, and then checks if resulting int would pass
+     * given predicate
+     */
+    public StringValidator isInteger(IntPredicate custom) {
+        return registerCondition(str -> StringValidator.isInteger(str) && custom.test(Integer.parseInt(str)));
     }
 
     /**
@@ -97,8 +133,43 @@ public final class StringValidator extends Validate<String, StringValidator> {
      * @return true if string is a comma separated list of non-negative integers, false otherwise
      */
     public static boolean isCommaSeparatedListOfIntegers(String string) {
-        return !startsEndsOrContainsConsecutive(string, ",")
-                && string.chars().allMatch(codePoint().isDigit().or().isEqual(','));
+        return Stream.of(string.split(",")).allMatch(string().not().isBlank().isInteger());
+    }
+
+    /**
+     * <pre>
+     * ASSUMES string has been checked for null/blank
+     *
+     * This checks if the String can be parsed by LocalDate using DateTimeFormatter.ISO_LOCAL_DATE
+     * </pre>
+     * @return true if string is a date of format YYYY-MM-DD, false otherwise
+     */
+    public static boolean isDate(String string) {
+        int firstDash = string.indexOf("-");
+        if (firstDash < 0)
+            return false;
+
+        if (firstDash == 0)
+            firstDash = string.substring(1).indexOf("-");
+
+        int yearStart = string.startsWith("-") || string.startsWith("+") ? 1 : 0;
+        String year = string.substring(yearStart, firstDash);
+        String remains = string.substring(firstDash + 1);
+        int secondDash = remains.indexOf("-");
+        if (secondDash < 0)
+            return false;
+
+        String month = remains.substring(0, secondDash);
+        String day = remains.substring(secondDash + 1);
+        return NOT_NULL_NOT_BLANK.isNoSmallerThan(4).isInteger(Int().passes(i -> i != 0 || string.indexOf("-") > 0).isBetween(0, 999999999)).test(year)
+                && NOT_NULL_NOT_BLANK.isNoSmallerThan(2).isInteger(Int().isMonthOfYear()).test(month)
+                && NOT_NULL_NOT_BLANK.isNoSmallerThan(2).isInteger(Int().isDayOfMonth(Integer.parseInt(year), Integer.parseInt(month))).test(day);
+    }
+
+    public static boolean isInteger(String string) {
+        if (string.startsWith("-") || string.startsWith("+"))
+            string = string.substring(1);
+        return string.chars().allMatch(codePoint().isSimpleDigit());
     }
 
     // CONSTRUCTORS

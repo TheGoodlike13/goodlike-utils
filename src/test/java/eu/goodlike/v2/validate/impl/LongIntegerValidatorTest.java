@@ -129,4 +129,29 @@ public class LongIntegerValidatorTest {
         assertThat(validator.isMinuteOfHour().test(150L)).isFalse();
     }
 
+    @Test
+    public void tryIsMonthOfYearWithMonth_shouldBeTrue() {
+        assertThat(validator.isMonthOfYear().test(10L)).isTrue();
+    }
+
+    @Test
+    public void tryIsMonthOfYearWithNotMonth_shouldBeFalse() {
+        assertThat(validator.isMonthOfYear().test(13L)).isFalse();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithCorrectDay_shouldBeTrue() {
+        assertThat(validator.isDayOfMonth(2015, 2).test(10L)).isTrue();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithIncorrectDay_shouldBeFalse() {
+        assertThat(validator.isDayOfMonth(2015, 2).test(30L)).isFalse();
+    }
+
+    @Test
+    public void tryIsDayOfMonthSpecificWithExtraDay_shouldBeTrue() {
+        assertThat(validator.isDayOfMonth(2016, 2).test(29L)).isTrue();
+    }
+
 }
