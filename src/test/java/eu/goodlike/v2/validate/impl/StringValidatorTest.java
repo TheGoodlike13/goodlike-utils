@@ -171,4 +171,29 @@ public class StringValidatorTest {
         assertThat(validator.isDate().test("-0000-11-10")).isFalse();
     }
 
+    @Test
+    public void tryDateWithManyLongYearsWithPlus_shouldBeTrue() {
+        assertThat(validator.isDate().test("+12345-11-10")).isTrue();
+    }
+
+    @Test
+    public void tryDateWithManyLongYearsWithoutPlus_shouldBeFalse() {
+        assertThat(validator.isDate().test("12345-11-10")).isFalse();
+    }
+
+    @Test
+    public void tryDateWithFourLongYearsWithPlus_shouldBeFalse() {
+        assertThat(validator.isDate().test("+2015-11-10")).isFalse();
+    }
+
+    @Test
+    public void tryExactlyOfSizeWithExactSize_shouldBeTrue() {
+        assertThat(validator.isExactlyOfSize(4).test("test")).isTrue();
+    }
+
+    @Test
+    public void tryExactlyOfSizeWithDifferentSize_shouldBeFalse() {
+        assertThat(validator.isExactlyOfSize(10).test("test")).isFalse();
+    }
+
 }
