@@ -21,6 +21,16 @@ public interface GMail {
      */
     void send(String emailTo, String title, String text);
 
+    /**
+     * @return completely configured simple GMail
+     */
+    static GMail getDefaultGMail(String username, String password) {
+        return new GMailSender(username, getDefaultSender(username, password));
+    }
+
+    /**
+     * @return completely configured simple MailSender
+     */
     static MailSender getDefaultSender(String username, String password) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("smtp.gmail.com");
