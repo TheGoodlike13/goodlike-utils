@@ -1,4 +1,6 @@
-package eu.goodlike.time;
+package eu.goodlike.time.impl;
+
+import eu.goodlike.time.DateConverter;
 
 import java.time.*;
 import java.util.Date;

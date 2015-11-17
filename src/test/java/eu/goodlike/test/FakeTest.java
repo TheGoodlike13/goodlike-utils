@@ -1,6 +1,6 @@
 package eu.goodlike.test;
 
-import eu.goodlike.functional.some.Some;
+import eu.goodlike.functional.Some;
 import eu.goodlike.misc.Scaleless;
 import eu.goodlike.time.DateConverter;
 import eu.goodlike.time.Time;

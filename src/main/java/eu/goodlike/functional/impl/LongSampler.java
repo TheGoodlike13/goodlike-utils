@@ -1,4 +1,4 @@
-package eu.goodlike.functional.some;
+package eu.goodlike.functional.impl;
 
 import eu.goodlike.neat.Null;
 

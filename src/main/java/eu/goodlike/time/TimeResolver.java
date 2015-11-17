@@ -1,6 +1,7 @@
 package eu.goodlike.time;
 
 import com.google.common.base.MoreObjects;
+import eu.goodlike.time.impl.TimeHandler;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

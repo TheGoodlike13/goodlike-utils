@@ -1,5 +1,6 @@
 package eu.goodlike.time;
 
+import eu.goodlike.time.impl.TimeHandler;
 import org.junit.Test;
 
 import java.time.LocalDate;

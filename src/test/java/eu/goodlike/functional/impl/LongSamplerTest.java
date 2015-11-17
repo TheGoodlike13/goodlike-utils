@@ -1,5 +1,6 @@
-package eu.goodlike.functional.some;
+package eu.goodlike.functional.impl;
 
+import eu.goodlike.functional.Some;
 import org.junit.Test;
 
 import java.util.Arrays;

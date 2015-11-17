@@ -1,4 +1,4 @@
-package eu.goodlike.time;
+package eu.goodlike.time.impl;
 
 import eu.goodlike.neat.Null;
 

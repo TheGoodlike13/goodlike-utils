@@ -3,6 +3,7 @@ package eu.goodlike.time;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.goodlike.neat.Null;
+import eu.goodlike.time.impl.TimeHandler;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
