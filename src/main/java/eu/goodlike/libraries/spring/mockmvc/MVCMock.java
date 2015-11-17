@@ -1,6 +1,7 @@
 package eu.goodlike.libraries.spring.mockmvc;
 
 import eu.goodlike.libraries.jackson.Json;
+import org.jooq.lambda.Seq;
 import org.jooq.lambda.Unchecked;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -14,7 +15,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static eu.goodlike.libraries.jool.Sequence.seq;
 import static eu.goodlike.misc.Constants.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -178,7 +178,7 @@ public final class MVCMock {
     }
 
     private ResultActions expect(ResultActions seed, ResultMatcher... expect) {
-        return seq(expect).foldLeft(seed, Unchecked.biFunction(ResultActions::andExpect));
+        return Seq.of(expect).foldLeft(seed, Unchecked.biFunction(ResultActions::andExpect));
     }
 
     private ResultActions okActions(ResultActions seed, HttpResult resultVariation) throws Exception {
