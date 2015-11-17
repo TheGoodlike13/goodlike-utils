@@ -107,10 +107,10 @@ public final class Either<T1, T2> {
      * Invokes an action if this Either is of neither kind, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public Either<T1, T2> ifNeitherKind(Action action) {
+    public Either<T1, T2> ifNeitherKind(Runnable action) {
         Null.check(action).ifAny("Null actions not allowed");
         if (isNeitherKind())
-            action.doIt();
+            action.run();
         return this;
     }
 

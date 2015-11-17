@@ -1,10 +1,10 @@
 package eu.goodlike.misc;
 
-import eu.goodlike.v2.validate.impl.StringValidator;
+import eu.goodlike.tbr.validate.impl.StringValidator;
 
 import java.nio.charset.Charset;
 
-import static eu.goodlike.v2.validate.Validate.string;
+import static eu.goodlike.tbr.validate.Validate.string;
 
 /**
  * <pre>

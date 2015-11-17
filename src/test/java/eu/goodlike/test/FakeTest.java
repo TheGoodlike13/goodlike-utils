@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static eu.goodlike.v2.validate.Validate.string;
+import static eu.goodlike.tbr.validate.Validate.string;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;

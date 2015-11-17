@@ -23,7 +23,7 @@ public class EitherTest {
 
     private List<Object> actionTester;
     private final String actionString = "action";
-    private final Action simpleAction = () -> actionTester.add(actionString);
+    private final Runnable simpleAction = () -> actionTester.add(actionString);
 
     @Before
     public void setup() {
