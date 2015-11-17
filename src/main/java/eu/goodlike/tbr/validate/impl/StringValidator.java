@@ -6,7 +6,7 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static eu.goodlike.misc.Constants.NOT_NULL_NOT_BLANK;
+import static eu.goodlike.validate.CommonValidators.NOT_NULL_NOT_BLANK;
 
 /**
  * String validator implementation
