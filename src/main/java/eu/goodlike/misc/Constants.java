@@ -1,10 +1,6 @@
 package eu.goodlike.misc;
 
-import eu.goodlike.tbr.validate.impl.StringValidator;
-
 import java.nio.charset.Charset;
-
-import static eu.goodlike.tbr.validate.Validate.string;
 
 /**
  * <pre>
@@ -55,11 +51,6 @@ public final class Constants {
      * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
      */
     public static final Charset DEF_CHARSET = Charset.forName(DEFAULT_CHARSET);
-
-    /**
-     * Validator to check if a string is null or blank
-     */
-    public static final StringValidator NOT_NULL_NOT_BLANK = string().not().isNull().not().isBlank();
 
     // PRIVATE
 
