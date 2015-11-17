@@ -1,4 +1,4 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import eu.goodlike.functional.some.Some;
 import org.junit.Before;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static eu.goodlike.v2.validate.Validate.integer;
+import static eu.goodlike.tbr.validate.Validate.integer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CollectionValidatorTest {

@@ -1,4 +1,4 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import eu.goodlike.functional.some.Some;
 import org.junit.Before;
@@ -9,14 +9,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongValidatorTest {
+public class IntValidatorTest {
 
-    private LongValidator validator;
-    private List<Long> actionTester;
+    private IntValidator validator;
+    private List<Integer> actionTester;
 
     @Before
     public void setup() {
-        validator = new LongValidator();
+        validator = new IntValidator();
         actionTester = new ArrayList<>();
     }
 
@@ -42,12 +42,12 @@ public class LongValidatorTest {
 
     @Test
     public void tryContainedInCollectionWithContained_shouldBeTrue() {
-        assertThat(validator.isContainedIn(Some.longs().oneUpTo(3)).test(2)).isTrue();
+        assertThat(validator.isContainedIn(Some.ints().oneUpTo(3)).test(2)).isTrue();
     }
 
     @Test
     public void tryContainedInCollectionWithContained_shouldBeFalse() {
-        assertThat(validator.isContainedIn(Some.longs().oneUpTo(3)).test(4)).isFalse();
+        assertThat(validator.isContainedIn(Some.ints().oneUpTo(3)).test(4)).isFalse();
     }
 
     @Test
@@ -222,20 +222,20 @@ public class LongValidatorTest {
 
     @Test
     public void tryInvalidCustomActionWithInvalid_shouldPerformAction() {
-        validator.isLessThan(5).ifInvalid(6, () -> actionTester.add(1L));
-        assertThat(actionTester).isEqualTo(Some.ofLong(1).oneUpTo(1));
+        validator.isLessThan(5).ifInvalid(6, () -> actionTester.add(1));
+        assertThat(actionTester).isEqualTo(Some.ofInt(1).oneUpTo(1));
     }
 
     @Test
     public void tryInvalidCustomActionWithValid_shouldDoNothing() {
-        validator.isLessThan(5).ifInvalid(4, () -> actionTester.add(1L));
+        validator.isLessThan(5).ifInvalid(4, () -> actionTester.add(1));
         assertThat(actionTester).isEmpty();
     }
 
     @Test
     public void tryInvalidCustomConsumerWithInvalid_shouldConsume() {
         validator.isLessThan(5).ifInvalid(6, actionTester::add);
-        assertThat(actionTester).isEqualTo(Some.ofLong(6).oneUpTo(1));
+        assertThat(actionTester).isEqualTo(Some.ofInt(6).oneUpTo(1));
     }
 
     @Test

@@ -1,4 +1,4 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import eu.goodlike.functional.some.Some;
 import org.junit.Before;
