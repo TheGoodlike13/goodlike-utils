@@ -34,15 +34,15 @@ public enum JsonMapper {
         return mapper.writeValueAsString(object);
     }
 
-    public <T> ObjectReader readerFor(Class<T> clazz) throws IOException {
+    public <T> ObjectReader readerFor(Class<T> clazz) {
         return mapper.readerFor(clazz);
     }
 
-    public <T> ObjectReader readerFor(JavaType type) throws IOException {
+    public <T> ObjectReader readerFor(JavaType type) {
         return mapper.readerFor(type);
     }
 
-    public <T> ObjectReader readerFor(TypeReference<T> type) throws IOException {
+    public <T> ObjectReader readerFor(TypeReference<T> type) {
         return mapper.readerFor(type);
     }
 
