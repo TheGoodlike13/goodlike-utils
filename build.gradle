@@ -27,15 +27,18 @@ repositories {
 }
 
 dependencies {
-    // used for neat collection methods and loading cache
+    // used for various utility methods
     compile 'com.google.guava:guava:19.0-rc2'
 
-    // mostly used for Unchecked versions of functional interfaces in various places
+    // used for Unchecked versions of functional interfaces
     compile 'org.jooq:jool:0.9.7'
 
+    // used for caching
+    compile 'com.github.ben-manes.caffeine:caffeine:2.0.1'
+
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-core:2.6.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.0-rc1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.6.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
 
     // needed for jooq package only
@@ -56,7 +59,7 @@ dependencies {
     // better assertions
     testCompile 'org.assertj:assertj-core:3.2.0'
     // mocking various objects
-    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'org.mockito:mockito-all:2.0.2-beta'
     // a little bit of reflection
     testCompile 'org.jooq:joor:0.9.5'
 }
