@@ -1,8 +1,7 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
-import eu.goodlike.v2.validate.Validate;
+import eu.goodlike.tbr.validate.Validate;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -56,7 +55,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      * @throws NullPointerException is elementValidator or customAction is null
      */
-    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Action customAction) {
+    public <V extends Validate<T, V>> CollectionValidator<T> forEachIfNot(V elementValidator, Runnable customAction) {
         Null.check(elementValidator, customAction).ifAny("Element validator and action cannot be null");
         return registerCondition(collection -> forEach(collection, elementValidator, customAction));
     }
@@ -124,7 +123,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
 
     // PRIVATE
 
-    private static <T, V extends Validate<T, V>> boolean forEach(Collection<T> collection, V elementValidator, Action customAction) {
+    private static <T, V extends Validate<T, V>> boolean forEach(Collection<T> collection, V elementValidator, Runnable customAction) {
         boolean result = true;
         for (T e : collection) {
             elementValidator.ifInvalid(e, customAction);
@@ -161,7 +160,7 @@ public final class CollectionValidator<T> extends Validate<Collection<T>, Collec
      * </pre>
      */
     public static final class ElementValidatorActor<T, V extends Validate<T, V>> {
-        public CollectionValidator<T> Do(Action action) {
+        public CollectionValidator<T> Do(Runnable action) {
             return collectionValidator.forEachIfNot(elementValidator, action);
         }
 

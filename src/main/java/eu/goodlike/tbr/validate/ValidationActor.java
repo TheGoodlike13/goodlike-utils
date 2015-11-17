@@ -1,6 +1,5 @@
-package eu.goodlike.v2.validate;
+package eu.goodlike.tbr.validate;
 
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
 import java.util.function.Consumer;
@@ -17,7 +16,7 @@ public final class ValidationActor<T, E extends T, V extends Validate<T, V>> {
      * Executes an arbitrary action if and only if an invalid value is passed
      * @throws NullPointerException if someAction is null
      */
-    public V thenDo(Action someAction) {
+    public V thenDo(Runnable someAction) {
         return validator.ifInvalid(value, someAction);
     }
 

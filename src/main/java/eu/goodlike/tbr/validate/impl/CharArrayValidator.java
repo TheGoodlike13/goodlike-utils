@@ -1,9 +1,8 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import com.google.common.primitives.Chars;
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
-import eu.goodlike.v2.validate.Validate;
+import eu.goodlike.tbr.validate.Validate;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -93,7 +92,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      * @throws NullPointerException is elementValidator or customAction is null
      */
-    public <V extends Validate<Character, V>> CharArrayValidator forEachIfNot(V elementValidator, Action customAction) {
+    public <V extends Validate<Character, V>> CharArrayValidator forEachIfNot(V elementValidator, Runnable customAction) {
         Null.check(elementValidator, customAction).ifAny("Predicate and action cannot be null");
         return registerCondition(chars -> forEach(chars, elementValidator, customAction));
     }
@@ -161,7 +160,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
 
     // PRIVATE
 
-    private static <V extends Validate<Character, V>> boolean forEach(char[] chars, V elementValidator, Action customAction) {
+    private static <V extends Validate<Character, V>> boolean forEach(char[] chars, V elementValidator, Runnable customAction) {
         boolean result = true;
         for (char c : chars) {
             elementValidator.ifInvalid(c, customAction);
@@ -202,7 +201,7 @@ public final class CharArrayValidator extends Validate<char[], CharArrayValidato
      * </pre>
      */
     public static final class ElementValidatorActor<V extends Validate<Character, V>> {
-        public CharArrayValidator Do(Action action) {
+        public CharArrayValidator Do(Runnable action) {
             return charArrayValidator.forEachIfNot(elementValidator, action);
         }
 

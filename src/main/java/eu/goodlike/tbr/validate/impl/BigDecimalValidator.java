@@ -1,8 +1,8 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import eu.goodlike.misc.Scaleless;
 import eu.goodlike.misc.SpecialUtils;
-import eu.goodlike.v2.validate.Validate;
+import eu.goodlike.tbr.validate.Validate;
 
 import java.math.BigDecimal;
 import java.util.function.Predicate;

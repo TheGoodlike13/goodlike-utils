@@ -1,7 +1,6 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import com.google.common.primitives.Longs;
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
 import java.time.LocalDate;
@@ -145,10 +144,10 @@ public final class LongValidator implements LongPredicate {
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public LongValidator ifInvalid(long integer, Action invalidAction) {
+    public LongValidator ifInvalid(long integer, Runnable invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(integer))
-            invalidAction.doIt();
+            invalidAction.run();
         return this;
     }
 
@@ -365,7 +364,7 @@ public final class LongValidator implements LongPredicate {
          * Executes an arbitrary action if and only if an invalid value is passed
          * @throws NullPointerException if someAction is null
          */
-        public LongValidator thenDo(Action someAction) {
+        public LongValidator thenDo(Runnable someAction) {
             return validator.ifInvalid(value, someAction);
         }
 

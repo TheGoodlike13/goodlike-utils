@@ -1,8 +1,7 @@
-package eu.goodlike.v2.validate;
+package eu.goodlike.tbr.validate;
 
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
-import eu.goodlike.v2.validate.impl.*;
+import eu.goodlike.tbr.validate.impl.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -212,10 +211,10 @@ public abstract class Validate<T, V extends Validate<T, V>> implements Predicate
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public final <E extends T> V ifInvalid(E object, Action invalidAction) {
+    public final <E extends T> V ifInvalid(E object, Runnable invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(object))
-            invalidAction.doIt();
+            invalidAction.run();
         return thisValidator();
     }
 

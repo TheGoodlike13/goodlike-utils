@@ -1,7 +1,6 @@
-package eu.goodlike.v2.validate.impl;
+package eu.goodlike.tbr.validate.impl;
 
 import com.google.common.primitives.Ints;
-import eu.goodlike.functional.Action;
 import eu.goodlike.neat.Null;
 
 import java.time.LocalDate;
@@ -145,10 +144,10 @@ public final class IntValidator implements IntPredicate {
      * @throws NullPointerException if invalidAction is null
      * @throws IllegalStateException if there are no conditions at all, or when closing brackets
      */
-    public IntValidator ifInvalid(int integer, Action invalidAction) {
+    public IntValidator ifInvalid(int integer, Runnable invalidAction) {
         Null.check(invalidAction).ifAny("Action cannot be null");
         if (isInvalid(integer))
-            invalidAction.doIt();
+            invalidAction.run();
         return this;
     }
 
@@ -550,7 +549,7 @@ public final class IntValidator implements IntPredicate {
          * Executes an arbitrary action if and only if an invalid value is passed
          * @throws NullPointerException if someAction is null
          */
-        public IntValidator thenDo(Action someAction) {
+        public IntValidator thenDo(Runnable someAction) {
             return validator.ifInvalid(value, someAction);
         }
 
