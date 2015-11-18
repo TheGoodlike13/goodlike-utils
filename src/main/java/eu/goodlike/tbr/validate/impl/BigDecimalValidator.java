@@ -1,7 +1,6 @@
 package eu.goodlike.tbr.validate.impl;
 
-import eu.goodlike.misc.Scaleless;
-import eu.goodlike.misc.SpecialUtils;
+import eu.goodlike.misc.BigDecimals;
 import eu.goodlike.tbr.validate.Validate;
 
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ public final class BigDecimalValidator extends Validate<BigDecimal, BigDecimalVa
      */
     @Override
     public BigDecimalValidator isEqual(BigDecimal other) {
-        return registerCondition(dec -> SpecialUtils.equals(dec, other, Scaleless::bigDecimal));
+        return registerCondition(dec -> BigDecimals.equalsIgnoreScale(dec, other));
     }
 
     /**

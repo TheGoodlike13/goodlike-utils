@@ -8,36 +8,36 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ROUND_UNNECESSARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ScalelessTest {
+public class BigDecimalsTest {
 
     private final BigDecimal big1 = ONE;
 
     @Test
-    public void tryTwoEqualBigDecimals_shouldBeEqual() {
-        assertThat(Scaleless.bigDecimal(big1)).isEqualTo(Scaleless.bigDecimal(big1));
+    public void tryTwoSameBigDecimals_shouldBeEqual() {
+        assertThat(BigDecimals.equalsIgnoreScale(big1, big1)).isTrue();
     }
 
     @Test
     public void tryTwoNotEqualBigDecimals_shouldNotBeEqual() {
         BigDecimal big2 = big1.add(ONE);
-        assertThat(Scaleless.bigDecimal(big1)).isNotEqualTo(Scaleless.bigDecimal(big2));
+        assertThat(BigDecimals.equalsIgnoreScale(big1, big2)).isFalse();
     }
 
     @Test
     public void tryTwoEqualWhenSameScaleBigDecimals_shouldBeEqual() {
         BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
-        assertThat(Scaleless.bigDecimal(big1)).isEqualTo(Scaleless.bigDecimal(big2));
+        assertThat(BigDecimals.equalsIgnoreScale(big1, big2)).isTrue();
     }
 
     @Test
-    public void tryTwoEqualBigDecimals_shouldGiveSameHashCode() {
-        assertThat(Scaleless.bigDecimal(big1).hashCode()).isEqualTo(Scaleless.bigDecimal(big1).hashCode());
+    public void tryTwoSameBigDecimals_shouldGiveSameHashCode() {
+        assertThat(BigDecimals.hashCode(big1)).isEqualTo(BigDecimals.hashCode(big1));
     }
 
     @Test
     public void tryTwoEqualWhenSameScaleBigDecimals_shouldGiveSameHashCode() {
         BigDecimal big2 = big1.setScale(big1.scale() + 1, ROUND_UNNECESSARY);
-        assertThat(Scaleless.bigDecimal(big1).hashCode()).isEqualTo(Scaleless.bigDecimal(big2).hashCode());
+        assertThat(BigDecimals.hashCode(big1)).isEqualTo(BigDecimals.hashCode(big2));
     }
 
 }

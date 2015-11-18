@@ -1,19 +1,20 @@
 package eu.goodlike.test;
 
 import eu.goodlike.functional.Some;
-import eu.goodlike.misc.Scaleless;
 import eu.goodlike.time.DateConverter;
 import eu.goodlike.time.Time;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static eu.goodlike.tbr.validate.Validate.string;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FakeTest {
@@ -62,7 +63,8 @@ public class FakeTest {
 
     @Test
     public void tryWages_shouldBeUnique() {
-        assertThat(Some.of(Fake::wage).oneUpToStream(10).map(Scaleless::bigDecimal).collect(toSet())).hasSize(10);
+        Set<BigDecimal> set = Some.of(Fake::wage).oneUpToStream(10).collect(toCollection(TreeSet::new));
+        assertThat(set).hasSize(10);
     }
 
     @Test
