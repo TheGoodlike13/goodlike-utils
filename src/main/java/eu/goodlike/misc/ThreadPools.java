@@ -24,13 +24,13 @@ public final class ThreadPools {
 
     // PRIVATE
 
-    private ThreadPools() {
-        throw new AssertionError("Do not instantiate, use static methods!");
-    }
-
     private static final int CORE_COUNT = Runtime.getRuntime().availableProcessors();
 
     private static final Executor CACHED_EX = Executors.newCachedThreadPool();
     private static final Executor FIXED_EX = Executors.newFixedThreadPool(CORE_COUNT);
+
+    private ThreadPools() {
+        throw new AssertionError("Do not instantiate, use static methods!");
+    }
 
 }
