@@ -32,6 +32,13 @@ public final class Some {
     }
 
     /**
+     * @return sampler for a long function
+     */
+    public static <T> LongSampler<T> Of(LongFunction<T> anyFunction) {
+        return new LongSampler<>(anyFunction);
+    }
+
+    /**
      * @return sampler of just integers
      */
     public static IntSampler<Integer> ints() {
@@ -64,13 +71,6 @@ public final class Some {
      */
     public static IntSampler<Long> ofLong(long longInteger) {
         return of(i -> longInteger);
-    }
-
-    /**
-     * @return sampler for a long function
-     */
-    public static <T> LongSampler<T> Of(LongFunction<T> anyFunction) {
-        return new LongSampler<>(anyFunction);
     }
 
     // PRIVATE
