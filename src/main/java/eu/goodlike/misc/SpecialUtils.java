@@ -1,5 +1,7 @@
 package eu.goodlike.misc;
 
+import eu.goodlike.neat.Null;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.function.Function;
@@ -46,6 +48,7 @@ public final class SpecialUtils {
      * @return true if objects are equal given a certain transformation, false otherwise
      */
     public static <T, U> boolean equals(T t1, T t2, Function<T, U> converter) {
+        Null.check(converter).ifAny("Converter cannot be null");
         return t1 == null ? t2 == null : converter.apply(t1).equals(converter.apply(t2));
     }
 
