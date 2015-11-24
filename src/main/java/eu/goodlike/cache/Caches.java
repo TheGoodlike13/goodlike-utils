@@ -1,8 +1,5 @@
 package eu.goodlike.cache;
 
-import eu.goodlike.cache.impl.CaffeineCacheWrapper;
-import eu.goodlike.cache.impl.GuavaCacheWrapper;
-import eu.goodlike.libraries.DependencyCheck;
 import eu.goodlike.neat.Null;
 
 import java.util.function.Function;
@@ -19,17 +16,22 @@ public final class Caches {
      */
     public static <K, V> CacheWrapper<K, V> softCache(Function<? super K, ? extends V> cacheLoader) {
         Null.check(cacheLoader).ifAny("Cache loader cannot be null");
-
-        if (DependencyCheck.isCaffeineAvailable())
-            return new CaffeineCacheWrapper<>(cacheLoader);
-
-        if (DependencyCheck.isGuavaAvailable())
-            return new GuavaCacheWrapper<>(cacheLoader);
-
-        throw new IllegalStateException("Please add Caffeine or Guava dependency when using Caches!");
+        ensureCacheFactoryExists();
+        return cacheFactory.makeSoftCache(cacheLoader);
     }
 
     // PRIVATE
+
+    private static volatile CacheFactory cacheFactory;
+
+    private static void ensureCacheFactoryExists() {
+        if (cacheFactory == null) {
+            synchronized (Caches.class) {
+                if (cacheFactory == null)
+                    cacheFactory = CacheFactory.getAvailableCacheFactory();
+            }
+        }
+    }
 
     private Caches() {
         throw new AssertionError("Do not instantiate, use static methods!");
