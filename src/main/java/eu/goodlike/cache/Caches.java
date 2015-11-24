@@ -1,5 +1,6 @@
 package eu.goodlike.cache;
 
+import eu.goodlike.misc.Singleton;
 import eu.goodlike.neat.Null;
 
 import java.util.function.Function;
@@ -16,22 +17,12 @@ public final class Caches {
      */
     public static <K, V> CacheWrapper<K, V> softCache(Function<? super K, ? extends V> cacheLoader) {
         Null.check(cacheLoader).ifAny("Cache loader cannot be null");
-        ensureCacheFactoryExists();
-        return cacheFactory.makeSoftCache(cacheLoader);
+        return cacheFactory.get().makeSoftCache(cacheLoader);
     }
 
     // PRIVATE
 
-    private static volatile CacheFactory cacheFactory;
-
-    private static void ensureCacheFactoryExists() {
-        if (cacheFactory == null) {
-            synchronized (Caches.class) {
-                if (cacheFactory == null)
-                    cacheFactory = CacheFactory.getAvailableCacheFactory();
-            }
-        }
-    }
+    private static final Singleton<CacheFactory> cacheFactory = Singleton.of(CacheFactory::getAvailableCacheFactory);
 
     private Caches() {
         throw new AssertionError("Do not instantiate, use static methods!");
