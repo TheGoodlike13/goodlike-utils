@@ -41,16 +41,24 @@ public class Null {
      *      () -> new X()
      * </pre>
      * @throws X if any of the checked objects are null
+     * @throws NullPointerException is exceptionSupplier is null
      */
     public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {
+        if (exceptionSupplier == null)
+            throw new NullPointerException("Exception supplier cannot be null");
+
         if (objects.containsNull())
             throw exceptionSupplier.get();
     }
 
     /**
      * @throws NullPointerException if any of the checked objects are null
+     * @throws NullPointerException if message is null
      */
     public void ifAny(String message) {
+        if (message == null)
+            throw new NullPointerException("Message cannot be null");
+
         int index = objects.indexOfNull();
         if (index >= 0)
             throw new NullPointerException(message + "; parameter at index "
@@ -127,17 +135,25 @@ public class Null {
          *      () -> new X()
          * </pre>
          * @throws X because this object is definitely null
+         * @throws NullPointerException is exceptionSupplier is null
          */
         @Override
         public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {
+            if (exceptionSupplier == null)
+                throw new NullPointerException("Exception supplier cannot be null");
+
             throw exceptionSupplier.get();
         }
 
         /**
          * @throws NullPointerException because this object is definitely null
+         * @throws NullPointerException if message is null
          */
         @Override
         public void ifAny(String message) {
+            if (message == null)
+                throw new NullPointerException("Message cannot be null");
+
             throw new NullPointerException(message);
         }
 
@@ -170,15 +186,23 @@ public class Null {
          *      () -> new X()
          * </pre>
          * @throws X never, because this object is definitely not null
+         * @throws NullPointerException is exceptionSupplier is null
          */
         @Override
-        public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {}
+        public <X extends Throwable> void ifAny(Supplier<? extends X> exceptionSupplier) throws X {
+            if (exceptionSupplier == null)
+                throw new NullPointerException("Exception supplier cannot be null");
+        }
 
         /**
          * @throws NullPointerException never because this object is definitely not null
+         * @throws NullPointerException if message is null
          */
         @Override
-        public void ifAny(String message) {}
+        public void ifAny(String message) {
+            if (message == null)
+                throw new NullPointerException("Message cannot be null");
+        }
 
         private DefinitelyNotNull() {
             super(null);
