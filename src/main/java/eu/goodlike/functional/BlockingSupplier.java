@@ -1,5 +1,7 @@
 package eu.goodlike.functional;
 
+import eu.goodlike.neat.Null;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
@@ -14,10 +16,8 @@ public final class BlockingSupplier<T> implements Supplier<T> {
      * @throws NullPointerException if supplier is null
      * @throws IllegalStateException if this supplier has already been set
      */
-    public synchronized void set(Supplier<T> supplier) {
-        if (supplier == null)
-            throw new NullPointerException("Supplier cannot be null");
-
+    public void set(Supplier<T> supplier) {
+        Null.check(supplier).ifAny("Supplier cannot be null");
         set(supplier.get());
     }
 
@@ -25,11 +25,8 @@ public final class BlockingSupplier<T> implements Supplier<T> {
      * Sets the value of this supplier
      * @throws IllegalStateException if this supplier has already been set
      */
-    public synchronized void set(T value) {
-        if (this.value != null)
-            throw new IllegalStateException("Value can be set only once!");
-
-        this.value = value;
+    public void set(T value) {
+        setValueOnlyOnce(value);
         blockingGate.countDown();
     }
 
@@ -50,5 +47,12 @@ public final class BlockingSupplier<T> implements Supplier<T> {
 
     private T value;
     private final CountDownLatch blockingGate = new CountDownLatch(1);
+
+    private synchronized void setValueOnlyOnce(T value) {
+        if (this.value != null)
+            throw new IllegalStateException("Value can be set only once!");
+
+        this.value = value;
+    }
 
 }
