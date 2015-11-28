@@ -22,7 +22,7 @@ public final class Caches {
 
     // PRIVATE
 
-    private static final Singleton<CacheFactory> cacheFactory = Singleton.of(CacheFactory::getAvailableCacheFactory);
+    private static final Singleton<CacheFactory> cacheFactory = Singleton.lazy(CacheFactory::getAvailableCacheFactory);
 
     private Caches() {
         throw new AssertionError("Do not instantiate, use static methods!");

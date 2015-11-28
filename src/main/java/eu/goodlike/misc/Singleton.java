@@ -1,5 +1,7 @@
 package eu.goodlike.misc;
 
+import eu.goodlike.neat.Null;
+
 import java.util.function.Supplier;
 
 /**
@@ -17,17 +19,13 @@ public final class Singleton<T> implements Supplier<T> {
 
     // CONSTRUCTORS
 
-    public static <T> Singleton<T> of (T value) {
-        if (value == null)
-            throw new NullPointerException("Value cannot be null");
-
+    public static <T> Singleton<T> of(T value) {
+        Null.check(value).ifAny("Value cannot be null");
         return new Singleton<>(value, null);
     }
 
-    public static <T> Singleton<T> of(Supplier<T> supplier) {
-        if (supplier == null)
-            throw new NullPointerException("Supplier cannot be null");
-
+    public static <T> Singleton<T> lazy(Supplier<T> supplier) {
+        Null.check(supplier).ifAny("Supplier cannot be null");
         return new Singleton<>(null, supplier);
     }
 
@@ -44,11 +42,10 @@ public final class Singleton<T> implements Supplier<T> {
     private void ensureValueExists() {
         if (value == null) {
             synchronized (this) {
-                if (value == null)
+                if (value == null) {
                     value = supplier.get();
-
-                if (value == null)
-                    throw new NullPointerException("Value from supplier cannot be null");
+                    Null.check(value).ifAny("Value from supplier cannot be null");
+                }
             }
         }
     }
