@@ -2,7 +2,9 @@ package eu.goodlike.functional;
 
 import eu.goodlike.neat.Null;
 
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
@@ -41,6 +43,21 @@ public final class BlockingSupplier<T> implements Supplier<T> {
             throw new IllegalStateException("Blocking supplier was interrupted!", e);
         }
         return value;
+    }
+
+    /**
+     * @return the value held by this supplier, blocking until some other Thread sets it, or
+     * given timeout passes
+     * @throws IllegalStateException if the waiting was interrupted
+     */
+    public Optional<T> get(long timeout, TimeUnit unit) {
+        try {
+            if (!blockingGate.await(timeout, unit))
+                return Optional.empty();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Blocking supplier was interrupted!", e);
+        }
+        return Optional.ofNullable(value);
     }
 
     // PRIVATE
