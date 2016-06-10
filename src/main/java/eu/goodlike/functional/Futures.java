@@ -1,6 +1,5 @@
 package eu.goodlike.functional;
 
-import eu.goodlike.misc.ThreadPools;
 import eu.goodlike.neat.Null;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,9 +22,10 @@ public final class Futures {
      */
     public static <T> CompletableFuture<T> valueFromSupplierAsRunnable(Consumer<Runnable> context, Supplier<T> supplier) {
         Null.check(context, supplier).ifAny("Context and supplier cannot be null");
-        BlockingSupplier<T> blockingSupplier = new BlockingSupplier<>();
-        context.accept(() -> blockingSupplier.set(supplier.get()));
-        return CompletableFuture.supplyAsync(blockingSupplier, ThreadPools.forShortTasks());
+
+        CompletableFuture<T> future = new CompletableFuture<>();
+        context.accept(() -> future.complete(supplier.get()));
+        return future;
     }
 
     // PRIVATE
