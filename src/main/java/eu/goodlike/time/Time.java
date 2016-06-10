@@ -1,7 +1,7 @@
 package eu.goodlike.time;
 
-import eu.goodlike.cache.CacheWrapper;
-import eu.goodlike.cache.Caches;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.goodlike.neat.Null;
 import eu.goodlike.time.impl.TimeHandler;
 
@@ -74,7 +74,8 @@ public final class Time {
     // PRIVATE
 
     private static final ZoneId DEFAULT_TIME_ZONE = ZoneId.of("UTC");
-    private static final CacheWrapper<ZoneId, TimeHandler> HANDLER_CACHE = Caches.softCache(TimeHandler::new);
+    private static final LoadingCache<ZoneId, TimeHandler> HANDLER_CACHE = Caffeine.newBuilder()
+            .build(TimeHandler::new);
 
     private Time() {
         throw new AssertionError("Do not instantiate, use static methods!");
