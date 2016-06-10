@@ -1,4 +1,4 @@
-package eu.goodlike.functional.impl;
+package eu.goodlike.functional.impl.some;
 
 import eu.goodlike.functional.Some;
 import org.junit.Test;
@@ -8,9 +8,9 @@ import java.util.Arrays;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongSamplerTest {
+public class IntSamplerTest {
 
-    private final LongSampler<String> toString = Some.Of(String::valueOf);
+    private final IntSampler<String> toString = Some.of(String::valueOf);
 
     @Test
     public void trySampling_shouldReturnSample() {
@@ -44,7 +44,7 @@ public class LongSamplerTest {
 
     @Test
     public void tryWithCollection_shouldReturnGivenValues() {
-        assertThat(toString.with(Arrays.asList(1L, 3L, 5L))).isEqualTo(Arrays.asList("1", "3", "5"));
+        assertThat(toString.with(Arrays.asList(1, 3, 5))).isEqualTo(Arrays.asList("1", "3", "5"));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class LongSamplerTest {
 
     @Test
     public void tryStreamCollection_shouldReturnGivenValues() {
-        assertThat(toString.stream(Arrays.asList(1L, 3L, 5L)).collect(toList())).isEqualTo(Arrays.asList("1", "3", "5"));
+        assertThat(toString.stream(Arrays.asList(1, 3, 5)).collect(toList())).isEqualTo(Arrays.asList("1", "3", "5"));
     }
 
 }

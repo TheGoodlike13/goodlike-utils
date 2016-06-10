@@ -1,6 +1,6 @@
 package eu.goodlike.neat;
 
-import eu.goodlike.neat.impl.StringBuilderWrapper;
+import eu.goodlike.neat.impl.str.StringBuilderWrapper;
 
 /**
  * <pre>

@@ -1,7 +1,7 @@
 package eu.goodlike.functional;
 
-import eu.goodlike.functional.impl.IntSampler;
-import eu.goodlike.functional.impl.LongSampler;
+import eu.goodlike.functional.impl.some.IntSampler;
+import eu.goodlike.functional.impl.some.LongSampler;
 
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
