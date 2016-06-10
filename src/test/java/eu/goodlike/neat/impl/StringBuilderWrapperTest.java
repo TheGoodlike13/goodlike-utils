@@ -1,4 +1,4 @@
-package eu.goodlike.string.impl;
+package eu.goodlike.neat.impl;
 
 import org.junit.Before;
 import org.junit.Test;
