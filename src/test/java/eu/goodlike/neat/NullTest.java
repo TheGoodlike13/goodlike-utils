@@ -147,14 +147,17 @@ public class NullTest {
         Null.checkCollection(null).ifAny(RuntimeException::new);
     }
 
+    @Test
     public void tryContainsNullWhenNull_shouldBeTrue() {
         assertThat(Null.checkAlone(null).containsNull()).isTrue();
     }
 
+    @Test
     public void tryContainsNullWhenContainsNull_shouldBeTrue() {
         assertThat(Null.check(1, null, 3).containsNull()).isTrue();
     }
 
+    @Test
     public void tryContainsNullWhenDoesNotContainNull_shouldBeFalse() {
         assertThat(Null.check(1, 2, 3).containsNull()).isFalse();
     }
