@@ -1,6 +1,7 @@
 package eu.goodlike.neat;
 
-import java.util.Arrays;
+import eu.goodlike.neat.impl.nullcheck.*;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,14 +26,28 @@ import java.util.function.Supplier;
  * including your message, allowing to easily figure out the location of null(s)
  * </pre>
  */
-public class Null {
+public abstract class Null {
+
+    // ABSTRACT
+
+    /**
+     * @return index of first occurrence of null if tested object(s) contains null, -1 otherwise
+     */
+    protected abstract int indexOfNull();
+
+    /**
+     * @return String representation of tested object(s) to print out for debug purposes when any are null
+     */
+    protected abstract String contentToString();
+
+    // PUBLIC
 
     /**
      * Convenience method to check if any of the items is null without throwing exception
      * @return true if any of elements being checked are null
      */
     public boolean containsNull() {
-        return objects.containsNull();
+        return indexOfNull() >= 0;
     }
 
     /**
@@ -47,7 +62,7 @@ public class Null {
         if (exceptionSupplier == null)
             throw new NullPointerException("Exception supplier cannot be null");
 
-        if (objects.containsNull())
+        if (containsNull())
             throw exceptionSupplier.get();
     }
 
@@ -59,20 +74,36 @@ public class Null {
         if (message == null)
             throw new NullPointerException("Message cannot be null");
 
-        int index = objects.indexOfNull();
+        int index = indexOfNull();
         if (index >= 0)
             throw new NullPointerException(message + "; parameter at index "
-                    + index + " was null, please check: " + objects);
+                    + index + " was null, please check: " + contentToString());
     }
 
     // CONSTRUCTORS
 
-    public static Null check(Object... objects) {
-        return objects == null ? DEFINITELY_NULL : new Null(new ArrayWrapper(objects));
+    public static Null check(Object one) {
+        return one == null ? DEFINITELY_NULL : DEFINITELY_NOT_NULL;
     }
 
-    public static Null check(Object singleObject) {
-        return singleObject == null ? DEFINITELY_NULL : DEFINITELY_NOT_NULL;
+    public static Null check(Object one, Object two) {
+        return new TwoNull(one, two);
+    }
+
+    public static Null check(Object one, Object two, Object three) {
+        return new ThreeNull(one, two, three);
+    }
+
+    public static Null check(Object one, Object two, Object three, Object four) {
+        return new FourNull(one, two, three, four);
+    }
+
+    public static Null check(Object one, Object two, Object three, Object four, Object five) {
+        return new FiveNull(one, two, three, four, five);
+    }
+
+    public static Null check(Object... objects) {
+        return objects == null ? DEFINITELY_NULL : new ArrayNull(objects);
     }
 
     /**
@@ -80,7 +111,7 @@ public class Null {
      * to avoid ambiguous call warnings
      */
     public static Null checkAlone(Object possiblyArray) {
-        return possiblyArray == null ? DEFINITELY_NULL : DEFINITELY_NOT_NULL;
+        return check(possiblyArray);
     }
 
     /**
@@ -88,23 +119,24 @@ public class Null {
      * to avoid ambiguous call warnings
      */
     public static Null checkArray(Object[] definitelyArray) {
-        return definitelyArray == null ? DEFINITELY_NULL : check(definitelyArray);
+        return definitelyArray == null ? DEFINITELY_NULL : new ArrayNull(definitelyArray);
+    }
+
+    /**
+     * Use this method when you need to check all collection elements for null (including collection itself)
+     */
+    public static Null checkList(List<?> list) {
+        return list == null ? DEFINITELY_NULL : new ListNull(list);
     }
 
     /**
      * Use this method when you need to check all collection elements for null (including collection itself)
      */
     public static Null checkCollection(Collection<?> collection) {
-        return collection == null ? DEFINITELY_NULL : new Null(new CollectionWrapper<>(collection));
-    }
-
-    private Null(NullCheckWrapper objects) {
-        this.objects = objects;
+        return collection == null ? DEFINITELY_NULL : new CollectionNull(collection);
     }
 
     // PRIVATE
-
-    private final NullCheckWrapper objects;
 
     private static final Null DEFINITELY_NULL = new DefinitelyNull();
     private static final Null DEFINITELY_NOT_NULL = new DefinitelyNotNull();
@@ -120,7 +152,17 @@ public class Null {
      * It avoids Null object construction and varargs array creation entirely
      * </pre>
      */
-    public static final class DefinitelyNull extends Null {
+    private static final class DefinitelyNull extends Null {
+        @Override
+        protected int indexOfNull() {
+            return 0;
+        }
+
+        @Override
+        protected String contentToString() {
+            return null;
+        }
+
         /**
          * @return true because this object is definitely null
          */
@@ -156,10 +198,6 @@ public class Null {
 
             throw new NullPointerException(message);
         }
-
-        private DefinitelyNull() {
-            super(null);
-        }
     }
 
     /**
@@ -171,7 +209,17 @@ public class Null {
      * It avoids Null object construction and varargs array creation entirely
      * </pre>
      */
-    public static final class DefinitelyNotNull extends Null {
+    private static final class DefinitelyNotNull extends Null {
+        @Override
+        protected int indexOfNull() {
+            return -1;
+        }
+
+        @Override
+        protected String contentToString() {
+            return null;
+        }
+
         /**
          * @return false because this object is definitely not null
          */
@@ -202,101 +250,6 @@ public class Null {
         public void ifAny(String message) {
             if (message == null)
                 throw new NullPointerException("Message cannot be null");
-        }
-
-        private DefinitelyNotNull() {
-            super(null);
-        }
-    }
-
-    /**
-     * This interface allows simple wrappers for classes which avoid creation of ArrayLists
-     */
-    private interface NullCheckWrapper {
-        /**
-         * @return true if wrapped object contains null, false otherwise
-         */
-        boolean containsNull();
-        /**
-         * @return index of first occurrence of null if wrapped object contains null, -1 otherwise
-         */
-        int indexOfNull();
-    }
-
-    /**
-     * Custom collection wrapper, avoids constructing an ArrayList for checkCollection()
-     */
-    private static final class CollectionWrapper<T> implements NullCheckWrapper {
-        @Override
-        public boolean containsNull() {
-            return collection.contains(null);
-        }
-
-        @Override
-        public int indexOfNull() {
-            if (collection instanceof List)
-                return ((List) collection).indexOf(null);
-
-            int i = 0;
-            for (T element : collection) {
-                if (element == null)
-                    return i;
-                i++;
-            }
-            return -1;
-        }
-
-        // CONSTRUCTORS
-
-        private CollectionWrapper(Collection<T> collection) {
-            this.collection = collection;
-        }
-
-        // PRIVATE
-
-        private final Collection<T> collection;
-
-        // TO STRING
-
-        @Override
-        public String toString() {
-            return collection.toString();
-        }
-    }
-
-    /**
-     * Custom object array wrapper, avoids constructing an ArrayList for check()
-     */
-    private static final class ArrayWrapper implements NullCheckWrapper {
-        @Override
-        public boolean containsNull() {
-            return indexOfNull() >= 0;
-        }
-
-        @Override
-        public int indexOfNull() {
-            for (int i = 0; i < array.length; i++)
-                if (array[i] == null)
-                    return i;
-
-            return -1;
-        }
-
-        // CONSTRUCTORS
-
-        private ArrayWrapper(Object[] array) {
-            this.array = array;
-        }
-
-        // PRIVATE
-
-        private final Object[] array;
-
-        // TO STRING
-
-        @Override
-        public String toString() {
-            return Arrays.toString(array);
         }
     }
 
