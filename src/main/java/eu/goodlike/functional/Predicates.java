@@ -16,56 +16,60 @@ public final class Predicates {
      * @return predicate which always evaluates to true
      */
     public static <T> Predicate<T> alwaysTrue() {
-        return any -> true;
+        @SuppressWarnings("unchecked")
+        Predicate<T> alwaysTrue = (Predicate<T>) ALWAYS_TRUE;
+        return alwaysTrue;
     }
 
     /**
      * @return predicate which always evaluates to true
      */
     public static DoublePredicate alwaysTrueForDouble() {
-        return any -> true;
+        return ALWAYS_TRUE_DOUBLE;
     }
 
     /**
      * @return predicate which always evaluates to true
      */
     public static IntPredicate alwaysTrueForInt() {
-        return any -> true;
+        return ALWAYS_TRUE_INT;
     }
 
     /**
      * @return predicate which always evaluates to true
      */
     public static LongPredicate alwaysTrueForLong() {
-        return any -> true;
+        return ALWAYS_TRUE_LONG;
     }
 
     /**
      * @return predicate which always evaluates to false
      */
     public static <T> Predicate<T> alwaysFalse() {
-        return any -> false;
+        @SuppressWarnings("unchecked")
+        Predicate<T> alwaysFalse = (Predicate<T>) ALWAYS_FALSE;
+        return alwaysFalse;
     }
 
     /**
      * @return predicate which always evaluates to false
      */
     public static DoublePredicate alwaysFalseForDouble() {
-        return any -> false;
+        return ALWAYS_FALSE_DOUBLE;
     }
 
     /**
      * @return predicate which always evaluates to false
      */
     public static IntPredicate alwaysFalseForInt() {
-        return any -> false;
+        return ALWAYS_FALSE_INT;
     }
 
     /**
      * @return predicate which always evaluates to false
      */
     public static LongPredicate alwaysFalseForLong() {
-        return any -> false;
+        return ALWAYS_FALSE_LONG;
     }
 
     /**
@@ -214,5 +218,181 @@ public final class Predicates {
     private Predicates() {
         throw new AssertionError("Do not instantiate, use static methods!");
     }
+
+    private static final Predicate<Object> ALWAYS_TRUE = new Predicate<Object>() {
+        @Override
+        public boolean test(Object o) {
+            return true;
+        }
+
+        @Override
+        public Predicate<Object> and(Predicate<? super Object> other) {
+            return other;
+        }
+
+        @Override
+        public Predicate<Object> negate() {
+            return alwaysFalse();
+        }
+
+        @Override
+        public Predicate<Object> or(Predicate<? super Object> other) {
+            return this;
+        }
+    };
+
+    private static final DoublePredicate ALWAYS_TRUE_DOUBLE = new DoublePredicate() {
+        @Override
+        public boolean test(double value) {
+            return true;
+        }
+
+        @Override
+        public DoublePredicate and(DoublePredicate other) {
+            return other;
+        }
+
+        @Override
+        public DoublePredicate negate() {
+            return alwaysFalseForDouble();
+        }
+
+        @Override
+        public DoublePredicate or(DoublePredicate other) {
+            return this;
+        }
+    };
+
+    private static final IntPredicate ALWAYS_TRUE_INT = new IntPredicate() {
+        @Override
+        public boolean test(int value) {
+            return true;
+        }
+
+        @Override
+        public IntPredicate and(IntPredicate other) {
+            return other;
+        }
+
+        @Override
+        public IntPredicate negate() {
+            return alwaysFalseForInt();
+        }
+
+        @Override
+        public IntPredicate or(IntPredicate other) {
+            return this;
+        }
+    };
+
+    private static final LongPredicate ALWAYS_TRUE_LONG = new LongPredicate() {
+        @Override
+        public boolean test(long value) {
+            return true;
+        }
+
+        @Override
+        public LongPredicate and(LongPredicate other) {
+            return other;
+        }
+
+        @Override
+        public LongPredicate negate() {
+            return alwaysFalseForLong();
+        }
+
+        @Override
+        public LongPredicate or(LongPredicate other) {
+            return this;
+        }
+    };
+
+    private static final Predicate<Object> ALWAYS_FALSE = new Predicate<Object>() {
+        @Override
+        public boolean test(Object o) {
+            return false;
+        }
+
+        @Override
+        public Predicate<Object> and(Predicate<? super Object> other) {
+            return this;
+        }
+
+        @Override
+        public Predicate<Object> negate() {
+            return alwaysTrue();
+        }
+
+        @Override
+        public Predicate<Object> or(Predicate<? super Object> other) {
+            return other;
+        }
+    };
+
+    private static final DoublePredicate ALWAYS_FALSE_DOUBLE = new DoublePredicate() {
+        @Override
+        public boolean test(double value) {
+            return false;
+        }
+
+        @Override
+        public DoublePredicate and(DoublePredicate other) {
+            return this;
+        }
+
+        @Override
+        public DoublePredicate negate() {
+            return alwaysTrueForDouble();
+        }
+
+        @Override
+        public DoublePredicate or(DoublePredicate other) {
+            return other;
+        }
+    };
+
+    private static final IntPredicate ALWAYS_FALSE_INT = new IntPredicate() {
+        @Override
+        public boolean test(int value) {
+            return false;
+        }
+
+        @Override
+        public IntPredicate and(IntPredicate other) {
+            return this;
+        }
+
+        @Override
+        public IntPredicate negate() {
+            return alwaysTrueForInt();
+        }
+
+        @Override
+        public IntPredicate or(IntPredicate other) {
+            return other;
+        }
+    };
+
+    private static final LongPredicate ALWAYS_FALSE_LONG = new LongPredicate() {
+        @Override
+        public boolean test(long value) {
+            return false;
+        }
+
+        @Override
+        public LongPredicate and(LongPredicate other) {
+            return this;
+        }
+
+        @Override
+        public LongPredicate negate() {
+            return alwaysTrueForLong();
+        }
+
+        @Override
+        public LongPredicate or(LongPredicate other) {
+            return other;
+        }
+    };
 
 }
