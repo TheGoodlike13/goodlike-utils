@@ -4,6 +4,9 @@ import eu.goodlike.neat.Null;
 
 import java.util.List;
 
+/**
+ * Null implementation for list check
+ */
 public final class ListNull extends Null {
 
     @Override

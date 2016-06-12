@@ -4,6 +4,9 @@ import eu.goodlike.neat.Null;
 
 import java.util.Arrays;
 
+/**
+ * Null implementation for array/varargs check
+ */
 public final class ArrayNull extends Null {
 
     @Override

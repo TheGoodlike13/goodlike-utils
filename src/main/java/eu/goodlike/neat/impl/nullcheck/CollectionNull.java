@@ -4,6 +4,9 @@ import eu.goodlike.neat.Null;
 
 import java.util.Collection;
 
+/**
+ * Null implementation for collection check
+ */
 public final class CollectionNull extends Null {
 
     @Override

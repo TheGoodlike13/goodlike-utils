@@ -22,6 +22,7 @@ public final class Either<T1, T2> {
      * @throws NoSuchElementException if this Either is of second or neither kind
      */
     public T1 getFirstKind() {
+        //noinspection OptionalGetWithoutIsPresent
         return firstKind.get();
     }
 
@@ -30,6 +31,7 @@ public final class Either<T1, T2> {
      * @throws NoSuchElementException if this Either is of first or neither kind
      */
     public T2 getSecondKind() {
+        //noinspection OptionalGetWithoutIsPresent
         return secondKind.get();
     }
 
@@ -215,6 +217,7 @@ public final class Either<T1, T2> {
      */
     public <U> Optional<U> mapInto(BiFunction<? super T1, ? super T2, ? extends U> mapper) {
         Null.check(mapper).ifAny("Null mappers not allowed");
+        //noinspection OptionalGetWithoutIsPresent
         return isFirstKind()
                 ? Optional.ofNullable(mapper.apply(firstKind.get(), null))
                 : isSecondKind() ? Optional.ofNullable(mapper.apply(null, secondKind.get())) : Optional.ofNullable(mapper.apply(null, null));
@@ -225,6 +228,7 @@ public final class Either<T1, T2> {
      */
     public <U1, U2> Either<U1, U2> flatMap(BiFunction<? super T1, ? super T2, Either<U1, U2>> mapper) {
         Null.check(mapper).ifAny("Null mappers not allowed");
+        //noinspection OptionalGetWithoutIsPresent
         return isFirstKind()
                 ? mapper.apply(firstKind.get(), null)
                 : isSecondKind() ? mapper.apply(null, secondKind.get()) : neither();
@@ -251,6 +255,7 @@ public final class Either<T1, T2> {
      */
     public <U> Optional<U> flatMapInto(BiFunction<? super T1, ? super T2, Optional<U>> mapper) {
         Null.check(mapper).ifAny("Null mappers not allowed");
+        //noinspection OptionalGetWithoutIsPresent
         return isFirstKind()
                 ? mapper.apply(firstKind.get(), null)
                 : isSecondKind() ? mapper.apply(null, secondKind.get()) : Optional.empty();
@@ -328,6 +333,7 @@ public final class Either<T1, T2> {
      */
     public <X extends Throwable> Either<T1, T2> ifFirstThrowIt(Function<T1, ? extends X> exceptionSupplier) throws X {
         if (isFirstKind())
+            //noinspection OptionalGetWithoutIsPresent
             throw exceptionSupplier.apply(firstKind.get());
 
         return this;
@@ -350,6 +356,7 @@ public final class Either<T1, T2> {
      */
     public <X extends Throwable> Either<T1, T2> ifSecondThrowIt(Function<T2, ? extends X> exceptionSupplier) throws X {
         if (isSecondKind())
+            //noinspection OptionalGetWithoutIsPresent
             throw exceptionSupplier.apply(secondKind.get());
 
         return this;

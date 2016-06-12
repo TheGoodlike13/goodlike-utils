@@ -2,6 +2,9 @@ package eu.goodlike.neat.impl.nullcheck;
 
 import eu.goodlike.neat.Null;
 
+/**
+ * Null implementation for two element check; should be quicker than straight up varargs
+ */
 public final class TwoNull extends Null {
 
     @Override

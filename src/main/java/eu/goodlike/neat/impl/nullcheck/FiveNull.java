@@ -2,6 +2,9 @@ package eu.goodlike.neat.impl.nullcheck;
 
 import eu.goodlike.neat.Null;
 
+/**
+ * Null implementation for five element check; should be quicker than straight up varargs
+ */
 public final class FiveNull extends Null {
 
     @Override

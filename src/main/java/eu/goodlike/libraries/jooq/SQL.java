@@ -17,10 +17,18 @@ import static org.jooq.impl.DSL.falseCondition;
  */
 public abstract class SQL {
 
+    /**
+     * Sets universal condition which is used in all SQL statements made by this SQL instance; no such condition is
+     * set by default
+     */
     public void setUniversalCondition(Supplier<Condition> universalCondition) {
         this.universalCondition = universalCondition;
     }
 
+    /**
+     * gets the universal condition which is used in all SQL statements made by this SQL instance; no such condition is
+     * set by default
+     */
     public Optional<Condition> getUniversalCondition() {
         return Optional.ofNullable(universalCondition).map(Supplier::get);
     }
