@@ -1,102 +1,103 @@
-package eu.goodlike.tbr.validate.impl;
+package eu.goodlike.validate.impl;
 
+import eu.goodlike.validate.Validate;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LongIntegerValidatorTest {
+public class LongValidatorTest {
 
-    private LongIntegerValidator validator;
+    private LongValidator validator;
 
     @Before
     public void setup() {
-        validator = new LongIntegerValidator();
+        validator = Validate.aLong();
     }
 
     @Test
     public void tryMoreThanWithMoreThan_shouldBeTrue() {
-        assertThat(validator.isMoreThan(10).test(11L)).isTrue();
+        assertThat(validator.isMoreThan(10L).test(11L)).isTrue();
     }
 
     @Test
     public void tryMoreThanWithExactValue_shouldBeFalse() {
-        assertThat(validator.isMoreThan(10).test(10L)).isFalse();
+        assertThat(validator.isMoreThan(10L).test(10L)).isFalse();
     }
 
     @Test
     public void tryMoreThanWithLessThan_shouldBeFalse() {
-        assertThat(validator.isMoreThan(10).test(9L)).isFalse();
+        assertThat(validator.isMoreThan(10L).test(9L)).isFalse();
     }
 
     @Test
     public void tryLessThanWithMoreThan_shouldBeFalse() {
-        assertThat(validator.isLessThan(10).test(11L)).isFalse();
+        assertThat(validator.isLessThan(10L).test(11L)).isFalse();
     }
 
     @Test
     public void tryLessThanWithExactValue_shouldBeFalse() {
-        assertThat(validator.isLessThan(10).test(10L)).isFalse();
+        assertThat(validator.isLessThan(10L).test(10L)).isFalse();
     }
 
     @Test
     public void tryLessThanWithLessThan_shouldBeTrue() {
-        assertThat(validator.isLessThan(10).test(9L)).isTrue();
+        assertThat(validator.isLessThan(10L).test(9L)).isTrue();
     }
 
     @Test
     public void tryAtLeastWithAtLeast_shouldBeTrue() {
-        assertThat(validator.isAtLeast(10).test(11L)).isTrue();
+        assertThat(validator.isAtLeast(10L).test(11L)).isTrue();
     }
 
     @Test
     public void tryAtLeastWithExactValue_shouldBeTrue() {
-        assertThat(validator.isAtLeast(10).test(10L)).isTrue();
+        assertThat(validator.isAtLeast(10L).test(10L)).isTrue();
     }
 
     @Test
     public void tryAtLeastWithLess_shouldBeTrue() {
-        assertThat(validator.isAtLeast(10).test(9L)).isFalse();
+        assertThat(validator.isAtLeast(10L).test(9L)).isFalse();
     }
 
     @Test
     public void tryAtMostWithMore_shouldBeTrue() {
-        assertThat(validator.isAtMost(10).test(11L)).isFalse();
+        assertThat(validator.isAtMost(10L).test(11L)).isFalse();
     }
 
     @Test
     public void tryAtMostWithExactValue_shouldBeTrue() {
-        assertThat(validator.isAtMost(10).test(10L)).isTrue();
+        assertThat(validator.isAtMost(10L).test(10L)).isTrue();
     }
 
     @Test
     public void tryAtMostWithAtMost_shouldBeTrue() {
-        assertThat(validator.isAtMost(10).test(9L)).isTrue();
+        assertThat(validator.isAtMost(10L).test(9L)).isTrue();
     }
 
     @Test
     public void tryBetweenWithBetween_shouldBeTrue() {
-        assertThat(validator.isBetween(1, 10).test(5L)).isTrue();
+        assertThat(validator.isBetween(1L, 10L).test(5L)).isTrue();
     }
 
     @Test
     public void tryBetweenWithLowestBetween_shouldBeTrue() {
-        assertThat(validator.isBetween(1, 10).test(1L)).isTrue();
+        assertThat(validator.isBetween(1L, 10L).test(1L)).isTrue();
     }
 
     @Test
     public void tryBetweenWithHighestBetween_shouldBeTrue() {
-        assertThat(validator.isBetween(1, 10).test(10L)).isTrue();
+        assertThat(validator.isBetween(1L, 10L).test(10L)).isTrue();
     }
 
     @Test
     public void tryBetweenWithLessThanLowest_shouldBeFalse() {
-        assertThat(validator.isBetween(1, 10).test(0L)).isFalse();
+        assertThat(validator.isBetween(1L, 10L).test(0L)).isFalse();
     }
 
     @Test
     public void tryBetweenWithMoreThanHighest_shouldBeFalse() {
-        assertThat(validator.isBetween(1, 10).test(11L)).isFalse();
+        assertThat(validator.isBetween(1L, 10L).test(11L)).isFalse();
     }
 
     @Test

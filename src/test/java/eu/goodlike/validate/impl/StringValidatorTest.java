@@ -1,6 +1,7 @@
-package eu.goodlike.tbr.validate.impl;
+package eu.goodlike.validate.impl;
 
 import eu.goodlike.test.Fake;
+import eu.goodlike.validate.Validate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class StringValidatorTest {
 
     @Before
     public void setup() {
-        validator = new StringValidator();
+        validator = Validate.string();
     }
 
     @Test
@@ -47,27 +48,27 @@ public class StringValidatorTest {
 
     @Test
     public void tryNoLargerThanWithNoLargerThan_shouldBeTrue() {
-        assertThat(validator.isNoLargerThan(5).test("yes")).isTrue();
+        assertThat(validator.hasAtMostChars(5).test("yes")).isTrue();
     }
 
     @Test
     public void tryNoLargerThanWithExactSize_shouldBeTrue() {
-        assertThat(validator.isNoLargerThan(5).test("size5")).isTrue();
+        assertThat(validator.hasAtMostChars(5).test("size5")).isTrue();
     }
 
     @Test
     public void tryNoLargerThanWithLargerThan_shouldBeFalse() {
-        assertThat(validator.isNoLargerThan(5).test("sizeMoreThan5")).isFalse();
+        assertThat(validator.hasAtMostChars(5).test("sizeMoreThan5")).isFalse();
     }
 
     @Test
     public void tryEmailWithEmail_shouldBeTrue() {
-        assertThat(validator.isEmail().test(Fake.email(1))).isTrue();
+        assertThat(validator.isSimpleEmail().test(Fake.email(1))).isTrue();
     }
 
     @Test
     public void tryEmailWithNotEmail_shouldBeFalse() {
-        assertThat(validator.isEmail().test(Fake.name(1))).isFalse();
+        assertThat(validator.isSimpleEmail().test(Fake.name(1))).isFalse();
     }
 
     @Test
@@ -86,34 +87,24 @@ public class StringValidatorTest {
     }
 
     @Test
-    public void tryCommaSeparatedListOfIntegersWithCommaSeparatedListOfNegativeIntegers_shouldBeFalse() {
-        assertThat(validator.isCommaSeparatedListOfIntegers().test("-1,2,-3")).isFalse();
-    }
-
-    @Test
-    public void tryCommaSeparatedListOfIntegersWithZero_shouldBeFalse() {
-        assertThat(validator.isCommaSeparatedListOfIntegers().test("0")).isFalse();
-    }
-
-    @Test
     public void tryCommaSeparatedListOfIntegersWithOne_shouldBeTrue() {
         assertThat(validator.isCommaSeparatedListOfIntegers().test("1")).isTrue();
     }
 
     @Test
     public void tryNoSmallerThanWithSmaller_shouldBeFalse() {
-        assertThat(validator.isNoSmallerThan(10).test("small")).isFalse();
+        assertThat(validator.hasAtLeastChars(10).test("small")).isFalse();
     }
 
     @Test
     public void tryNoSmallerThanWithExact_shouldBeTrue() {
         String test = "test";
-        assertThat(validator.isNoSmallerThan(test.length()).test(test)).isTrue();
+        assertThat(validator.hasAtLeastChars(test.length()).test(test)).isTrue();
     }
 
     @Test
     public void tryNoSmallerThanWithBigger_shouldBeTrue() {
-        assertThat(validator.isNoSmallerThan(2).test("large")).isTrue();
+        assertThat(validator.hasAtLeastChars(2).test("large")).isTrue();
     }
 
     @Test
@@ -188,12 +179,12 @@ public class StringValidatorTest {
 
     @Test
     public void tryExactlyOfSizeWithExactSize_shouldBeTrue() {
-        assertThat(validator.isExactlyOfSize(4).test("test")).isTrue();
+        assertThat(validator.hasChars(4).test("test")).isTrue();
     }
 
     @Test
     public void tryExactlyOfSizeWithDifferentSize_shouldBeFalse() {
-        assertThat(validator.isExactlyOfSize(10).test("test")).isFalse();
+        assertThat(validator.hasChars(10).test("test")).isFalse();
     }
 
 }

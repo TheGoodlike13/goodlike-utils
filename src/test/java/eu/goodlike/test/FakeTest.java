@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static eu.goodlike.tbr.validate.Validate.string;
+import static eu.goodlike.validate.Validate.string;
 import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -139,7 +139,7 @@ public class FakeTest {
 
     @Test
     public void testEmail_shouldBeEmail() {
-        assertThat(Some.of(Fake::email).with(indexes)).filteredOn(string().isEmail()).hasSameSizeAs(indexes);
+        assertThat(Some.of(Fake::email).with(indexes)).filteredOn(string().isSimpleEmail()).hasSameSizeAs(indexes);
     }
 
     @Test

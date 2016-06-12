@@ -1,5 +1,6 @@
-package eu.goodlike.tbr.validate.impl;
+package eu.goodlike.validate.impl;
 
+import eu.goodlike.validate.Validate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class BigDecimalValidatorTest {
 
     @Before
     public void setup() {
-        validator = new BigDecimalValidator();
+        validator = Validate.bigDecimal();
     }
 
     @Test
@@ -23,9 +24,9 @@ public class BigDecimalValidatorTest {
     }
 
     @Test
-    public void tryEqualsOfSameBigDecimalDifferentScale_shouldBeTrue() {
+    public void tryEqualsIgnoreScaleOfSameBigDecimalDifferentScale_shouldBeTrue() {
         BigDecimal oneScaled = ONE.setScale(4, ROUND_UNNECESSARY);
-        assertThat(validator.isEqual(ONE).test(oneScaled)).isTrue();
+        assertThat(validator.isEqualIgnoreScale(ONE).test(oneScaled)).isTrue();
     }
 
     @Test

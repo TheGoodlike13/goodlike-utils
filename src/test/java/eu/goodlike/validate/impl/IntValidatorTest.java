@@ -1,17 +1,18 @@
-package eu.goodlike.tbr.validate.impl;
+package eu.goodlike.validate.impl;
 
+import eu.goodlike.validate.Validate;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IntegerValidatorTest {
+public class IntValidatorTest {
 
-    private IntegerValidator validator;
+    private IntValidator validator;
 
     @Before
     public void setup() {
-        validator = new IntegerValidator();
+        validator = Validate.anInt();
     }
 
     @Test

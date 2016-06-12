@@ -1,6 +1,7 @@
-package eu.goodlike.tbr.validate.impl;
+package eu.goodlike.validate.primitive;
 
 import eu.goodlike.functional.Some;
+import eu.goodlike.validate.Validate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class IntValidatorTest {
 
-    private IntValidator validator;
+    private PrimitiveIntValidator validator;
     private List<Integer> actionTester;
 
     @Before
     public void setup() {
-        validator = new IntValidator();
+        validator = Validate.aPrimInt();
         actionTester = new ArrayList<>();
     }
 
@@ -32,22 +33,22 @@ public class IntValidatorTest {
 
     @Test
     public void tryContainedInArrayWithContained_shouldBeTrue() {
-        assertThat(validator.isContainedIn(1, 2, 3).test(2)).isTrue();
+        assertThat(validator.isIn(1, 2, 3).test(2)).isTrue();
     }
 
     @Test
     public void tryContainedInArrayWithContained_shouldBeFalse() {
-        assertThat(validator.isContainedIn(1, 2, 3).test(4)).isFalse();
+        assertThat(validator.isIn(1, 2, 3).test(4)).isFalse();
     }
 
     @Test
     public void tryContainedInCollectionWithContained_shouldBeTrue() {
-        assertThat(validator.isContainedIn(Some.ints().oneUpTo(3)).test(2)).isTrue();
+        assertThat(validator.isIn(Some.ints().oneUpTo(3)).test(2)).isTrue();
     }
 
     @Test
     public void tryContainedInCollectionWithContained_shouldBeFalse() {
-        assertThat(validator.isContainedIn(Some.ints().oneUpTo(3)).test(4)).isFalse();
+        assertThat(validator.isIn(Some.ints().oneUpTo(3)).test(4)).isFalse();
     }
 
     @Test
@@ -222,46 +223,46 @@ public class IntValidatorTest {
 
     @Test
     public void tryInvalidCustomActionWithInvalid_shouldPerformAction() {
-        validator.isLessThan(5).ifInvalid(6, () -> actionTester.add(1));
+        validator.isLessThan(5).ifInvalid(6).thenRun(() -> actionTester.add(1));
         assertThat(actionTester).isEqualTo(Some.ofInt(1).oneUpTo(1));
     }
 
     @Test
     public void tryInvalidCustomActionWithValid_shouldDoNothing() {
-        validator.isLessThan(5).ifInvalid(4, () -> actionTester.add(1));
+        validator.isLessThan(5).ifInvalid(4).thenRun(() -> actionTester.add(1));
         assertThat(actionTester).isEmpty();
     }
 
     @Test
     public void tryInvalidCustomConsumerWithInvalid_shouldConsume() {
-        validator.isLessThan(5).ifInvalid(6, actionTester::add);
+        validator.isLessThan(5).ifInvalid(6).thenAccept(actionTester::add);
         assertThat(actionTester).isEqualTo(Some.ofInt(6).oneUpTo(1));
     }
 
     @Test
     public void tryInvalidCustomConsumerWithValid_shouldDoNothing() {
-        validator.isLessThan(5).ifInvalid(4, actionTester::add);
+        validator.isLessThan(5).ifInvalid(4).thenAccept(actionTester::add);
         assertThat(actionTester).isEmpty();
     }
 
     @Test(expected = RuntimeException.class)
     public void tryInvalidThrowWithInvalid_shouldThrow() {
-        validator.isLessThan(5).ifInvalidThrow(6, () -> new RuntimeException("Invalid number found!"));
+        validator.isLessThan(5).ifInvalid(6).thenThrow(() -> new RuntimeException("Invalid number found!"));
     }
 
     @Test
     public void tryInvalidThrowWithValid_shouldPass() {
-        validator.isLessThan(5).ifInvalidThrow(4, () -> new RuntimeException("Invalid number found!"));
+        validator.isLessThan(5).ifInvalid(4).thenThrow(() -> new RuntimeException("Invalid number found!"));
     }
 
     @Test(expected = RuntimeException.class)
     public void tryInvalidThrowConsumingWithInvalid_shouldThrow() {
-        validator.isLessThan(5).ifInvalidThrow(6, i -> new RuntimeException("Invalid number found: " + i));
+        validator.isLessThan(5).ifInvalid(6).thenThrowWith(i -> new RuntimeException("Invalid number found: " + i));
     }
 
     @Test
     public void tryInvalidThrowConsumingWithValid_shouldPass() {
-        validator.isLessThan(5).ifInvalidThrow(4, i -> new RuntimeException("Invalid number found: " + i));
+        validator.isLessThan(5).ifInvalid(4).thenThrowWith(i -> new RuntimeException("Invalid number found: " + i));
     }
 
     @Test
