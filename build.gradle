@@ -1,9 +1,16 @@
 plugins {
     id 'java'
     id 'idea'
+
+    // needed for publishing the lib to maven/jCenter
     id 'maven-publish'
-    id "com.github.ben-manes.versions" version "0.12.0"
     id "com.jfrog.bintray" version "1.6"
+
+    // helps me keep up to date with dependencies
+    id "com.github.ben-manes.versions" version "0.12.0"
+
+    // some of the dependencies are constricted to their own packages; if you don't use classes in these packages,
+    // the dependencies becomes entirely optional
     id 'nebula.optional-base' version '3.0.3'
 }
 
