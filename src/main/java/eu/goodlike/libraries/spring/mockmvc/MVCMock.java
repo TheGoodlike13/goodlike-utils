@@ -1,8 +1,6 @@
 package eu.goodlike.libraries.spring.mockmvc;
 
 import eu.goodlike.libraries.jackson.Json;
-import org.jooq.lambda.Seq;
-import org.jooq.lambda.Unchecked;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -45,7 +43,7 @@ public final class MVCMock {
      */
     public Optional<MvcResult> performGet(String path, HttpResult httpResult,
                                              ResultMatcher... expect) throws Exception {
-        return performRequest(Unchecked.function(this::get), path, httpResult, expect);
+        return performRequest(this::get, path, httpResult, expect);
     }
 
     /**
@@ -54,7 +52,7 @@ public final class MVCMock {
      */
     public Optional<MvcResult> performPost(String path, Object body, HttpResult httpResult,
                                               ResultMatcher... expect) throws Exception {
-        return performRequest(Unchecked.biFunction(this::post), path, body, httpResult, expect);
+        return performRequest(this::post, path, body, httpResult, expect);
     }
 
     /**
@@ -63,7 +61,7 @@ public final class MVCMock {
      */
     public Optional<MvcResult> performPut(String path, Object body, HttpResult httpResult,
                                              ResultMatcher... expect) throws Exception {
-        return performRequest(Unchecked.biFunction(this::put), path, body, httpResult, expect);
+        return performRequest(this::put, path, body, httpResult, expect);
     }
 
     /**
@@ -72,7 +70,7 @@ public final class MVCMock {
      */
     public Optional<MvcResult> performDelete(String path, HttpResult httpResult,
                                                 ResultMatcher... expect) throws Exception {
-        return performRequest(Unchecked.function(this::delete), path, httpResult, expect);
+        return performRequest(this::delete, path, httpResult, expect);
     }
 
     /**
@@ -111,7 +109,7 @@ public final class MVCMock {
     /**
      * @return basic POST request
      */
-    public MockHttpServletRequestBuilder post(String path, Object body) throws IOException {
+    public MockHttpServletRequestBuilder post(String path, Object body) {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(path)
                 .contentType(APPLICATION_JSON_UTF8);
 
@@ -119,7 +117,11 @@ public final class MVCMock {
             builder = builder.header("Authorization", authToken);
 
         if (body != null)
-            builder = builder.content(Json.bytesFrom(body));
+            try {
+                builder = builder.content(Json.bytesFrom(body));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         return builder;
     }
@@ -127,7 +129,7 @@ public final class MVCMock {
     /**
      * @return basic PUT request
      */
-    public MockHttpServletRequestBuilder put(String path, Object body) throws IOException {
+    public MockHttpServletRequestBuilder put(String path, Object body) {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.put(path)
                 .contentType(APPLICATION_JSON_UTF8);
 
@@ -135,7 +137,11 @@ public final class MVCMock {
             builder = builder.header("Authorization", authToken);
 
         if (body != null)
-            builder = builder.content(Json.bytesFrom(body));
+            try {
+                builder = builder.content(Json.bytesFrom(body));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         return builder;
     }
@@ -178,7 +184,15 @@ public final class MVCMock {
     }
 
     private ResultActions expect(ResultActions seed, ResultMatcher... expect) {
-        return Seq.of(expect).foldLeft(seed, Unchecked.biFunction(ResultActions::andExpect));
+        ResultActions resultActions = seed;
+        for (ResultMatcher resultMatcher : expect)
+            try {
+                resultActions = resultActions.andExpect(resultMatcher);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        return seed;
     }
 
     private ResultActions okActions(ResultActions seed, HttpResult resultVariation) throws Exception {
