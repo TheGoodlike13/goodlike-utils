@@ -56,6 +56,10 @@ dependencies {
 group 'eu.goodlike'
 version '0.0.1'
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     options.encoding = 'UTF-8'
@@ -64,10 +68,6 @@ tasks.withType(JavaCompile) {
 task sourceJar(type: Jar) {
     from sourceSets.main.allJava
     classifier "sources"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
 }
 
 publishing {
