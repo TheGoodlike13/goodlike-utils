@@ -2,6 +2,9 @@ package eu.goodlike.misc;
 
 import java.math.BigDecimal;
 
+/**
+ * Contains utility methods to deal with BigDecimal class
+ */
 public final class BigDecimals {
 
     /**
