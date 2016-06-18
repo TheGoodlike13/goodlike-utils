@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
     id "com.github.ben-manes.versions" version "0.12.0"
     id "com.jfrog.bintray" version "1.6"
+    id 'nebula.optional-base' version '3.0.3'
 }
 
 repositories {
@@ -18,22 +19,22 @@ dependencies {
     compile 'com.github.ben-manes.caffeine:caffeine:2.0.3'
 
     // needed for jackson package only
-    compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.8.0.rc1'
-    compileOnly 'com.fasterxml.jackson.core:jackson-core:2.8.0.rc1'
-    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.8.0.rc1'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.0.rc1', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0.rc1', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0.rc1', optional
 
     // needed for jooq package only
-    compileOnly 'org.jooq:jooq:3.8.2'
+    compile 'org.jooq:jooq:3.8.2', optional
 
     // needed for spring.mockmvc package only
-    compileOnly 'org.springframework:spring-test:4.3.0.RELEASE'
-    compileOnly 'org.springframework:spring-web:4.3.0.RELEASE'
-    compileOnly 'org.springframework:spring-beans:4.3.0.RELEASE'
-    compileOnly 'javax.servlet:javax.servlet-api:4.0.0-b01'
+    compile 'org.springframework:spring-test:4.3.0.RELEASE', optional
+    compile 'org.springframework:spring-web:4.3.0.RELEASE', optional
+    compile 'org.springframework:spring-beans:4.3.0.RELEASE', optional
+    compile 'javax.servlet:javax.servlet-api:4.0.0-b01', optional
 
     // needed for spring.gmail package only
-    compileOnly 'org.springframework:spring-context-support:4.3.0.RELEASE'
-    compileOnly 'javax.mail:javax.mail-api:1.5.5'
+    compile 'org.springframework:spring-context-support:4.3.0.RELEASE', optional
+    compile 'javax.mail:javax.mail-api:1.5.5', optional
 
     // unit tests
     testCompile 'junit:junit:4.12'
@@ -64,13 +65,22 @@ task wrapper(type: Wrapper) {
 
 publishing {
     publications {
-        TestingWhatIsAPublication(MavenPublication) {
+        GoodlikeUtils(MavenPublication) {
             groupId 'eu.goodlike'
             artifactId 'goodlike-utils'
             version '0.0.1'
 
             from components.java
             artifact sourceJar
+
+            pom.withXml {
+                asNode().dependencies.dependency.findAll {
+                    configurations.compile.allDependencies.find {dep -> dep.name == it.artifactId.text()} &&
+                            it.scope.text() == 'runtime'
+                }.each {
+                    it.scope*.value = 'compile'
+                }
+            }
         }
     }
 }
@@ -78,7 +88,7 @@ publishing {
 bintray {
     user = project.property('bintray_user')
     key = project.property('bintray_api_key')
-    publications = ['TestingWhatIsAPublication']
+    publications = ['GoodlikeUtils']
     pkg {
         repo = 'generic'
         name = 'goodlike-utils'
