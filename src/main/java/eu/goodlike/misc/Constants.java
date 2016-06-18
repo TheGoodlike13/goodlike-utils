@@ -1,6 +1,8 @@
 package eu.goodlike.misc;
 
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * <pre>
@@ -51,6 +53,26 @@ public final class Constants {
      * Default charset. It really should be the default charset. Why is it not the default charset? WHY?
      */
     public static final Charset DEF_CHARSET = Charset.forName(DEFAULT_CHARSET);
+
+    /**
+     * Relative path string to working directory, where the application was launched
+     */
+    public static final String WORKING_DIRECTORY = ".";
+
+    /**
+     * Relative path to working directory, where the application was launched
+     */
+    public static final Path WORKING_DIRECTORY_PATH = Paths.get(WORKING_DIRECTORY);
+
+    /**
+     * Absolute path to working directory, where the application was launched
+     */
+    public static final Path ABSOLUTE_WORKING_DIRECTORY_PATH = WORKING_DIRECTORY_PATH.toAbsolutePath().normalize();
+
+    /**
+     * Absolute path string to working directory, where the application was launched
+     */
+    public static final String ABSOLUTE_WORKING_DIRECTORY = ABSOLUTE_WORKING_DIRECTORY_PATH.toString();
 
     // PRIVATE
 
