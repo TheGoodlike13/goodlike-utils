@@ -76,7 +76,7 @@ public final class TimeResolver {
     }
 
     /**
-     * Resolves the time using JodaTimeZoneHandler for given zoneId and given LocalDates
+     * Resolves the time using TimeHandler for given zoneId and given LocalDates
      */
     public static TimeResolver from(ZoneId zoneId, LocalDate localStartDate, LocalDate localEndDate) {
         return from(Time.at(zoneId), localStartDate, localEndDate);
