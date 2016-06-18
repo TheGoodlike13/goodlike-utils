@@ -90,10 +90,10 @@ bintray {
     key = project.property('bintray_api_key')
     publications = ['GoodlikeUtils']
     pkg {
-        repo = 'generic'
+        repo = 'maven'
         name = 'goodlike-utils'
         userOrg = project.property('bintray_user')
-        licenses = ['Unlicence']
+        licenses = ['Unlicense']
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
             name = '0.0.1'
