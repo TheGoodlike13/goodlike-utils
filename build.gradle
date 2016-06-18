@@ -1,16 +1,9 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'maven-publish'
     id "com.github.ben-manes.versions" version "0.12.0"
     id "com.jfrog.bintray" version "1.6"
-}
-
-group 'eu.goodlike'
-version '1.0'
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    options.encoding = 'UTF-8'
 }
 
 repositories {
@@ -24,26 +17,23 @@ dependencies {
     // used for caching
     compile 'com.github.ben-manes.caffeine:caffeine:2.0.3'
 
-    // used for Unchecked versions of functional interfaces
-    compile 'org.jooq:jool:0.9.11'
-
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.0.rc1'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0.rc1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0.rc1'
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.8.0.rc1'
+    compileOnly 'com.fasterxml.jackson.core:jackson-core:2.8.0.rc1'
+    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.8.0.rc1'
 
     // needed for jooq package only
-    compile 'org.jooq:jooq:3.8.2'
+    compileOnly 'org.jooq:jooq:3.8.2'
 
     // needed for spring.mockmvc package only
-    compile 'org.springframework:spring-test:4.3.0.RELEASE'
-    compile 'org.springframework:spring-web:4.3.0.RELEASE'
-    compile 'org.springframework:spring-beans:4.3.0.RELEASE'
-    compile 'javax.servlet:javax.servlet-api:4.0.0-b01'
+    compileOnly 'org.springframework:spring-test:4.3.0.RELEASE'
+    compileOnly 'org.springframework:spring-web:4.3.0.RELEASE'
+    compileOnly 'org.springframework:spring-beans:4.3.0.RELEASE'
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.0-b01'
 
     // needed for spring.gmail package only
-    compile 'org.springframework:spring-context-support:4.3.0.RELEASE'
-    compile 'javax.mail:javax.mail-api:1.5.5'
+    compileOnly 'org.springframework:spring-context-support:4.3.0.RELEASE'
+    compileOnly 'javax.mail:javax.mail-api:1.5.5'
 
     // unit tests
     testCompile 'junit:junit:4.12'
@@ -53,4 +43,54 @@ dependencies {
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     // a little bit of reflection
     testCompile 'org.jooq:joor:0.9.5'
+}
+
+group 'eu.goodlike'
+version '0.0.1'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.encoding = 'UTF-8'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
+
+publishing {
+    publications {
+        TestingWhatIsAPublication(MavenPublication) {
+            groupId 'eu.goodlike'
+            artifactId 'goodlike-utils'
+            version '0.0.1'
+
+            from components.java
+            artifact sourceJar
+        }
+    }
+}
+
+bintray {
+    user = project.property('bintray_user')
+    key = project.property('bintray_api_key')
+    publications = ['TestingWhatIsAPublication']
+    pkg {
+        repo = 'generic'
+        name = 'goodlike-utils'
+        userOrg = project.property('bintray_user')
+        licenses = ['Unlicence']
+        vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
+        version {
+            name = '0.0.1'
+            desc = 'Something new'
+            released  = new Date()
+            vcsTag = '0.0.1'
+            // attributes = []
+        }
+    }
 }
