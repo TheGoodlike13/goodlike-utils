@@ -233,7 +233,7 @@ public final class PrimitiveDoubleValidator implements DoublePredicate {
      * Negates the SINGLE next predicate added to this builder
      *
      * Make sure the call is immediately followed with the condition you wish to negate! Leaving a dangling call to
-     * not() will not cause any problems for this particular Validator, but any Validator that build upon it will
+     * not() will not cause any problems for this particular Validator, but any Validator that builds upon it will
      * act incorrectly
      * </pre>
      */
