@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 /**
@@ -42,12 +43,11 @@ public final class FileAppender implements AutoCloseable {
 
     public static Optional<FileAppender> ofFile(String filename) {
         Path path = Paths.get(filename);
-        if (!Files.isWritable(path))
-            return Optional.empty();
-
         BufferedWriter bufferedWriter;
         try {
-            bufferedWriter = Files.newBufferedWriter(path, UTF_8, CREATE_NEW);
+            bufferedWriter = Files.exists(path)
+                    ? Files.newBufferedWriter(path, UTF_8, APPEND)
+                    : Files.newBufferedWriter(path, UTF_8, CREATE_NEW);
         } catch (IOException e) {
             return Optional.empty();
         }
