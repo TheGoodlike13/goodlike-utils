@@ -1,4 +1,4 @@
-package eu.goodlike.misc;
+package eu.goodlike.io;
 
 import eu.goodlike.neat.Null;
 
