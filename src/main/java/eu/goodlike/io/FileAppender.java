@@ -40,7 +40,7 @@ public final class FileAppender implements AutoCloseable {
 
     // CONSTRUCTORS
 
-    public Optional<FileAppender> ofFile(String filename) {
+    public static Optional<FileAppender> ofFile(String filename) {
         Path path = Paths.get(filename);
         if (!Files.isWritable(path))
             return Optional.empty();
