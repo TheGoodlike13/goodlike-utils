@@ -1,6 +1,9 @@
 package eu.goodlike.io;
 
+import eu.goodlike.neat.Null;
+
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +45,13 @@ public final class FileAppender implements AutoCloseable {
     // CONSTRUCTORS
 
     public static Optional<FileAppender> ofFile(String filename) {
-        Path path = Paths.get(filename);
+        Null.check(filename).ifAny("Filename cannot be null");
+        return ofPath(Paths.get(filename));
+    }
+
+    public static Optional<FileAppender> ofPath(Path path) {
+        Null.check(path).ifAny("Path cannot be null");
+
         BufferedWriter bufferedWriter;
         try {
             bufferedWriter = Files.exists(path)
@@ -52,6 +61,11 @@ public final class FileAppender implements AutoCloseable {
             return Optional.empty();
         }
         return Optional.of(new FileAppender(bufferedWriter));
+    }
+
+    public static Optional<FileAppender> ofFile(File file) {
+        Null.check(file).ifAny("File cannot be null");
+        return ofPath(file.toPath());
     }
 
     private FileAppender(BufferedWriter bufferedWriter) {
