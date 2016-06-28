@@ -23,6 +23,15 @@ public final class Json {
     }
 
     /**
+     * Json.read(JsonNode.class) also works, so, to avoid confusion (normally deserializer takes an annotated class),
+     * this method is provided separately
+     * @return JSON deserializer for JsonNode
+     */
+    public static JsonDeserializerForType<JsonNode> readNode() throws IOException {
+        return read(JsonNode.class);
+    }
+
+    /**
      * @return JSON deserializer for a class
      */
     public static <T> JsonDeserializerForType<T> read(Class<T> clazz) throws IOException {
