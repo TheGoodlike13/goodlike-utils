@@ -1,5 +1,6 @@
 package eu.goodlike.str.format;
 
+import eu.goodlike.functional.Optionals;
 import eu.goodlike.misc.ArrayUtils;
 import eu.goodlike.misc.impl.array.ArraySplitter;
 import eu.goodlike.neat.Null;
@@ -75,12 +76,10 @@ public final class TraversableFormatter {
         Optional<String> firstElement = splitter.getFirstElement();
         String[] elementsAfterFirst = splitter.getElementsAfterFirst();
 
-        Optional<String> value = firstElement
-                .flatMap(firstStep -> getValueFromOverrides(firstStep, elementsAfterFirst));
-        return value.isPresent()
-                ? value
-                : firstElement
-                .flatMap(firstStep -> traversable.getValueAt(firstStep, elementsAfterFirst));
+        return Optionals.firstNotEmpty(
+                firstElement.flatMap(firstStep -> getValueFromOverrides(firstStep, elementsAfterFirst)),
+                firstElement.flatMap(firstStep -> traversable.getValueAt(firstStep, elementsAfterFirst))
+        );
     }
 
     private Optional<String> getValueFromOverrides(String firstStep, String... otherSteps) {
