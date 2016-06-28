@@ -1,6 +1,6 @@
-package eu.goodlike.neat;
+package eu.goodlike.str;
 
-import eu.goodlike.neat.impl.str.StringBuilderWrapper;
+import eu.goodlike.str.impl.str.StringBuilderWrapper;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

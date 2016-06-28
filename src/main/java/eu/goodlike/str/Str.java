@@ -1,6 +1,7 @@
-package eu.goodlike.neat;
+package eu.goodlike.str;
 
-import eu.goodlike.neat.impl.str.StringBuilderWrapper;
+import eu.goodlike.neat.Null;
+import eu.goodlike.str.impl.str.StringBuilderWrapper;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
