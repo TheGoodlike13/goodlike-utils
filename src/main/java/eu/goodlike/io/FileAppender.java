@@ -37,7 +37,7 @@ public final class FileAppender implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public synchronized void close() throws Exception {
         bufferedWriter.close();
     }
 
