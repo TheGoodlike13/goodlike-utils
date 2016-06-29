@@ -15,7 +15,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 /**
  * <pre>
- * Synchronized appended for files
+ * Appender for files
  *
  * In most cases a properly configured logger is preferred, but for simple file operations, this should suffice
  * </pre>
@@ -25,7 +25,7 @@ public final class FileAppender implements AutoCloseable {
     /**
      * Appends given string to the file of this appender
      */
-    public synchronized void append(String string) throws IOException {
+    public void append(String string) throws IOException {
         bufferedWriter.append(string);
     }
 
@@ -37,7 +37,7 @@ public final class FileAppender implements AutoCloseable {
     }
 
     @Override
-    public synchronized void close() throws Exception {
+    public void close() throws Exception {
         bufferedWriter.close();
     }
 
