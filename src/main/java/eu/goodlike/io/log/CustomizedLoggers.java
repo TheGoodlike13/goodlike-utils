@@ -64,7 +64,7 @@ public final class CustomizedLoggers {
      */
     public static CustomizedLogger forFile(Path path) {
         Null.check(path).ifAny("Path cannot be null");
-        return CACHED_FILE_LOGGERS.get(path);
+        return CACHED_FILE_LOGGERS.get(path.normalize());
     }
 
     /**
