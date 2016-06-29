@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.7'
+version '0.0.8'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -81,7 +81,7 @@ publishing {
         GoodlikeUtils(MavenPublication) {
             groupId 'eu.goodlike'
             artifactId 'goodlike-utils'
-            version '0.0.7'
+            version '0.0.8'
 
             from components.java
             artifact sourceJar
@@ -109,10 +109,10 @@ bintray {
         licenses = ['Unlicense']
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
-            name = '0.0.7'
-            desc = "Added ArrayUtils and TraversableFormatter"
+            name = '0.0.8'
+            desc = "Minor readability adjustments + SpecialUtils::getCoreCountWithMin"
             released  = new Date()
-            vcsTag = '0.0.7'
+            vcsTag = '0.0.8'
             // attributes = []
         }
     }
