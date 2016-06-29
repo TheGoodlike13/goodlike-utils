@@ -55,10 +55,30 @@ public final class SpecialUtils {
     /**
      * @return amount of cores that the JVM can see; if this value is less than minimumCores, minimumCores is returned
      * instead
+     * @throws IllegalArgumentException if minimumCores < 1
      */
     public static int getCoreCountWithMin(int minimumCores) {
+        if (minimumCores < 1)
+            throw new IllegalArgumentException("Minimum cores must be positive, not " + minimumCores);
+
         int availableCores = Runtime.getRuntime().availableProcessors();
         return availableCores > minimumCores ? availableCores : minimumCores;
+    }
+
+    /**
+     * <pre>
+     * Runs given runnable when the program exits normally; may not run if JVM is aborted (refer to
+     * Runtime::addShutdownHook for specifics)
+     *
+     * This method should only be used in special circumstances, i.e. when spawning child processes which should close
+     * along with the application, or handling resources which are difficult to close, such as log files. In most other
+     * scenarios, prefer try-with-resources or similar!
+     * </pre>
+     * @throws NullPointerException if runnable is null
+     */
+    public static void runOnExit(Runnable runnable) {
+        Null.check(runnable).ifAny("Runnable cannot be null");
+        Runtime.getRuntime().addShutdownHook(new Thread(runnable));
     }
 
     // PRIVATE
