@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -25,7 +24,8 @@ public final class PropertiesUtils {
      */
     public static Optional<Properties> fileToProperties(String filename) {
         Null.check(filename).ifAny("Filename cannot be null");
-        return fileToProperties(Paths.get(filename));
+        return FileUtils.getPath(filename)
+                .flatMap(PropertiesUtils::fileToProperties);
     }
 
     /**

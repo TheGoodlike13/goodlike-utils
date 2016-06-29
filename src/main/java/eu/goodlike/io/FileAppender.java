@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -46,10 +45,10 @@ public final class FileAppender implements AutoCloseable {
 
     public static Optional<FileAppender> ofFile(String filename) {
         Null.check(filename).ifAny("Filename cannot be null");
-        return ofPath(Paths.get(filename));
+        return FileUtils.getPath(filename).flatMap(FileAppender::ofFile);
     }
 
-    public static Optional<FileAppender> ofPath(Path path) {
+    public static Optional<FileAppender> ofFile(Path path) {
         Null.check(path).ifAny("Path cannot be null");
 
         BufferedWriter bufferedWriter;
@@ -65,7 +64,7 @@ public final class FileAppender implements AutoCloseable {
 
     public static Optional<FileAppender> ofFile(File file) {
         Null.check(file).ifAny("File cannot be null");
-        return ofPath(file.toPath());
+        return ofFile(file.toPath());
     }
 
     private FileAppender(BufferedWriter bufferedWriter) {
