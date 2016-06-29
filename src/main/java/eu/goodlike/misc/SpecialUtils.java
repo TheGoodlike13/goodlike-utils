@@ -52,6 +52,15 @@ public final class SpecialUtils {
         return t1 == null ? t2 == null : converter.apply(t1).equals(converter.apply(t2));
     }
 
+    /**
+     * @return amount of cores that the JVM can see; if this value is less than minimumCores, minimumCores is returned
+     * instead
+     */
+    public static int getCoreCountWithMin(int minimumCores) {
+        int availableCores = Runtime.getRuntime().availableProcessors();
+        return availableCores > minimumCores ? availableCores : minimumCores;
+    }
+
     // PRIVATE
 
     private SpecialUtils() {
