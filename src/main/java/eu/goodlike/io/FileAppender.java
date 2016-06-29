@@ -43,11 +43,19 @@ public final class FileAppender implements AutoCloseable {
 
     // CONSTRUCTORS
 
+    /**
+     * @return FileAppender for given file, assuming it can be opened (created if needed), Optional::empty otherwise
+     * @throws NullPointerException if filename is null
+     */
     public static Optional<FileAppender> ofFile(String filename) {
         Null.check(filename).ifAny("Filename cannot be null");
         return FileUtils.getPath(filename).flatMap(FileAppender::ofFile);
     }
 
+    /**
+     * @return FileAppender for given file, assuming it can be opened (created if needed), Optional::empty otherwise
+     * @throws NullPointerException if path is null
+     */
     public static Optional<FileAppender> ofFile(Path path) {
         Null.check(path).ifAny("Path cannot be null");
 
@@ -62,6 +70,10 @@ public final class FileAppender implements AutoCloseable {
         return Optional.of(new FileAppender(bufferedWriter));
     }
 
+    /**
+     * @return FileAppender for given file, assuming it can be opened (created if needed), Optional::empty otherwise
+     * @throws NullPointerException if file is null
+     */
     public static Optional<FileAppender> ofFile(File file) {
         Null.check(file).ifAny("File cannot be null");
         return ofFile(file.toPath());
