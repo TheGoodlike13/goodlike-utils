@@ -44,7 +44,7 @@ public final class TraversableFormatter {
             if (stepEndIndex < 0)
                 return Optional.empty();
 
-            String key = subString.substring(stepEndIndex + 1, stepEndIndex);
+            String key = subString.substring(stepStartIndex + 1, stepEndIndex);
             getValue(key).ifPresent(builder::append);
 
             subString = subString.substring(stepEndIndex + 1);
