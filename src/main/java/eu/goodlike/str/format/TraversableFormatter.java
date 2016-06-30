@@ -1,10 +1,10 @@
 package eu.goodlike.str.format;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.functional.Optionals;
-import eu.goodlike.misc.ArrayUtils;
-import eu.goodlike.misc.impl.array.ArraySplitter;
 import eu.goodlike.neat.Null;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -70,16 +70,26 @@ public final class TraversableFormatter {
     private final Traversable overrides;
 
     private Optional<String> getValue(String key) {
-        String[] paths = key.split(NEXT_STEP);
+        List<String> paths = getParts(key);
 
-        ArraySplitter<String> splitter = ArrayUtils.split(paths);
-        Optional<String> firstElement = splitter.getFirstElement();
-        String[] elementsAfterFirst = splitter.getElementsAfterFirst();
+        String firstElement = paths.get(0);
+        String[] elementsAfterFirst = paths.subList(1, paths.size()).toArray(new String[paths.size() - 1]);
 
         return Optionals.firstNotEmpty(
-                firstElement.flatMap(firstStep -> getValueFromOverrides(firstStep, elementsAfterFirst)),
-                firstElement.flatMap(firstStep -> traversable.getValueAt(firstStep, elementsAfterFirst))
+                getValueFromOverrides(firstElement, elementsAfterFirst),
+                traversable.getValueAt(firstElement, elementsAfterFirst)
         );
+    }
+
+    private List<String> getParts(String key) {
+        ImmutableList.Builder<String> builder = ImmutableList.builder();
+        int index;
+        while ((index = key.indexOf(NEXT_STEP)) >= 0) {
+            builder.add(key.substring(0, index));
+            key = key.substring(index + 1);
+        }
+
+        return builder.add(key).build();
     }
 
     private Optional<String> getValueFromOverrides(String firstStep, String... otherSteps) {
