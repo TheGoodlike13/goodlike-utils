@@ -1,9 +1,12 @@
 package eu.goodlike.str;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.neat.Null;
 import eu.goodlike.str.impl.str.StringBuilderWrapper;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
+
+import java.util.List;
 
 /**
  * <pre>
@@ -60,6 +63,13 @@ public final class Str {
      */
     public static String format(String string, Object... any) {
         return format(MessageFormatter.arrayFormat(string, any));
+    }
+
+    /**
+     * @return result of string.split(pattern) in an immutable list
+     */
+    public static List<String> split(String string, String pattern) {
+        return ImmutableList.copyOf(string.split(pattern));
     }
 
     // PRIVATE
