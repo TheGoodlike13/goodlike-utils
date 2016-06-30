@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.12'
+version '0.0.12a'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -81,7 +81,7 @@ publishing {
         GoodlikeUtils(MavenPublication) {
             groupId 'eu.goodlike'
             artifactId 'goodlike-utils'
-            version '0.0.12'
+            version '0.0.12a'
 
             from components.java
             artifact sourceJar
@@ -109,10 +109,10 @@ bintray {
         licenses = ['Unlicense']
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
-            name = '0.0.12'
-            desc = "Cleanup + minor optimizations"
+            name = '0.0.12a'
+            desc = "Minor bugfix"
             released  = new Date()
-            vcsTag = '0.0.12'
+            vcsTag = '0.0.12a'
             // attributes = []
         }
     }
