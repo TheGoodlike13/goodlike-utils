@@ -81,7 +81,7 @@ public final class Str {
     private static String format(FormattingTuple formattingTuple) {
         String result = formattingTuple.getMessage();
         if (result == null)
-            throw new IllegalArgumentException("Given string cannot be formatter using given object");
+            throw new IllegalArgumentException("Given string cannot be formatted using given object");
 
         return result;
     }
