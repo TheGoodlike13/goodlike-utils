@@ -62,12 +62,15 @@ public final class Futures {
 
     /**
      * @return CompletableFuture, completed with value from the optional, or Throwable if optional is empty
+     * @throws NullPointerException if optional or onEmpty is null
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    public static <T> CompletableFuture<T> fromOptional(Optional<T> optional, Throwable onEmpty) {
+    public static <T> CompletableFuture<T> fromOptional(Optional<T> optional, Supplier<Throwable> onEmpty) {
+        Null.check(optional, onEmpty).ifAny("Optional and supplier cannot be null");
+
         return optional.isPresent()
                 ? CompletableFuture.completedFuture(optional.get())
-                : Futures.failedFuture(onEmpty);
+                : Futures.failedFuture(onEmpty.get());
     }
 
     // PRIVATE
