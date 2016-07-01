@@ -2,6 +2,7 @@ package eu.goodlike.functional;
 
 import eu.goodlike.neat.Null;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -57,6 +58,16 @@ public final class Futures {
             else
                 errorConsumer.accept(error);
         };
+    }
+
+    /**
+     * @return CompletableFuture, completed with value from the optional, or Throwable if optional is empty
+     */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static <T> CompletableFuture<T> fromOptional(Optional<T> optional, Throwable onEmpty) {
+        return optional.isPresent()
+                ? CompletableFuture.completedFuture(optional.get())
+                : Futures.failedFuture(onEmpty);
     }
 
     // PRIVATE
