@@ -47,8 +47,8 @@ public final class Futures {
      * the errorConsumer is called, otherwise the resultConsumer is called
      * @throws NullPointerException if resultConsumer or errorConsumer are null
      */
-    public static <Result, Error> BiConsumer<Result, Error> completionHandler(Consumer<Result> resultConsumer,
-                                                                              Consumer<Error> errorConsumer) {
+    public static <Result> BiConsumer<Result, Throwable> completionHandler(Consumer<Result> resultConsumer,
+                                                                              Consumer<Throwable> errorConsumer) {
         Null.check(resultConsumer, errorConsumer).ifAny("Result consumer and error consumer cannot be null");
 
         return (result, error) ->  {
