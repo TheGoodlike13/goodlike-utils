@@ -69,7 +69,27 @@ public final class Str {
      * @return result of string.split(pattern) in an immutable list
      */
     public static List<String> split(String string, String pattern) {
+        Null.check(string, pattern).ifAny("String and pattern cannot be null");
         return ImmutableList.copyOf(string.split(pattern));
+    }
+
+    /**
+     * @return result of string.split(pattern) in an immutable list, including empty Strings if string starts/ends with
+     * the pattern
+     */
+    public static List<String> splitIncludingEmptyAffixes(String string, String pattern) {
+        Null.check(string, pattern).ifAny("String and pattern cannot be null");
+
+        ImmutableList.Builder<String> builder = ImmutableList.builder();
+        if (string.startsWith(pattern))
+            builder.add("");
+
+        builder.add(string.split(pattern));
+
+        if (string.endsWith(pattern))
+            builder.add("");
+
+        return builder.build();
     }
 
     // PRIVATE
