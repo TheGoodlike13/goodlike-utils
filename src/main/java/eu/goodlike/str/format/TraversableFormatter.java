@@ -1,8 +1,8 @@
 package eu.goodlike.str.format;
 
-import com.google.common.collect.ImmutableList;
 import eu.goodlike.functional.Optionals;
 import eu.goodlike.neat.Null;
+import eu.goodlike.str.Str;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +70,7 @@ public final class TraversableFormatter {
     private final Traversable overrides;
 
     private Optional<String> getValue(String key) {
-        List<String> paths = getParts(key);
+        List<String> paths = Str.splitIncludingEmptyAffixes(key, NEXT_STEP);
 
         String firstElement = paths.get(0);
         String[] elementsAfterFirst = paths.subList(1, paths.size()).toArray(new String[paths.size() - 1]);
@@ -79,17 +79,6 @@ public final class TraversableFormatter {
                 getValueFromOverrides(firstElement, elementsAfterFirst),
                 traversable.getValueAt(firstElement, elementsAfterFirst)
         );
-    }
-
-    private List<String> getParts(String key) {
-        ImmutableList.Builder<String> builder = ImmutableList.builder();
-        int index;
-        while ((index = key.indexOf(NEXT_STEP)) >= 0) {
-            builder.add(key.substring(0, index));
-            key = key.substring(index + 1);
-        }
-
-        return builder.add(key).build();
     }
 
     private Optional<String> getValueFromOverrides(String firstStep, String... otherSteps) {
