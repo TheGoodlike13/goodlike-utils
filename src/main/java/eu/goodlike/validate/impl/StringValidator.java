@@ -9,7 +9,6 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static eu.goodlike.validate.CommonValidators.NOT_NULL_NOT_BLANK;
 import static eu.goodlike.validate.Validate.Collections.chars;
 import static eu.goodlike.validate.Validate.Collections.codePoints;
 import static eu.goodlike.validate.Validate.*;
@@ -320,7 +319,8 @@ public final class StringValidator extends ComparableValidator<String, StringVal
         }
     }
 
-    private static final StringValidator SUB_EMAIL_VALIDATOR = NOT_NULL_NOT_BLANK
+    private static final StringValidator SUB_EMAIL_VALIDATOR = string()
+            .not().isBlank()
             .not().contains("@")
             .not().startsEndsOrContainsConsecutive(".");
 
