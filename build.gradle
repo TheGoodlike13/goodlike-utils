@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.17'
+version '0.0.17a'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -79,9 +79,9 @@ task sourceJar(type: Jar) {
 publishing {
     publications {
         GoodlikeUtils(MavenPublication) {
-            groupId 'eu.goodlike'
-            artifactId 'goodlike-utils'
-            version '0.0.17'
+            groupId project.group
+            artifactId rootProject.name
+            version project.version
 
             from components.java
             artifact sourceJar
@@ -104,15 +104,15 @@ bintray {
     publications = ['GoodlikeUtils']
     pkg {
         repo = 'maven'
-        name = 'goodlike-utils'
+        name = rootProject.name
         userOrg = project.property('bintray_user')
         licenses = ['Unlicense']
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
-            name = '0.0.17'
-            desc = "Added Str::splitIncludingEmptyAffixes"
+            name = project.version
+            desc = "Fixed some minor errors"
             released  = new Date()
-            vcsTag = '0.0.17'
+            vcsTag = project.version
             // attributes = []
         }
     }
