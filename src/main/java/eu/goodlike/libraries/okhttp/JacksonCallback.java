@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * <pre>
- * Static factory methods for callback implementation for okhttp client
+ * Static factory methods for callback implementation for OkHttp client
  *
  * Uses CompletableFuture and Jackson to handle the Response, completing exceptionally on failure or parsing error
  * </pre>

@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * <pre>
- * Callback implementation for okhttp client
+ * Callback implementation for OkHttp client
  *
  * Uses CompletableFuture and given JSON parser to handle the Response, completing exceptionally on failure or parsing
  * error

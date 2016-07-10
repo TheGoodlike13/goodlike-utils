@@ -28,7 +28,7 @@ dependencies {
     // used for String formatting
     compile 'org.slf4j:slf4j-api:1.7.21'
 
-    // used for okhttp package only
+    // used for OkHttp package only
     compile 'com.squareup.okhttp3:okhttp:3.3.1', optional
 
     // needed for jackson package only

@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * <pre>
- * Callback implementation for okhttp client
+ * Callback implementation for OkHttp client
  *
  * Uses CompletableFuture to handle the Response, completing exceptionally on failure
  *
