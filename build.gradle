@@ -4,10 +4,10 @@ plugins {
 
     // needed for publishing the lib to maven/jCenter
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.6"
+    id "com.jfrog.bintray" version "1.7.1"
 
     // helps me keep up to date with dependencies
-    id "com.github.ben-manes.versions" version "0.12.0"
+    id "com.github.ben-manes.versions" version "0.13.0"
 
     // some of the dependencies are constricted to their own packages; if you don't use classes in these packages,
     // the dependencies becomes entirely optional
@@ -29,34 +29,34 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
 
     // used for OkHttp package only
-    compile 'com.squareup.okhttp3:okhttp:3.3.1', optional
+    compile 'com.squareup.okhttp3:okhttp:3.4.1', optional
 
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.0.rc2', optional
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0.rc2', optional
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0.rc2', optional
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.0', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0', optional
 
     // needed for jooq package only
-    compile 'org.jooq:jooq:3.8.2', optional
+    compile 'org.jooq:jooq:3.8.3', optional
 
     // needed for spring.mockmvc package only
-    compile 'org.springframework:spring-test:4.3.0.RELEASE', optional
-    compile 'org.springframework:spring-web:4.3.0.RELEASE', optional
-    compile 'org.springframework:spring-beans:4.3.0.RELEASE', optional
+    compile 'org.springframework:spring-test:4.3.1.RELEASE', optional
+    compile 'org.springframework:spring-web:4.3.1.RELEASE', optional
+    compile 'org.springframework:spring-beans:4.3.1.RELEASE', optional
     compile 'javax.servlet:javax.servlet-api:4.0.0-b01', optional
 
     // needed for spring.gmail package only
-    compile 'org.springframework:spring-context-support:4.3.0.RELEASE', optional
+    compile 'org.springframework:spring-context-support:4.3.1.RELEASE', optional
     compile 'javax.mail:javax.mail-api:1.5.5', optional
 
     // unit tests
     testCompile 'junit:junit:4.12'
     // better assertions
-    testCompile 'org.assertj:assertj-core:3.4.1'
+    testCompile 'org.assertj:assertj-core:3.5.1'
     // mocking various objects
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     // a little bit of reflection
-    testCompile 'org.jooq:joor:0.9.5'
+    testCompile 'org.jooq:joor:0.9.6'
 }
 
 group 'eu.goodlike'
@@ -110,7 +110,7 @@ bintray {
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
             name = project.version
-            desc = ""
+            desc = "Updated dependencies and added TestableIntConsumer"
             released  = new Date()
             vcsTag = project.version
             // attributes = []
