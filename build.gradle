@@ -110,7 +110,7 @@ bintray {
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
         version {
             name = project.version
-            desc = "Fixed some minor errors"
+            desc = ""
             released  = new Date()
             vcsTag = project.version
             // attributes = []
