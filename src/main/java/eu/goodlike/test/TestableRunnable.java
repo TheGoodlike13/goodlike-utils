@@ -13,14 +13,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class TestableRunnable implements Runnable {
 
     /**
-     * @return true if this runnable has been run at least once, false otherwise
+     * @return true if this Runnable has been run at least once, false otherwise
      */
     public boolean hasBeenRun() {
         return totalTimesRun() > 0;
     }
 
     /**
-     * @return amount of times this runnable has been run
+     * @return amount of times this Runnable has been run
      */
     public int totalTimesRun() {
         return timesRun.get();
