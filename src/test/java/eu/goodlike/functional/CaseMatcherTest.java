@@ -26,6 +26,7 @@ public class CaseMatcherTest {
                 .match(testableRunnable);
 
         assertThat(testableRunnable.hasBeenRun())
+                .as("check if testableRunnable has been run")
                 .isTrue();
     }
 
@@ -39,6 +40,7 @@ public class CaseMatcherTest {
                 .match(testableRunnable);
 
         assertThat(testableRunnable.totalTimesRun())
+                .as("check how many times testableRunnable has been run")
                 .isEqualTo(1);
     }
 
@@ -53,9 +55,24 @@ public class CaseMatcherTest {
                 .match(testableRunnable, anotherRunnable);
 
         assertThat(testableRunnable.totalTimesRun())
+                .as("check how many times testableRunnable has been run")
                 .isEqualTo(1);
         assertThat(anotherRunnable.hasBeenRun)
+                .as("check if anotherRunnable has been run")
                 .isTrue();
+    }
+
+    @Test
+    public void ignoredCaseDoesNotGetMatched() {
+        TestableRunnable testableRunnable = new TestableRunnable();
+
+        new CaseMatcher<Runnable>(TestableRunnable.class)
+                .ignoreCase(TestableRunnable.class)
+                .match(testableRunnable);
+
+        assertThat(testableRunnable.hasBeenRun())
+                .as("check if testableRunnable has been run")
+                .isFalse();
     }
 
     @Test

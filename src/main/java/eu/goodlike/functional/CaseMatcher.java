@@ -15,17 +15,46 @@ import java.util.function.Consumer;
  * <pre>
  * Rudimentary case class implementation
  *
- * It does not provide any compile time guarantees, only runtime
+ * The matcher can create a builder, which requires that you explicitly provide a consumer for every case class defined
+ * in this CaseMatcher. This builder is not synchronized
+ *
+ * The following limitations apply when using CaseMatcher:
+ *      Cannot match interfaces or abstract classes
+ *          In general, if you cannot have an instance of that exact class, you should not be able to match it
+ *      Cannot have multiple matchers for the same case
+ *      Cannot match extending classes which are not pre-defined in the CaseMatcher
+ *      Cannot match objects of extending classes which are not pre-defined in the CaseMatcher
+ *      There must always be at least one case to match
  * </pre>
  */
 public final class CaseMatcher<CaseClass> {
 
+    /**
+     * @return builder for case classes, with the initial case set
+     * @throws NullPointerException if caseClass or onMatchConsumer is null
+     * @throws IllegalArgumentException if caseClass does not belong to this CaseMatcher
+     */
     public <T extends CaseClass> Builder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
         return new Builder<>(matchableClasses).onCase(caseClass, onMatchConsumer);
     }
 
+    /**
+     * @return builder for case classes, with the initial case set to ignore
+     * @throws NullPointerException if caseClass is null
+     * @throws IllegalArgumentException if caseClass does not belong to this CaseMatcher
+     */
+    public <T extends CaseClass> Builder<CaseClass> ignoreCase(Class<T> caseClass) {
+        return new Builder<>(matchableClasses).ignoreCase(caseClass);
+    }
+
     // CONSTRUCTORS
 
+    /**
+     * Constructor for CaseMatcher
+     * @throws NullPointerException if caseClasses is or contains null
+     * @throws IllegalArgumentException if caseClasses is empty
+     * @throws IllegalStateException if any of the caseClasses if an interface or abstract class
+     */
     @SafeVarargs
     public CaseMatcher(Class<? extends CaseClass>... caseClasses) {
         Null.checkArray(caseClasses).ifAny("Cannot be or contain null: caseClasses");
@@ -52,6 +81,13 @@ public final class CaseMatcher<CaseClass> {
     }
 
     public static final class Builder<CaseClass> {
+        /**
+         * Sets handler for given caseClass, which will be executed upon a match
+         * @return this builder
+         * @throws NullPointerException if caseClass or onMatchConsumer is null
+         * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
+         * @throws IllegalStateException if caseClass already has a defined consumer in this builder
+         */
         public <T extends CaseClass> Builder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
             Null.check(caseClass, onMatchConsumer).ifAny("Cannot be null: caseClass, onMatchConsumer");
 
@@ -69,6 +105,25 @@ public final class CaseMatcher<CaseClass> {
             return this;
         }
 
+        /**
+         * Sets handler for given caseClass to ignore it even if it is matched
+         * @return this builder
+         * @throws NullPointerException if caseClass is null
+         * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
+         * @throws IllegalStateException if caseClass already has a defined consumer in this builder
+         */
+        public <T extends CaseClass> Builder<CaseClass> ignoreCase(Class<T> caseClass) {
+            return onCase(caseClass, Consumers.doNothing());
+        }
+
+        /**
+         * Matches all given objects and executes appropriate handlers
+         * @return this builder
+         * @throws NullPointerException if values is or contains null
+         * @throws IllegalStateException if not all cases have been explicitly given handlers/ignored in this builder
+         * @throws IllegalArgumentException if any of the values are of class that is not defined in the CaseMatcher
+         * which spawned this builder
+         */
         @SafeVarargs
         public final Builder<CaseClass> match(CaseClass... values) {
             Null.checkArray(values).ifAny("Cannot be or contain null: values");
