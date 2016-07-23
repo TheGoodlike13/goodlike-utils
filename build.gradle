@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.19'
+version '0.0.20'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -81,9 +81,11 @@ publishing {
         GoodlikeUtils(MavenPublication) {
             groupId project.group
             artifactId rootProject.name
+            //noinspection GroovyAssignabilityCheck
             version project.version
 
             from components.java
+            //noinspection GroovyAssignabilityCheck
             artifact sourceJar
 
             pom.withXml {
@@ -108,9 +110,10 @@ bintray {
         userOrg = project.property('bintray_user')
         licenses = ['Unlicense']
         vcsUrl = 'https://github.com/TheGoodlike13/goodlike-utils'
+        //noinspection GroovyAssignabilityCheck
         version {
             name = project.version
-            desc = "Updated dependencies and added TestableIntConsumer"
+            desc = "Added CaseMatcher"
             released  = new Date()
             vcsTag = project.version
             // attributes = []
