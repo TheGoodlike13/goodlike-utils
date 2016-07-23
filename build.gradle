@@ -32,12 +32,12 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1', optional
 
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.0', optional
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.0', optional
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0', optional
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.1', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.1', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1', optional
 
     // needed for jooq package only
-    compile 'org.jooq:jooq:3.8.3', optional
+    compile 'org.jooq:jooq:3.8.4', optional
 
     // needed for spring.mockmvc package only
     compile 'org.springframework:spring-test:4.3.1.RELEASE', optional
@@ -52,7 +52,7 @@ dependencies {
     // unit tests
     testCompile 'junit:junit:4.12'
     // better assertions
-    testCompile 'org.assertj:assertj-core:3.5.1'
+    testCompile 'org.assertj:assertj-core:3.5.2'
     // mocking various objects
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     // a little bit of reflection
@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.20'
+version '0.0.21'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -113,7 +113,7 @@ bintray {
         //noinspection GroovyAssignabilityCheck
         version {
             name = project.version
-            desc = "Added CaseMatcher"
+            desc = "Updated CaseMatcher and versions"
             released  = new Date()
             vcsTag = project.version
             // attributes = []
