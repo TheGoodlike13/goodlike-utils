@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <pre>
@@ -34,8 +35,8 @@ public final class CaseMatcher<CaseClass> {
      * @throws NullPointerException if caseClass or onMatchConsumer is null
      * @throws IllegalArgumentException if caseClass does not belong to this CaseMatcher
      */
-    public <T extends CaseClass> Builder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
-        return new Builder<>(matchableClasses).onCase(caseClass, onMatchConsumer);
+    public <T extends CaseClass> MatcherBuilder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
+        return new MatcherBuilder<>(matchableClasses).onCase(caseClass, onMatchConsumer);
     }
 
     /**
@@ -43,8 +44,13 @@ public final class CaseMatcher<CaseClass> {
      * @throws NullPointerException if caseClass is null
      * @throws IllegalArgumentException if caseClass does not belong to this CaseMatcher
      */
-    public <T extends CaseClass> Builder<CaseClass> ignoreCase(Class<T> caseClass) {
-        return new Builder<>(matchableClasses).ignoreCase(caseClass);
+    public <T extends CaseClass> MatcherBuilder<CaseClass> ignoreCase(Class<T> caseClass) {
+        return new MatcherBuilder<>(matchableClasses).ignoreCase(caseClass);
+    }
+
+    public <ResultClass> MappingBuilder<CaseClass, ResultClass> mapInto(Class<ResultClass> resultClass) {
+        Null.check(resultClass).ifAny("Cannot be null: resultClass");
+        return new MappingBuilder<>(matchableClasses, resultClass);
     }
 
     // CONSTRUCTORS
@@ -80,7 +86,43 @@ public final class CaseMatcher<CaseClass> {
             throw new IllegalStateException("Cannot match not implemented classes: " + classes);
     }
 
-    public static final class Builder<CaseClass> {
+    private static abstract class AbstractBuilder<CaseClass> {
+        // CONSTRUCTORS
+
+        private AbstractBuilder(Set<Class<? extends CaseClass>> matchableClasses) {
+            this.matchableClasses = matchableClasses;
+        }
+
+        // PRIVATE
+
+        private final Set<Class<? extends CaseClass>> matchableClasses;
+
+        protected final void assertCaseIsMatchable(Class<? extends CaseClass> caseClass) {
+            if (!matchableClasses.contains(caseClass))
+                throw new IllegalArgumentException("Class " + caseClass + " is not among matchable cases: " +
+                        matchableClasses);
+        }
+
+        protected final void assertAllConsumersAreDefined(Set<Class<? extends CaseClass>> matcherKeySet) {
+            if (!matchableClasses.equals(matcherKeySet))
+                throw new IllegalStateException("Consumers not defined for matchable cases: " +
+                        Sets.difference(matchableClasses, matcherKeySet));
+        }
+
+        protected final void throwInsteadOfConsuming(CaseClass caseObject) {
+            throw new IllegalArgumentException("Class " + caseObject.getClass() +
+                    " is not defined as matchable in CaseMatcher, only these are allowed: " +
+                    matchableClasses);
+        }
+
+        protected final Class<? extends CaseClass> getExactClass(CaseClass object) {
+            @SuppressWarnings("unchecked")
+            Class<? extends CaseClass> caseClass = (Class<? extends CaseClass>) object.getClass();
+            return caseClass;
+        }
+    }
+
+    public static final class MatcherBuilder<CaseClass> extends AbstractBuilder<CaseClass> {
         /**
          * Sets handler for given caseClass, which will be executed upon a match
          * @return this builder
@@ -88,12 +130,9 @@ public final class CaseMatcher<CaseClass> {
          * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
          * @throws IllegalStateException if caseClass already has a defined consumer in this builder
          */
-        public <T extends CaseClass> Builder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
+        public <T extends CaseClass> MatcherBuilder<CaseClass> onCase(Class<T> caseClass, Consumer<? super T> onMatchConsumer) {
             Null.check(caseClass, onMatchConsumer).ifAny("Cannot be null: caseClass, onMatchConsumer");
-
-            if (!matchableClasses.contains(caseClass))
-                throw new IllegalArgumentException("Class " + caseClass + " is not among matchable cases: " +
-                        matchableClasses);
+            assertCaseIsMatchable(caseClass);
 
             if (matchers.containsKey(caseClass))
                 throw new IllegalStateException("Multiple definitions found for case: " + caseClass);
@@ -112,7 +151,7 @@ public final class CaseMatcher<CaseClass> {
          * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
          * @throws IllegalStateException if caseClass already has a defined consumer in this builder
          */
-        public <T extends CaseClass> Builder<CaseClass> ignoreCase(Class<T> caseClass) {
+        public <T extends CaseClass> MatcherBuilder<CaseClass> ignoreCase(Class<T> caseClass) {
             return onCase(caseClass, Consumers.doNothing());
         }
 
@@ -125,9 +164,9 @@ public final class CaseMatcher<CaseClass> {
          * which spawned this builder
          */
         @SafeVarargs
-        public final Builder<CaseClass> match(CaseClass... values) {
+        public final MatcherBuilder<CaseClass> match(CaseClass... values) {
             Null.checkArray(values).ifAny("Cannot be or contain null: values");
-            assertAllConsumersAreDefined();
+            assertAllConsumersAreDefined(matchers.keySet());
 
             Arrays.stream(values).forEach(this::consumeCorrectValue);
             return this;
@@ -135,42 +174,77 @@ public final class CaseMatcher<CaseClass> {
 
         // CONSTRUCTORS
 
-        private Builder(Set<Class<? extends CaseClass>> matchableClasses) {
-            this.matchableClasses = matchableClasses;
+        private MatcherBuilder(Set<Class<? extends CaseClass>> matchableClasses) {
+            super(matchableClasses);
             this.matchers = new HashMap<>();
-
-            this.throwOnNotDefinedCase = caseObject -> {
-                throw new IllegalArgumentException("Class " + caseObject.getClass() +
-                        " is not defined as matchable in CaseMatcher, only these are allowed: " +
-                        matchableClasses);
-            };
         }
 
         // PRIVATE
 
-        private final Set<Class<? extends CaseClass>> matchableClasses;
         private final Map<Class<? extends CaseClass>, Consumer<? super CaseClass>> matchers;
 
-        private final Consumer<? super CaseClass> throwOnNotDefinedCase;
-
-        private void assertAllConsumersAreDefined() {
-            if (!matchableClasses.equals(matchers.keySet()))
-                throw new IllegalStateException("Consumers not defined for matchable cases: " +
-                        Sets.difference(matchableClasses, matchers.keySet()));
-        }
-
         private void consumeCorrectValue(CaseClass caseObject) {
-            getMatcher(getExactClass(caseObject)).accept(caseObject);
+            getMatchingConsumer(getExactClass(caseObject)).accept(caseObject);
         }
 
-        private Consumer<? super CaseClass> getMatcher(Class<? extends CaseClass> caseClass) {
-            return matchers.getOrDefault(caseClass, throwOnNotDefinedCase);
+        private Consumer<? super CaseClass> getMatchingConsumer(Class<? extends CaseClass> caseClass) {
+            return matchers.getOrDefault(caseClass, this::throwInsteadOfConsuming);
         }
+    }
 
-        private Class<? extends CaseClass> getExactClass(CaseClass object) {
+    public static final class MappingBuilder<CaseClass, ResultClass> extends AbstractBuilder<CaseClass> {
+        public <T extends CaseClass> MappingBuilder<CaseClass, ResultClass> onCase(Class<T> caseClass,
+                                                                                   Function<? super T, ? extends ResultClass> mapper) {
+            Null.check(caseClass, mapper).ifAny("Cannot be null: caseClass, mapper");
+            assertCaseIsMatchable(caseClass);
+
+            if (matchers.containsKey(caseClass))
+                throw new IllegalStateException("Multiple definitions found for case: " + caseClass);
+
             @SuppressWarnings("unchecked")
-            Class<? extends CaseClass> caseClass = (Class<? extends CaseClass>) object.getClass();
-            return caseClass;
+            Function<? super CaseClass, ? extends ResultClass> castedFunction = (Function<? super CaseClass, ? extends ResultClass>) mapper;
+            matchers.put(caseClass, castedFunction);
+
+            return this;
+        }
+
+        public <T extends CaseClass, R extends ResultClass> MappingBuilder<CaseClass, ResultClass> onCase(Class<T> caseClass,
+                                                                                                          R instance) {
+            Function<? super T, ? extends ResultClass> instanceFunction = any -> instance;
+            return onCase(caseClass, instanceFunction);
+        }
+
+        public ResultClass map(CaseClass value) {
+            Null.check(value).ifAny("Cannot be null: value");
+            assertAllConsumersAreDefined(matchers.keySet());
+
+            return mapIntoCorrectValue(value);
+        }
+
+        // CONSTRUCTORS
+
+        private MappingBuilder(Set<Class<? extends CaseClass>> matchableClasses, Class<ResultClass> resultClass) {
+            super(matchableClasses);
+            this.resultClass = resultClass;
+            this.matchers = new HashMap<>();
+        }
+
+        // PRIVATE
+
+        private final Class<ResultClass> resultClass;
+        private final Map<Class<? extends CaseClass>, Function<? super CaseClass, ? extends ResultClass>> matchers;
+
+        private ResultClass mapIntoCorrectValue(CaseClass caseObject) {
+            return getMatchingFunction(getExactClass(caseObject)).apply(caseObject);
+        }
+
+        private Function<? super CaseClass, ? extends ResultClass> getMatchingFunction(Class<? extends CaseClass> caseClass) {
+            return matchers.getOrDefault(caseClass, this::throwInsteadOfReturning);
+        }
+
+        private ResultClass throwInsteadOfReturning(CaseClass caseClass) {
+            throwInsteadOfConsuming(caseClass);
+            throw new AssertionError("The above method call will always throw an exception");
         }
     }
 

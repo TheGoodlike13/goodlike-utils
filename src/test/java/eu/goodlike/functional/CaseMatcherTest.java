@@ -76,6 +76,36 @@ public class CaseMatcherTest {
     }
 
     @Test
+    public void correctCaseGetsMapped() {
+        TestableRunnable testableRunnable = new TestableRunnable();
+
+        boolean result = new CaseMatcher<>(TestableRunnable.class, AnotherRunnable.class)
+                .mapInto(Boolean.class)
+                .onCase(TestableRunnable.class, true)
+                .onCase(AnotherRunnable.class, false)
+                .map(testableRunnable);
+
+        assertThat(result)
+                .as("check if correct case got matched")
+                .isTrue();
+    }
+
+    @Test
+    public void incorrectCaseGetsIgnored() {
+        AnotherRunnable anotherRunnable = new AnotherRunnable();
+
+        boolean result = new CaseMatcher<>(TestableRunnable.class, AnotherRunnable.class)
+                .mapInto(Boolean.class)
+                .onCase(TestableRunnable.class, true)
+                .onCase(AnotherRunnable.class, false)
+                .map(anotherRunnable);
+
+        assertThat(result)
+                .as("check if correct case got matched")
+                .isFalse();
+    }
+
+    @Test
     public void exceptionThrownOnInterfaceOrAbstractClassMatcher() {
         assertThatExceptionOfType(IllegalStateException.class)
                 .isThrownBy(() -> new CaseMatcher<>(Runnable.class));
@@ -83,7 +113,7 @@ public class CaseMatcherTest {
 
     @Test
     public void exceptionThrownOnMissingDefinitions() {
-        CaseMatcher.Builder<Runnable> matcher = new CaseMatcher<>(TestableRunnable.class, AnotherRunnable.class)
+        CaseMatcher.MatcherBuilder<Runnable> matcher = new CaseMatcher<>(TestableRunnable.class, AnotherRunnable.class)
                 .onCase(TestableRunnable.class, TestableRunnable::run);
 
         assertThatExceptionOfType(IllegalStateException.class)
@@ -92,7 +122,7 @@ public class CaseMatcherTest {
 
     @Test
     public void exceptionThrownOnMultipleDefinitions() {
-        CaseMatcher.Builder<Runnable> matcher = new CaseMatcher<Runnable>(TestableRunnable.class)
+        CaseMatcher.MatcherBuilder<Runnable> matcher = new CaseMatcher<Runnable>(TestableRunnable.class)
                 .onCase(TestableRunnable.class, TestableRunnable::run);
 
         assertThatExceptionOfType(IllegalStateException.class)
@@ -109,7 +139,7 @@ public class CaseMatcherTest {
 
     @Test
     public void exceptionThrownOnNotMatchableInstance() {
-        CaseMatcher.Builder<Runnable> matcher = new CaseMatcher<Runnable>(TestableRunnable.class)
+        CaseMatcher.MatcherBuilder<Runnable> matcher = new CaseMatcher<Runnable>(TestableRunnable.class)
                 .onCase(TestableRunnable.class, TestableRunnable::run);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
