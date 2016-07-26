@@ -127,10 +127,7 @@ public final class CaseMatcher<CaseClass> {
         @SafeVarargs
         public final Builder<CaseClass> match(CaseClass... values) {
             Null.checkArray(values).ifAny("Cannot be or contain null: values");
-
-            if (!matchableClasses.equals(matchers.keySet()))
-                throw new IllegalStateException("Consumers not defined for matchable cases: " +
-                        Sets.difference(matchableClasses, matchers.keySet()));
+            assertAllConsumersAreDefined();
 
             Arrays.stream(values).forEach(this::consumeCorrectValue);
             return this;
@@ -141,6 +138,12 @@ public final class CaseMatcher<CaseClass> {
         private Builder(Set<Class<? extends CaseClass>> matchableClasses) {
             this.matchableClasses = matchableClasses;
             this.matchers = new HashMap<>();
+
+            this.throwOnNotDefinedCase = caseObject -> {
+                throw new IllegalArgumentException("Class " + caseObject.getClass() +
+                        " is not defined as matchable in CaseMatcher, only these are allowed: " +
+                        matchableClasses);
+            };
         }
 
         // PRIVATE
@@ -148,16 +151,26 @@ public final class CaseMatcher<CaseClass> {
         private final Set<Class<? extends CaseClass>> matchableClasses;
         private final Map<Class<? extends CaseClass>, Consumer<? super CaseClass>> matchers;
 
+        private final Consumer<? super CaseClass> throwOnNotDefinedCase;
+
+        private void assertAllConsumersAreDefined() {
+            if (!matchableClasses.equals(matchers.keySet()))
+                throw new IllegalStateException("Consumers not defined for matchable cases: " +
+                        Sets.difference(matchableClasses, matchers.keySet()));
+        }
+
         private void consumeCorrectValue(CaseClass caseObject) {
+            getMatcher(getExactClass(caseObject)).accept(caseObject);
+        }
+
+        private Consumer<? super CaseClass> getMatcher(Class<? extends CaseClass> caseClass) {
+            return matchers.getOrDefault(caseClass, throwOnNotDefinedCase);
+        }
+
+        private Class<? extends CaseClass> getExactClass(CaseClass object) {
             @SuppressWarnings("unchecked")
-            Class<? extends CaseClass> caseClass = (Class<? extends CaseClass>) caseObject.getClass();
-
-            Consumer<? super CaseClass> consumer = matchers.get(caseClass);
-            if (consumer == null)
-                throw new IllegalArgumentException("Class " + caseClass + " is not defined as matchable in CaseMatcher, " +
-                        "only these are allowed: " + matchableClasses);
-
-            consumer.accept(caseObject);
+            Class<? extends CaseClass> caseClass = (Class<? extends CaseClass>) object.getClass();
+            return caseClass;
         }
     }
 
