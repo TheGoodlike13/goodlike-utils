@@ -1,5 +1,6 @@
 package eu.goodlike.misc;
 
+import eu.goodlike.test.TestableRunnable;
 import eu.goodlike.validate.ComparableValidator;
 import eu.goodlike.validate.impl.StringValidator;
 import org.junit.Test;
@@ -34,6 +35,21 @@ public class ReflectUtilsTest {
         assertThat(ReflectUtils.isImplemented(Runnable.class))
                 .as("check if Runnable is not an interface or abstract class")
                 .isFalse();
+    }
+
+    @Test
+    public void castIsSuccessfulOnMatchingCase() {
+        Runnable testableRunnable = new TestableRunnable();
+        assertThat(ReflectUtils.cast(testableRunnable, TestableRunnable.class))
+                .as("check if cast returned anything")
+                .contains((TestableRunnable) testableRunnable);
+    }
+
+    @Test
+    public void optionalEmptyOnNonMatchingCase() {
+        assertThat(ReflectUtils.cast(new Object(), TestableRunnable.class))
+                .as("check if cast returned anything")
+                .isEmpty();
     }
 
 }
