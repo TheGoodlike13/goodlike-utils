@@ -193,6 +193,13 @@ public final class CaseMatcher<CaseClass> {
     }
 
     public static final class MappingBuilder<CaseClass, ResultClass> extends AbstractBuilder<CaseClass> {
+        /**
+         * Sets mapper for given caseClass; it will be used on the mapped object if it is exactly of given class
+         * @return this builder
+         * @throws NullPointerException if caseClass or mapper is null
+         * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
+         * @throws IllegalStateException if caseClass already has a defined mapper in this builder
+         */
         public <T extends CaseClass> MappingBuilder<CaseClass, ResultClass> onCase(Class<T> caseClass,
                                                                                    Function<? super T, ? extends ResultClass> mapper) {
             Null.check(caseClass, mapper).ifAny("Cannot be null: caseClass, mapper");
@@ -208,12 +215,26 @@ public final class CaseMatcher<CaseClass> {
             return this;
         }
 
+        /**
+         * Sets instance for given caseClass; it will be used to replace the mapped object if it is exactly of given class
+         * @return this builder
+         * @throws NullPointerException if caseClass is null
+         * @throws IllegalArgumentException if caseClass does not belong to the CaseMatcher that spawned this builder
+         * @throws IllegalStateException if caseClass already has a defined mapper in this builder
+         */
         public <T extends CaseClass, R extends ResultClass> MappingBuilder<CaseClass, ResultClass> onCase(Class<T> caseClass,
                                                                                                           R instance) {
             Function<? super T, ? extends ResultClass> instanceFunction = any -> instance;
             return onCase(caseClass, instanceFunction);
         }
 
+        /**
+         * @return matches the class of given value and maps using appropriate mapper
+         * @throws NullPointerException if value is null
+         * @throws IllegalStateException if not all cases have been explicitly given mappers/instances in this builder
+         * @throws IllegalArgumentException if value is of class that is not defined in the CaseMatcher which spawned
+         * this builder
+         */
         public ResultClass map(CaseClass value) {
             Null.check(value).ifAny("Cannot be null: value");
             assertAllConsumersAreDefined(matchers.keySet());
