@@ -123,18 +123,73 @@ public class StringValidatorTest {
     }
 
     @Test
-    public void tryIntegerCustomWithPassingInteger_shouldBeTrue() {
-        assertThat(validator.isInteger(i -> i >= 0).test("123456789")).isTrue();
+    public void tryIntWithInt_shouldBeTrue() {
+        assertThat(validator.isInt().test("123456789")).isTrue();
     }
 
     @Test
-    public void tryIntegerCustomWithNotPassingInteger_shouldBeFalse() {
-        assertThat(validator.isInteger(i -> i >= 0).test("-123456789")).isFalse();
+    public void tryIntWithNegativeInt_shouldBeTrue() {
+        assertThat(validator.isInt().test("-123456789")).isTrue();
     }
 
     @Test
-    public void tryIntegerCustomWithNotInteger_shouldBeFalse() {
-        assertThat(validator.isInteger(i -> i >= 0).test("not integer")).isFalse();
+    public void tryIntWithNotInt_shouldBeFalse() {
+        assertThat(validator.isInt().test("not int")).isFalse();
+    }
+
+    @Test
+    public void tryIntWithTooBigInt_shouldBeFalse() {
+        assertThat(validator.isInt().test("123456789123456789123456789123456789123456789")).isFalse();
+    }
+
+    @Test
+    public void tryLongWithLong_shouldBeTrue() {
+        assertThat(validator.isLong().test("123456789")).isTrue();
+    }
+
+    @Test
+    public void tryLongWithNegativeLong_shouldBeTrue() {
+        assertThat(validator.isLong().test("-123456789")).isTrue();
+    }
+
+    @Test
+    public void tryLongWithNotLong_shouldBeFalse() {
+        assertThat(validator.isLong().test("not long")).isFalse();
+    }
+
+    @Test
+    public void tryLongWithTooBigLong_shouldBeFalse() {
+        assertThat(validator.isLong().test("123456789123456789123456789123456789123456789")).isFalse();
+    }
+
+    @Test
+    public void tryIntCustomWithPassingInt_shouldBeTrue() {
+        assertThat(validator.isInt(i -> i >= 0).test("123456789")).isTrue();
+    }
+
+    @Test
+    public void tryIntCustomWithNotPassingInt_shouldBeFalse() {
+        assertThat(validator.isInt(i -> i >= 0).test("-123456789")).isFalse();
+    }
+
+    @Test
+    public void tryIntCustomWithNotInt_shouldBeFalse() {
+        assertThat(validator.isInt(i -> i >= 0).test("not integer")).isFalse();
+    }
+
+    @Test
+    public void tryLongCustomWithPassingLong_shouldBeTrue() {
+        assertThat(validator.isLong(i -> i >= 0).test("123456789")).isTrue();
+    }
+
+    @Test
+    public void tryLongCustomWithNotPassingLong_shouldBeFalse() {
+        assertThat(validator.isLong(i -> i >= 0).test("-123456789")).isFalse();
+    }
+
+    @Test
+    public void tryLongCustomWithNotLong_shouldBeFalse() {
+        assertThat(validator.isLong(i -> i >= 0).test("not integer")).isFalse();
     }
 
     @Test

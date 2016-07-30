@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.23'
+version '0.0.24'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -113,7 +113,7 @@ bintray {
         //noinspection GroovyAssignabilityCheck
         version {
             name = project.version
-            desc = "Added mapping capabilities to CaseMatcher"
+            desc = "Updated StringValidator to check isInt() and isLong() over isInteger()"
             released  = new Date()
             vcsTag = project.version
             // attributes = []

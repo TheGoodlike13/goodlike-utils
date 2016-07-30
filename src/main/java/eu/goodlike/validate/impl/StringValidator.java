@@ -6,6 +6,7 @@ import eu.goodlike.validate.ComparableValidator;
 
 import java.util.List;
 import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -148,10 +149,33 @@ public final class StringValidator extends ComparableValidator<String, StringVal
     }
 
     /**
-     * Refer to StingValidator::isInteger; also adds an additional check for the parsed integer
+     * Refer to StingValidator::isInt
      */
-    public StringValidator isInteger(IntPredicate custom) {
-        return registerConditions(StringValidator::isInteger, str -> custom.test(Integer.parseInt(str)));
+    public StringValidator isInt() {
+        return registerCondition(StringValidator::isInt);
+    }
+
+    /**
+     * Refer to StingValidator::isInt; also adds an additional check for the parsed int
+     */
+    public StringValidator isInt(IntPredicate customCheck) {
+        Null.check(customCheck).ifAny("Cannot be null: customCheck");
+        return registerConditions(StringValidator::isInt, str -> customCheck.test(Integer.parseInt(str)));
+    }
+
+    /**
+     * Refer to StingValidator::isLong
+     */
+    public StringValidator isLong() {
+        return registerCondition(StringValidator::isLong);
+    }
+
+    /**
+     * Refer to StingValidator::isInt; also adds an additional check for the parsed int
+     */
+    public StringValidator isLong(LongPredicate customCheck) {
+        Null.check(customCheck).ifAny("Cannot be null: customCheck");
+        return registerConditions(StringValidator::isLong, str -> customCheck.test(Long.parseLong(str)));
     }
 
     /**
@@ -217,6 +241,24 @@ public final class StringValidator extends ComparableValidator<String, StringVal
 
     /**
      * ASSUMES string has been checked for null/blank
+     * @return true if string is made only of chars '0' to '9', with an optional prefix of '-' or '+' AND can be parsed as int
+     * @throws NullPointerException if string is null
+     */
+    public static boolean isInt(String string) {
+        return isInteger(string) && fitsIntoInt(string);
+    }
+
+    /**
+     * ASSUMES string has been checked for null/blank
+     * @return true if string is made only of chars '0' to '9', with an optional prefix of '-' or '+' AND can be parsed as long
+     * @throws NullPointerException if string is null
+     */
+    public static boolean isLong(String string) {
+        return isInteger(string) && fitsIntoLong(string);
+    }
+
+    /**
+     * ASSUMES string has been checked for null/blank
      * @return true if string is a comma separated list of integers, false otherwise
      * @throws NullPointerException if string is null
      */
@@ -231,7 +273,7 @@ public final class StringValidator extends ComparableValidator<String, StringVal
      */
     public static boolean isCommaSeparatedListOfIntegers(String string, IntPredicate intPredicate) {
         Null.check(intPredicate).ifAny("IntPredicate cannot be null");
-        return Stream.of(string.split(",")).allMatch(string().not().isBlank().isInteger(intPredicate));
+        return Stream.of(string.split(",")).allMatch(string().not().isBlank().isInt(intPredicate));
     }
 
     /**
@@ -327,16 +369,45 @@ public final class StringValidator extends ComparableValidator<String, StringVal
     private static final StringValidator ONLY_ZERO = string().passesAsChars(chars().allMatch(c -> c == '0'));
 
     private static final StringValidator YEAR_VALIDATOR = string().not().isBlank()
-            .isInteger(aPrimInt().isBetween(0, 999999999));
+            .isInt(aPrimInt().isBetween(0, 999999999));
 
     private static final StringValidator DATE_PART_VALIDATOR = string().not().isBlank()
             .hasAtLeastChars(2);
 
     private static final StringValidator MONTH_VALIDATOR = DATE_PART_VALIDATOR
-            .isInteger(aPrimInt().isMonthOfYear());
+            .isInt(aPrimInt().isMonthOfYear());
 
     private static StringValidator dayValidator(String year, String month) {
-        return DATE_PART_VALIDATOR.isInteger(aPrimInt().isDayOfMonth(Integer.parseInt(year), Integer.parseInt(month)));
+        return DATE_PART_VALIDATOR.isInt(aPrimInt().isDayOfMonth(Integer.parseInt(year), Integer.parseInt(month)));
+    }
+
+    private static final String MIN_INT = String.valueOf(Integer.MIN_VALUE).substring(1);
+    private static final String MAX_INT = String.valueOf(Integer.MAX_VALUE);
+
+    private static final String MIN_LONG = String.valueOf(Long.MIN_VALUE).substring(1);
+    private static final String MAX_LONG = String.valueOf(Long.MAX_VALUE);
+
+    private static boolean fitsIntoInt(String string) {
+        return fitsInto(string, MIN_INT, MAX_INT);
+    }
+
+    private static boolean fitsIntoLong(String string) {
+        return fitsInto(string, MIN_LONG, MAX_LONG);
+    }
+
+    private static boolean fitsInto(String string, String min, String max) {
+        Prefix prefix = Prefix.forString(string);
+        if (prefix.isNegative()) {
+            string = string.substring(1);
+            return string.length() < min.length()
+                    || string.length() == min.length() && string.compareTo(min) <= 0;
+        }
+
+        if (prefix.isPositive())
+            string = string.substring(1);
+
+        return string.length() < max.length()
+                || string.length() == max.length() && string.compareTo(max) <= 0;
     }
 
 }
