@@ -15,6 +15,16 @@ import java.util.stream.Collectors;
  */
 public final class HttpUrls {
 
+    public static HttpUrl withoutParams(HttpUrl urlWithParams) {
+        Null.check(urlWithParams).ifAny("Cannot be null: urlWithParams");
+
+        HttpUrl.Builder builder = urlWithParams.newBuilder();
+        urlWithParams.queryParameterNames()
+                .forEach(builder::removeAllQueryParameters);
+
+        return builder.build();
+    }
+
     /**
      * @return HttpUrl parsed from given url, empty if it would have returned null
      * @throws NullPointerException if url is null
