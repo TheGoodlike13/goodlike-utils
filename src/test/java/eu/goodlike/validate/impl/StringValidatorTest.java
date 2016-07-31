@@ -143,6 +143,16 @@ public class StringValidatorTest {
     }
 
     @Test
+    public void tryIntWithManyLeadingZeros_shouldBeTrue() {
+        assertThat(validator.isInt().test("0000000000000000000000000000000000123456789")).isTrue();
+    }
+
+    @Test
+    public void tryIntWithManyLeadingZerosAndMinus_shouldBeTrue() {
+        assertThat(validator.isInt().test("-0000000000000000000000000000000000123456789")).isTrue();
+    }
+
+    @Test
     public void tryLongWithLong_shouldBeTrue() {
         assertThat(validator.isLong().test("123456789")).isTrue();
     }
@@ -160,6 +170,16 @@ public class StringValidatorTest {
     @Test
     public void tryLongWithTooBigLong_shouldBeFalse() {
         assertThat(validator.isLong().test("123456789123456789123456789123456789123456789")).isFalse();
+    }
+
+    @Test
+    public void tryLongWithManyLeadingZeros_shouldBeTrue() {
+        assertThat(validator.isLong().test("0000000000000000000000000000000000123456789")).isTrue();
+    }
+
+    @Test
+    public void tryLongWithManyLeadingZerosAndMinus_shouldBeTrue() {
+        assertThat(validator.isLong().test("-0000000000000000000000000000000000123456789")).isTrue();
     }
 
     @Test

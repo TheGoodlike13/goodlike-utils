@@ -234,9 +234,7 @@ public final class StringValidator extends ComparableValidator<String, StringVal
      * @throws NullPointerException if string is null
      */
     public static boolean isInteger(String string) {
-        if (Prefix.forString(string).anyPrefix())
-            string = string.substring(1);
-        return string.codePoints().allMatch(codePoint().isSimpleDigit());
+        return Prefix.forString(string).removeFrom(string).codePoints().allMatch(codePoint().isSimpleDigit());
     }
 
     /**
@@ -338,6 +336,17 @@ public final class StringValidator extends ComparableValidator<String, StringVal
     private enum Prefix {
         PLUS, MINUS, NEITHER;
 
+        public String removeFrom(String string) {
+            int prefixEndIndex = 0;
+            if (anyPrefix())
+                prefixEndIndex++;
+
+            while (prefixEndIndex < string.length() - 1 && string.charAt(prefixEndIndex) == '0')
+                prefixEndIndex++;
+
+            return string.substring(prefixEndIndex);
+        }
+
         private boolean isPositive() {
             return this == PLUS;
         }
@@ -382,32 +391,22 @@ public final class StringValidator extends ComparableValidator<String, StringVal
     }
 
     private static final String MIN_INT = String.valueOf(Integer.MIN_VALUE).substring(1);
-    private static final String MAX_INT = String.valueOf(Integer.MAX_VALUE);
 
     private static final String MIN_LONG = String.valueOf(Long.MIN_VALUE).substring(1);
-    private static final String MAX_LONG = String.valueOf(Long.MAX_VALUE);
 
     private static boolean fitsIntoInt(String string) {
-        return fitsInto(string, MIN_INT, MAX_INT);
+        return fitsInto(string, MIN_INT);
     }
 
     private static boolean fitsIntoLong(String string) {
-        return fitsInto(string, MIN_LONG, MAX_LONG);
+        return fitsInto(string, MIN_LONG);
     }
 
-    private static boolean fitsInto(String string, String min, String max) {
+    private static boolean fitsInto(String string, String min) {
         Prefix prefix = Prefix.forString(string);
-        if (prefix.isNegative()) {
-            string = string.substring(1);
-            return string.length() < min.length()
-                    || string.length() == min.length() && string.compareTo(min) <= 0;
-        }
-
-        if (prefix.isPositive())
-            string = string.substring(1);
-
-        return string.length() < max.length()
-                || string.length() == max.length() && string.compareTo(max) <= 0;
+        string = prefix.removeFrom(string);
+        return string.length() < min.length()
+                || string.length() == min.length() && (prefix.isNegative() && string.equals(min) || string.compareTo(min) < 0);
     }
 
 }
