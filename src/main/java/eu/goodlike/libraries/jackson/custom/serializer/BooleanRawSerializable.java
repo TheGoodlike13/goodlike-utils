@@ -8,14 +8,14 @@ public interface BooleanRawSerializable extends RawSerializable<Boolean> {
     /**
      * @return boolean that represents this object in JSON
      */
-    boolean toJsonBoolean();
+    boolean asJsonBoolean();
 
     /**
-     * Cast toJsonBoolean() to Boolean; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonBoolean() to Boolean; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Boolean toJsonObject() {
-        return toJsonBoolean();
+    default Boolean asJsonObject() {
+        return asJsonBoolean();
     }
 
 }

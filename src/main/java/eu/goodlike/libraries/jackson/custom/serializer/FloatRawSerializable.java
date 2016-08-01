@@ -8,14 +8,14 @@ public interface FloatRawSerializable extends RawSerializable<Float> {
     /**
      * @return float that represents this object in JSON
      */
-    float toJsonFloat();
+    float asJsonFloat();
 
     /**
-     * Cast toJsonFloat() to Float; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonFloat() to Float; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Float toJsonObject() {
-        return toJsonFloat();
+    default Float asJsonObject() {
+        return asJsonFloat();
     }
 
 }

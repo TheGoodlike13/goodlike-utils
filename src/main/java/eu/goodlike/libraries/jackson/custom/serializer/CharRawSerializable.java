@@ -8,14 +8,14 @@ public interface CharRawSerializable extends RawSerializable<Character> {
     /**
      * @return char that represents this object in JSON
      */
-    char toJsonChar();
+    char asJsonChar();
 
     /**
-     * Cast toJsonChar() to Character; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonChar() to Character; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Character toJsonObject() {
-        return toJsonChar();
+    default Character asJsonObject() {
+        return asJsonChar();
     }
 
 }

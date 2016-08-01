@@ -8,14 +8,14 @@ public interface ShortRawSerializable extends RawSerializable<Short> {
     /**
      * @return short that represents this object in JSON
      */
-    short toJsonShort();
+    short asJsonShort();
 
     /**
-     * Cast toJsonShort() to Short; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonShort() to Short; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Short toJsonObject() {
-        return toJsonShort();
+    default Short asJsonObject() {
+        return asJsonShort();
     }
 
 }

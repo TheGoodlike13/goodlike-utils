@@ -8,14 +8,14 @@ public interface IntRawSerializable extends RawSerializable<Integer> {
     /**
      * @return int that represents this object in JSON
      */
-    int toJsonInt();
+    int asJsonInt();
 
     /**
-     * Cast toJsonBoolean() to Integer; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonInt() to Integer; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Integer toJsonObject() {
-        return toJsonInt();
+    default Integer asJsonObject() {
+        return asJsonInt();
     }
 
 }

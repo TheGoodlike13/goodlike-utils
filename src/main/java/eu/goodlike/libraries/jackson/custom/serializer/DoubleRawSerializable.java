@@ -8,14 +8,14 @@ public interface DoubleRawSerializable extends RawSerializable<Double> {
     /**
      * @return double that represents this object in JSON
      */
-    double toJsonDouble();
+    double asJsonDouble();
 
     /**
-     * Cast toJsonDouble() to Double; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonDouble() to Double; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Double toJsonObject() {
-        return toJsonDouble();
+    default Double asJsonObject() {
+        return asJsonDouble();
     }
 
 }

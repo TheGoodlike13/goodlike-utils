@@ -20,7 +20,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToString implements RawSerializable<String> {
         @Override
-        public String toJsonObject() {
+        public String asJsonObject() {
             return "Success!";
         }
     }
@@ -36,7 +36,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToBoolean implements BooleanRawSerializable {
         @Override
-        public boolean toJsonBoolean() {
+        public boolean asJsonBoolean() {
             return true;
         }
     }
@@ -52,7 +52,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToByte implements ByteRawSerializable {
         @Override
-        public byte toJsonByte() {
+        public byte asJsonByte() {
             return (byte) 200;
         }
     }
@@ -68,7 +68,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToChar implements CharRawSerializable {
         @Override
-        public char toJsonChar() {
+        public char asJsonChar() {
             return (char) 200;
         }
     }
@@ -84,7 +84,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToDouble implements DoubleRawSerializable {
         @Override
-        public double toJsonDouble() {
+        public double asJsonDouble() {
             return 200;
         }
     }
@@ -100,7 +100,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToFloat implements FloatRawSerializable {
         @Override
-        public float toJsonFloat() {
+        public float asJsonFloat() {
             return 200;
         }
     }
@@ -116,7 +116,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToInt implements IntRawSerializable {
         @Override
-        public int toJsonInt() {
+        public int asJsonInt() {
             return 200;
         }
     }
@@ -132,7 +132,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToLong implements LongRawSerializable {
         @Override
-        public long toJsonLong() {
+        public long asJsonLong() {
             return 200;
         }
     }
@@ -148,7 +148,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToShort implements ShortRawSerializable {
         @Override
-        public short toJsonShort() {
+        public short asJsonShort() {
             return 200;
         }
     }
@@ -164,7 +164,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToIntArray implements RawSerializable<int[]> {
         @Override
-        public int[] toJsonObject() {
+        public int[] asJsonObject() {
             return new int[] {200};
         }
     }
@@ -180,7 +180,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToListOfStrings implements RawSerializable<List<String>> {
         @Override
-        public List<String> toJsonObject() {
+        public List<String> asJsonObject() {
             return ImmutableList.of("Success!");
         }
     }
@@ -196,7 +196,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToSetOfStrings implements RawSerializable<Set<String>> {
         @Override
-        public Set<String> toJsonObject() {
+        public Set<String> asJsonObject() {
             return ImmutableSet.of("Success!");
         }
     }
@@ -229,7 +229,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToSimpleObject implements RawSerializable<JustSerializable> {
         @Override
-        public JustSerializable toJsonObject() {
+        public JustSerializable asJsonObject() {
             return new JustSerializable("Success!");
         }
     }
@@ -245,7 +245,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToOtherRawSerializable implements RawSerializable<SerializableToSimpleObject> {
         @Override
-        public SerializableToSimpleObject toJsonObject() {
+        public SerializableToSimpleObject asJsonObject() {
             return new SerializableToSimpleObject();
         }
     }
@@ -261,7 +261,7 @@ public class RawSerializerTest {
     @JsonSerialize(using = RawSerializer.class)
     private static final class SerializableToObject implements RawSerializable<Object> {
         @Override
-        public Object toJsonObject() {
+        public Object asJsonObject() {
             return new Object();
         }
     }

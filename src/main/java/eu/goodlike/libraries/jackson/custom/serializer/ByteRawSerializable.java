@@ -8,14 +8,14 @@ public interface ByteRawSerializable extends RawSerializable<Byte> {
     /**
      * @return byte that represents this object in JSON
      */
-    byte toJsonByte();
+    byte asJsonByte();
 
     /**
-     * Cast toJsonByte() to Byte; any performance loss is negligible, but allows to reuse RawSerializer while still
-     * allowing to define primitive toJson...() function
+     * Cast asJsonByte() to Byte; any performance loss is negligible, but allows to reuse RawSerializer while still
+     * allowing to define primitive asJson...() function
      */
-    default Byte toJsonObject() {
-        return toJsonByte();
+    default Byte asJsonObject() {
+        return asJsonByte();
     }
 
 }

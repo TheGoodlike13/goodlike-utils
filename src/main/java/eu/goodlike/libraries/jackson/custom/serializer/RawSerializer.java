@@ -22,7 +22,7 @@ public final class RawSerializer extends StdSerializer<RawSerializable<?>> {
 
     @Override
     public void serialize(RawSerializable value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeObject(value.toJsonObject());
+        gen.writeObject(value.asJsonObject());
     }
 
     // CONSTRUCTORS

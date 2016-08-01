@@ -15,8 +15,8 @@ package eu.goodlike.libraries.jackson.custom.serializer;
 public interface RawSerializable<T> {
 
     /**
-     * @return object, that Jackson can serialize
+     * @return object, that represents this object and Jackson can serialize
      */
-    T toJsonObject();
+    T asJsonObject();
 
 }
