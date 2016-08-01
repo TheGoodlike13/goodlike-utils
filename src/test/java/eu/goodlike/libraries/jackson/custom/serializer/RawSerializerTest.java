@@ -274,7 +274,7 @@ public class RawSerializerTest {
 
     @JsonSerialize(using = RawSerializer.class)
     private static final class NotRawSerializable {
-        public Object toJsonObject() {
+        public Object asJsonObject() {
             return "Where did the interface go?";
         }
     }
@@ -283,6 +283,19 @@ public class RawSerializerTest {
     public void serializationOfNotSerializableDoesNotWork() {
         assertThatExceptionOfType(JsonMappingException.class)
                 .isThrownBy(() -> Json.stringFrom(new NotRawSerializable()));
+    }
+
+    private static final class NotAnnotatedSerializable implements RawSerializable<String> {
+        @Override
+        public String asJsonObject() {
+            return "Where did the annotation go?";
+        }
+    }
+
+    @Test
+    public void serializationOfNotAnnotatedDoesNotWork() {
+        assertThatExceptionOfType(JsonMappingException.class)
+                .isThrownBy(() -> Json.stringFrom(new NotAnnotatedSerializable()));
     }
 
 }
