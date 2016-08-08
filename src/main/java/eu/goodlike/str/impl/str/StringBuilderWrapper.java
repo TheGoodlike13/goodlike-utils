@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
  * <pre>
  * Wraps StringBuilder in a convenient way
  *
- * Use Str.of() to create instances
+ * Use Str::of to create instances
  *
  * In general, if you feel that you need to explicitly define a variable of StringBuilderWrapper, you might as well
  * just use StringBuilder in the first place; the wrapper is intended to take care of simple cases only

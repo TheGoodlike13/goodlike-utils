@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <pre>
- * Creates StringBuilderWrapper instances
+ * Contains utilities for dealing with String
  *
  * StringBuilderWrapper allows simple but neat way to construct a String using chained methods
  *

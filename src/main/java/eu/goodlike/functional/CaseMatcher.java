@@ -48,6 +48,10 @@ public final class CaseMatcher<CaseClass> {
         return new MatcherBuilder<>(matchableClasses).ignoreCase(caseClass);
     }
 
+    /**
+     * @return builder for mapping cases into a specific class
+     * @throws NullPointerException if resultClass is null
+     */
     public <ResultClass> MappingBuilder<CaseClass, ResultClass> mapInto(Class<ResultClass> resultClass) {
         Null.check(resultClass).ifAny("Cannot be null: resultClass");
         return new MappingBuilder<>(matchableClasses, resultClass);
