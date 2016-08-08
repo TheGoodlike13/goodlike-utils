@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Utility methods to help create/transform HttpUrls
@@ -113,11 +112,6 @@ public final class HttpUrls {
         List<String> path = httpUrl.pathSegments();
         if (path.isEmpty())
             return httpUrl;
-
-        if (pathVariables.isEmpty())
-            throw new IllegalArgumentException("No values given, yet there are path variables: " + path.stream()
-                    .filter(HttpUrls::isPathVariableNoNull)
-                    .collect(Collectors.joining(", ", "{", "}")));
 
         HttpUrl.Builder builder = httpUrl.newBuilder();
         for (int i = 0; i < path.size(); i++) {

@@ -1,5 +1,6 @@
 package eu.goodlike.libraries.okhttp;
 
+import com.google.common.collect.ImmutableMap;
 import okhttp3.HttpUrl;
 import org.junit.Test;
 
@@ -14,6 +15,14 @@ public class HttpUrlsTest {
 
         assertThat(HttpUrls.withoutParams(urlWithParams))
                 .isEqualTo(urlWithoutParams);
+    }
+
+    @Test
+    public void httpUrlWithoutPathVariablesReturnedUnchanged() {
+        HttpUrl simpleUrl = HttpUrl.parse("https://google.com/");
+
+        assertThat(HttpUrls.insertPathVariables(simpleUrl, ImmutableMap.of()))
+                .isEqualTo(simpleUrl);
     }
 
 }
