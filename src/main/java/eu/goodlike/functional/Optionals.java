@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 /**
  * Utility methods to work with Optionals
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class Optionals {
 
     /**
@@ -17,10 +18,22 @@ public final class Optionals {
      */
     @SafeVarargs
     public static <T> Stream<T> asStream(Optional<T>... optionals) {
-        Null.checkArray(optionals).ifAny("Optionals cannot be null!");
+        Null.checkArray(optionals).ifAny("Cannot be or contain null: optionals");
         return Stream.of(optionals)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
+    }
+
+    /**
+     * This is optimized version of Optionals::asStream for a single optional
+     * @return Stream that contains an element from singleOptional, if it contains any
+     * @throws NullPointerException if singleOptional is null
+     */
+    public static <T> Stream<T> asStream(Optional<T> singleOptional) {
+        Null.check(singleOptional).ifAny("Cannot be null: singleOptional");
+        return singleOptional.isPresent()
+                ? Stream.of(singleOptional.get())
+                : Stream.empty();
     }
 
     /**
@@ -31,6 +44,17 @@ public final class Optionals {
     @SafeVarargs
     public static <T> Optional<T> firstNotEmpty(Optional<T>... optionals) {
         return asStream(optionals).findFirst();
+    }
+
+    /**
+     * This is optimized version of Optionals::firstNotEmpty for a single optional
+     * @return singleOptional
+     * @throws NullPointerException if optionals is null, or any of the contained optionals are null (not empty,
+     * but null themselves)
+     */
+    public static <T> Optional<T> firstNotEmpty(Optional<T> singleOptional) {
+        Null.check(singleOptional).ifAny("Cannot be null: singleOptional");
+        return singleOptional;
     }
 
     // PRIVATE
