@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -61,28 +62,32 @@ public final class CaseMatcher<CaseClass> {
 
     /**
      * Constructor for CaseMatcher
-     * @throws NullPointerException if caseClasses is or contains null
-     * @throws IllegalArgumentException if caseClasses is empty
-     * @throws IllegalStateException if any of the caseClasses if an interface or abstract class
+     * @throws NullPointerException if firstCase or otherCases is or contains null
+     * @throws IllegalStateException if any of the cases is an interface or abstract class
      */
     @SafeVarargs
-    public CaseMatcher(Class<? extends CaseClass>... caseClasses) {
-        Null.checkArray(caseClasses).ifAny("Cannot be or contain null: caseClasses");
+    public CaseMatcher(Class<? extends CaseClass> firstCase, Class<? extends CaseClass>... otherCases) {
+        Null.check(firstCase).ifAny("Cannot be null: firstCase");
+        Null.checkArray(otherCases).ifAny("Cannot be or contain null: otherCases");
 
-        if (caseClasses.length < 1)
-            throw new IllegalArgumentException("At least one case must be provided");
+        ensureClassesAreImplemented(firstCase, otherCases);
 
-        ensureClassesAreImplemented(caseClasses);
-
-        this.matchableClasses = ImmutableSet.copyOf(caseClasses);
+        ImmutableSet.Builder<Class<? extends CaseClass>> builder = ImmutableSet.builder();
+        this.matchableClasses = builder
+                .add(firstCase)
+                .add(otherCases)
+                .build();
     }
 
     // PRIVATE
 
     private final Set<Class<? extends CaseClass>> matchableClasses;
 
-    private void ensureClassesAreImplemented(Class<?>[] caseClasses) {
-        Set<Class<?>> classes = Arrays.stream(caseClasses)
+    private void ensureClassesAreImplemented(Class<?> firstCase, Class<?>[] otherCases) {
+        Stream<Class<?>> firstCaseStream = Stream.of(firstCase);
+        Stream<Class<?>> otherCasesStream = Stream.of(otherCases);
+
+        Set<Class<?>> classes = Stream.concat(firstCaseStream, otherCasesStream)
                 .filter(clazz -> !ReflectUtils.isImplemented(clazz))
                 .collect(ImmutableCollectors.toSet());
 
