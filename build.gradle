@@ -60,7 +60,7 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.26a'
+version '0.0.27'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
@@ -113,7 +113,7 @@ bintray {
         //noinspection GroovyAssignabilityCheck
         version {
             name = project.version
-            desc = "Implemented RawSerializable"
+            desc = "Various simple updates"
             released  = new Date()
             vcsTag = project.version
             // attributes = []
