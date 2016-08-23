@@ -63,7 +63,7 @@ group 'eu.goodlike'
 version '0.0.27'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '3.0'
 }
 
 tasks.withType(JavaCompile) {
