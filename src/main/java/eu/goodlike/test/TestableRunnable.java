@@ -1,6 +1,6 @@
 package eu.goodlike.test;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * <pre>
@@ -22,7 +22,7 @@ public final class TestableRunnable implements Runnable {
     /**
      * @return amount of times this Runnable has been run
      */
-    public int totalTimesRun() {
+    public long totalTimesRun() {
         return timesRun.get();
     }
 
@@ -37,12 +37,12 @@ public final class TestableRunnable implements Runnable {
         this(0);
     }
 
-    public TestableRunnable(int timesAlreadyRun) {
-        this.timesRun = new AtomicInteger(timesAlreadyRun);
+    public TestableRunnable(long timesAlreadyRun) {
+        this.timesRun = new AtomicLong(timesAlreadyRun);
     }
 
     // PRIVATE
 
-    private final AtomicInteger timesRun;
+    private final AtomicLong timesRun;
 
 }
