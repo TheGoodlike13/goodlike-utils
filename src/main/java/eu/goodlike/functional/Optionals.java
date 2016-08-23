@@ -2,7 +2,9 @@ package eu.goodlike.functional;
 
 import eu.goodlike.neat.Null;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +39,18 @@ public final class Optionals {
     }
 
     /**
+     * @return Stream of only non empty optionals of the given ones, fetching their values lazily
+     * @throws NullPointerException if lazyOptionals is or contains null
+     */
+    @SafeVarargs
+    public static <T> Stream<T> lazyStream(Supplier<Optional<T>>... lazyOptionals) {
+        Null.checkArray(lazyOptionals).ifAny("Cannot be or contain null: lazyOptionals");
+        return Arrays.stream(lazyOptionals)
+                .map(Supplier::get)
+                .flatMap(Optionals::asStream);
+    }
+
+    /**
      * @return first non empty optional of the given ones
      * @throws NullPointerException if optionals is null, or any of the contained optionals are null (not empty,
      * but null themselves)
@@ -47,14 +61,13 @@ public final class Optionals {
     }
 
     /**
-     * This is optimized version of Optionals::firstNotEmpty for a single optional
-     * @return singleOptional
-     * @throws NullPointerException if optionals is null, or any of the contained optionals are null (not empty,
-     * but null themselves)
+     * @return first non empty optional of the given ones, fetching their values lazily
+     * @throws NullPointerException if lazyOptionals is or contains null
      */
-    public static <T> Optional<T> firstNotEmpty(Optional<T> singleOptional) {
-        Null.check(singleOptional).ifAny("Cannot be null: singleOptional");
-        return singleOptional;
+    @SafeVarargs
+    public static <T> Optional<T> lazyFirstNotEmpty(Supplier<Optional<T>>... lazyOptionals) {
+        Null.checkArray(lazyOptionals).ifAny("Cannot be or contain null: lazyOptionals");
+        return lazyStream(lazyOptionals).findFirst();
     }
 
     // PRIVATE
