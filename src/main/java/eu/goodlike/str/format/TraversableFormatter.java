@@ -75,9 +75,9 @@ public final class TraversableFormatter {
         String firstElement = paths.get(0);
         String[] elementsAfterFirst = paths.subList(1, paths.size()).toArray(new String[paths.size() - 1]);
 
-        return Optionals.firstNotEmpty(
-                getValueFromOverrides(firstElement, elementsAfterFirst),
-                traversable.getValueAt(firstElement, elementsAfterFirst)
+        return Optionals.lazyFirstNotEmpty(
+                () -> getValueFromOverrides(firstElement, elementsAfterFirst),
+                () -> traversable.getValueAt(firstElement, elementsAfterFirst)
         );
     }
 
