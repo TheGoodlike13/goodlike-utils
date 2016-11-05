@@ -4,7 +4,7 @@ plugins {
 
     // needed for publishing the lib to maven/jCenter
     id 'maven-publish'
-    id "com.jfrog.bintray" version "1.7.1"
+    id "com.jfrog.bintray" version "1.7.2"
 
     // helps me keep up to date with dependencies
     id "com.github.ben-manes.versions" version "0.13.0"
@@ -20,34 +20,34 @@ repositories {
 
 dependencies {
     // used for various utility methods
-    compile 'com.google.guava:guava:19.0'
+    compile 'com.google.guava:guava:20.0'
 
     // used for caching
-    compile 'com.github.ben-manes.caffeine:caffeine:2.0.3'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.3.4'
 
     // used for String formatting
     compile 'org.slf4j:slf4j-api:1.7.21'
 
     // used for OkHttp package only
-    compile 'com.squareup.okhttp3:okhttp:3.4.1', optional
+    compile 'com.squareup.okhttp3:okhttp:3.4.2', optional
 
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.1', optional
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.1', optional
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1', optional
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.4', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.4', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4', optional
 
     // needed for jooq package only
-    compile 'org.jooq:jooq:3.8.4', optional
+    compile 'org.jooq:jooq:3.8.6', optional
 
     // needed for spring.mockmvc package only
-    compile 'org.springframework:spring-test:4.3.1.RELEASE', optional
-    compile 'org.springframework:spring-web:4.3.1.RELEASE', optional
-    compile 'org.springframework:spring-beans:4.3.1.RELEASE', optional
+    compile 'org.springframework:spring-test:4.3.3.RELEASE', optional
+    compile 'org.springframework:spring-web:4.3.3.RELEASE', optional
+    compile 'org.springframework:spring-beans:4.3.3.RELEASE', optional
     compile 'javax.servlet:javax.servlet-api:4.0.0-b01', optional
 
     // needed for spring.gmail package only
-    compile 'org.springframework:spring-context-support:4.3.1.RELEASE', optional
-    compile 'javax.mail:javax.mail-api:1.5.5', optional
+    compile 'org.springframework:spring-context-support:4.3.3.RELEASE', optional
+    compile 'javax.mail:javax.mail-api:1.5.6', optional
 
     // unit tests
     testCompile 'junit:junit:4.12'
@@ -60,7 +60,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.29'
+version '0.0.30'
+def versionDescription = 'Added SingleTimeExecutor and some testing utils and updated dependencies'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.0'
@@ -113,7 +114,7 @@ bintray {
         //noinspection GroovyAssignabilityCheck
         version {
             name = project.version
-            desc = "Minor fix"
+            desc = versionDescription
             released  = new Date()
             vcsTag = project.version
             // attributes = []
