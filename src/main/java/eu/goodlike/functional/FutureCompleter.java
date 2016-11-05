@@ -45,6 +45,9 @@ public final class FutureCompleter implements AutoCloseable {
     public void ensureCompletion(CompletableFuture<?> future, String hangReason) {
         Null.check(future, hangReason).ifAny("Cannot be null: future, hangReason");
 
+        if (future.isDone())
+            return;
+
         executorService.submit(() -> {
             try {
                 future.get(durationInMillis, TimeUnit.MILLISECONDS);
