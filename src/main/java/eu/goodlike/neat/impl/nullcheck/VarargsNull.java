@@ -5,10 +5,10 @@ import eu.goodlike.neat.Null;
 import java.util.Arrays;
 
 /**
- * Null implementation for array check; different from {@link VarargsNull} in the sense, that it handles a real array,
- * not a bunch of elements, and only has one name for the entire array
+ * Null implementation for varargs check; different from {@link ArrayNull} in the sense, that it handles not a real
+ * array, but instead a bunch of elements which then will have their names passed separately to the check
  */
-public final class ArrayNull extends Null {
+public final class VarargsNull extends Null {
 
     @Override
     protected int indexOfNull() {
@@ -24,14 +24,9 @@ public final class ArrayNull extends Null {
         return Arrays.toString(array);
     }
 
-    @Override
-    protected String genericErrorFormat() {
-        return "Cannot contain null: {}";
-    }
-
     // CONSTRUCTORS
 
-    public ArrayNull(Object[] array) {
+    public VarargsNull(Object... array) {
         this.array = array;
     }
 

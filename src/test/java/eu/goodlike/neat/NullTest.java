@@ -4,8 +4,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class NullTest {
 
@@ -160,6 +162,71 @@ public class NullTest {
     @Test
     public void tryContainsNullWhenDoesNotContainNull_shouldBeFalse() {
         assertThat(Null.check(1, 2, 3).containsNull()).isFalse();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithSingleField_givesGenericMessage() {
+        String someField = null;
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.check(someField).as("someField"))
+                .withMessage("Cannot be null: someField");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithTwoFields_givesGenericMessage() {
+        String someField = null;
+        String anotherField = null;
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.check(someField, anotherField).as("someField, anotherField"))
+                .withMessageStartingWith("Cannot be null: someField, anotherField");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithArray_givesGenericMessage() {
+        String someField = null;
+        String anotherField = null;
+        String[] multipleFields = {someField, anotherField};
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.checkArray(multipleFields).as("multipleFields"))
+                .withMessageStartingWith("Cannot contain null: multipleFields");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithNullArray_givesGenericMessage() {
+        String[] multipleFields = null;
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.checkArray(multipleFields).as("multipleFields"))
+                .withMessageStartingWith("Cannot be null: multipleFields");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithCollection_givesGenericMessage() {
+        String someField = null;
+        String anotherField = null;
+        List<String> multipleFields = Arrays.asList(someField, anotherField);
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.checkCollection(multipleFields).as("multipleFields"))
+                .withMessageStartingWith("Cannot contain null: multipleFields");
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void tryAsWithNullList_givesGenericMessage() {
+        List<String> multipleFields = null;
+
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> Null.checkList(multipleFields).as("multipleFields"))
+                .withMessageStartingWith("Cannot be null: multipleFields");
     }
 
 }

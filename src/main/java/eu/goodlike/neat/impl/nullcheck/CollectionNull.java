@@ -30,6 +30,11 @@ public final class CollectionNull extends Null {
         return String.valueOf(collection);
     }
 
+    @Override
+    protected String genericErrorFormat() {
+        return "Cannot contain null: {}";
+    }
+
     // CONSTRUCTORS
 
     public CollectionNull(Collection<?> collection) {

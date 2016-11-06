@@ -1,6 +1,7 @@
 package eu.goodlike.neat;
 
 import eu.goodlike.neat.impl.nullcheck.*;
+import eu.goodlike.str.Str;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +41,15 @@ public abstract class Null {
      */
     protected abstract String contentToString();
 
+    // PROTECTED
+
+    /**
+     * @return String format which is used by {@link Null#as(String)}; extend if needed
+     */
+    protected String genericErrorFormat() {
+        return "Cannot be null: {}";
+    }
+
     // PUBLIC
 
     /**
@@ -67,6 +77,8 @@ public abstract class Null {
     }
 
     /**
+     * Throws NullPointerException with given message if any of checked objects are null
+     *
      * @throws NullPointerException if any of the checked objects are null
      * @throws NullPointerException if message is null
      */
@@ -78,6 +90,22 @@ public abstract class Null {
         if (index >= 0)
             throw new NullPointerException(message + "; parameter at index "
                     + index + " was null, please check: " + contentToString());
+    }
+
+    /**
+     * <pre>
+     * Same behaviour as {@link Null#ifAny(String)}. The message sent to ifAny is a default message, based on the
+     * subclass of Null and fieldNames
+     * </pre>
+     * @throws NullPointerException if any of the checked objects are null
+     * @throws NullPointerException if message is null
+     */
+    public void as(String fieldNames) {
+        if (fieldNames == null)
+            throw new NullPointerException("Field names cannot be null");
+
+        String message = Str.format(genericErrorFormat(), fieldNames);
+        ifAny(message);
     }
 
     // CONSTRUCTORS
@@ -103,7 +131,7 @@ public abstract class Null {
     }
 
     public static Null check(Object... objects) {
-        return objects == null ? DEFINITELY_NULL : new ArrayNull(objects);
+        return objects == null ? DEFINITELY_NULL : new VarargsNull(objects);
     }
 
     /**

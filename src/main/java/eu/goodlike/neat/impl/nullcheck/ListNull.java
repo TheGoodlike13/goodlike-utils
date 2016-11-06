@@ -24,6 +24,11 @@ public final class ListNull extends Null {
         return String.valueOf(list);
     }
 
+    @Override
+    protected String genericErrorFormat() {
+        return "Cannot contain null: {}";
+    }
+
     // CONSTRUCTORS
 
     public ListNull(List<?> list) {
