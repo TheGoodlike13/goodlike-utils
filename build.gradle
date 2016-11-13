@@ -60,8 +60,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.31'
-def versionDescription = 'Added Null::as for generic error message'
+version '0.0.31a'
+def versionDescription = 'Fixed some docs and toString() methods'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.0'
