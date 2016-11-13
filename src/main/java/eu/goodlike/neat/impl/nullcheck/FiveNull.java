@@ -24,7 +24,7 @@ public final class FiveNull extends Null {
 
     @Override
     protected String contentToString() {
-        return "{" + one + ", " + two + ", " + three + ", " + four + ", " + five + "}";
+        return "[" + one + ", " + two + ", " + three + ", " + four + ", " + five + "]";
     }
 
     // CONSTRUCTORS

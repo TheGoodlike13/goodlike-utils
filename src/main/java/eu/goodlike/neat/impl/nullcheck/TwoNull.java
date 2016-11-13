@@ -18,7 +18,7 @@ public final class TwoNull extends Null {
 
     @Override
     protected String contentToString() {
-        return "{" + one + ", " + two + "}";
+        return "[" + one + ", " + two + "]";
     }
 
     // CONSTRUCTORS

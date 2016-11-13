@@ -22,7 +22,7 @@ public final class FourNull extends Null {
 
     @Override
     protected String contentToString() {
-        return "{" + one + ", " + two + ", " + three + ", " + four + "}";
+        return "[" + one + ", " + two + ", " + three + ", " + four + "]";
     }
 
     // CONSTRUCTORS

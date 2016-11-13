@@ -21,7 +21,7 @@ public final class ListNull extends Null {
 
     @Override
     protected String contentToString() {
-        return String.valueOf(list);
+        return list.toString();
     }
 
     @Override

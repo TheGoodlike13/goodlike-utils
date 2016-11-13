@@ -20,11 +20,11 @@ import java.util.function.Supplier;
  *  This is very clunky (verbose), it also doesn't identify which exact parameter was null (unless you make it even
  *  more clunky or even separate the null checks for every parameter);
  *
- * With this you can check for nulls like this: *
- * Null.check(param1, param2, param3).ifAny("Param1, param2 and param3 should not be null");
+ * With this you can check for nulls like this:
+ * Null.check(param1, param2, param3).as("param1, param2, param3");
  *
- * This will automatically turn the objects into a list which will be printed out if any of the arguments were null,
- * including your message, allowing to easily figure out the location of null(s)
+ * This will check all the objects for null, and print them all out like this (in this example param2 and param3 == null):
+ *      Cannot be null: param1, param2, param3; parameter at index 1 was null, please check: [param1Value, null, null]
  * </pre>
  */
 public abstract class Null {
@@ -98,7 +98,7 @@ public abstract class Null {
      * subclass of Null and fieldNames
      * </pre>
      * @throws NullPointerException if any of the checked objects are null
-     * @throws NullPointerException if message is null
+     * @throws NullPointerException if fieldNames is null
      */
     public void as(String fieldNames) {
         if (fieldNames == null)

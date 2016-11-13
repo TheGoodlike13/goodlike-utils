@@ -20,7 +20,7 @@ public final class ThreeNull extends Null {
 
     @Override
     protected String contentToString() {
-        return "{" + one + ", " + two + ", " + three + "}";
+        return "[" + one + ", " + two + ", " + three + "]";
     }
 
     // CONSTRUCTORS

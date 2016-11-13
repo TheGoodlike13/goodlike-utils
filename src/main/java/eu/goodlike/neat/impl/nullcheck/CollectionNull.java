@@ -27,7 +27,7 @@ public final class CollectionNull extends Null {
 
     @Override
     protected String contentToString() {
-        return String.valueOf(collection);
+        return collection.toString();
     }
 
     @Override
