@@ -229,4 +229,10 @@ public class NullTest {
                 .withMessageStartingWith("Cannot be null: multipleFields");
     }
 
+    @Test
+    public void tryNoArgCheck_throwsIllegalState() {
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(Null::check);
+    }
+
 }

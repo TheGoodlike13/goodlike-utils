@@ -110,6 +110,10 @@ public abstract class Null {
 
     // CONSTRUCTORS
 
+    public static Null check() {
+        throw new IllegalStateException("Null::check called without any arguments!");
+    }
+
     public static Null check(Object one) {
         return one == null ? DEFINITELY_NULL : DEFINITELY_NOT_NULL;
     }
