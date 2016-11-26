@@ -62,8 +62,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.32'
-def versionDescription = 'Null.check() without arguments now throws an IllegalStateException'
+version '0.0.33'
+def versionDescription = 'Moved in lots of http code from other projects'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
