@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -19,19 +17,19 @@ public final class LimitedProcessRunner implements ProcessRunner {
     public Optional<Process> execute(String command, String... args) {
         return acquirePermitToSpawnAnAdditionalProcess()
                 .flatMap(permit -> processRunner.execute(command, args))
-                .map(this::attachHook);
+                .map(process -> processHookAttacher.attachAfter(process, any -> parallelExecutionLimiter.release()));
     }
 
     @Override
     public Optional<Process> execute(String command, List<String> args) {
         return acquirePermitToSpawnAnAdditionalProcess()
                 .flatMap(permit -> processRunner.execute(command, args))
-                .map(this::attachHook);
+                .map(process -> processHookAttacher.attachAfter(process, any -> parallelExecutionLimiter.release()));
     }
 
     @Override
     public void close() throws Exception {
-        processHook.shutdown();
+        processHookAttacher.close();
         processRunner.close();
     }
 
@@ -43,39 +41,26 @@ public final class LimitedProcessRunner implements ProcessRunner {
      *
      * @param processRunner runner to spawn processes with
      * @param maxConcurrentProcesses max concurrent processes this runner can spawn
-     * @throws NullPointerException if processRunner is null
+     * @param processHookAttacher attacher of hooks that this runner will use to ensure that parallel execution limit
+     *                            is correctly released after a process finishes
+     * @throws NullPointerException if processRunner or processHookAttacher is null
      * @throws IllegalArgumentException if maxConcurrentProcesses < 1
      */
-    public LimitedProcessRunner(ProcessRunner processRunner, int maxConcurrentProcesses) {
-        this(processRunner, maxConcurrentProcesses, Executors.newFixedThreadPool(maxConcurrentProcesses));
-    }
-
-    /**
-     * Creates a {@link LimitedProcessRunner} which limits the spawning of processes to given amount, using given
-     * runner as a process spawner
-     *
-     * @param processRunner runner to spawn processes with
-     * @param maxConcurrentProcesses max concurrent processes this runner can spawn
-     * @param customProcessHook custom hook for checking if a process has ended; if this hook cannot spawn sufficient
-     *                          threads (i.e. < maxConcurrentProcesses), behaviour of LimitedProcessRunner is undefined
-     * @throws NullPointerException if processRunner or customProcessHook is null
-     * @throws IllegalArgumentException if maxConcurrentProcesses < 1
-     */
-    public LimitedProcessRunner(ProcessRunner processRunner, int maxConcurrentProcesses, ExecutorService customProcessHook) {
-        Null.check(processRunner, customProcessHook).as("processRunner, customProcessHook");
+    public LimitedProcessRunner(ProcessRunner processRunner, int maxConcurrentProcesses, ProcessHookAttacher processHookAttacher) {
+        Null.check(processRunner, processHookAttacher).as("processRunner, processHookAttacher");
         if (maxConcurrentProcesses < 1)
             throw new IllegalArgumentException("Cannot create fewer than 1 process: " + maxConcurrentProcesses);
 
         this.processRunner = processRunner;
         this.parallelExecutionLimiter = new Semaphore(maxConcurrentProcesses);
-        this.processHook = customProcessHook;
+        this.processHookAttacher = processHookAttacher;
     }
 
     // PRIVATE
 
     private final ProcessRunner processRunner;
     private final Semaphore parallelExecutionLimiter;
-    private final ExecutorService processHook;
+    private final ProcessHookAttacher processHookAttacher;
 
     private Optional<Object> acquirePermitToSpawnAnAdditionalProcess() {
         try {
@@ -85,21 +70,6 @@ public final class LimitedProcessRunner implements ProcessRunner {
             LOG.error("Waiting to acquire permit to spawn additional process has been interrupted", e);
             return Optional.empty();
         }
-    }
-
-    private Process attachHook(Process process) {
-        processHook.submit(() -> releaseAfterExecution(process));
-        return process;
-    }
-
-    private void releaseAfterExecution(Process process) {
-        try {
-            process.waitFor();
-        } catch (InterruptedException e) {
-            LOG.error("Waiting for process to finish has been interrupted", e);
-        }
-
-        parallelExecutionLimiter.release();
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
