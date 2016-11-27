@@ -62,8 +62,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.33'
-def versionDescription = 'Moved in lots of http code from other projects'
+version '0.0.34'
+def versionDescription = 'Moved in CommandLineRunner with some refactors'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
