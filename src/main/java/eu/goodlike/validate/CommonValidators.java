@@ -13,6 +13,11 @@ import static eu.goodlike.validate.Validate.*;
 public final class CommonValidators {
 
     /**
+     * Checks if String is not blank (useful when null has already been checked for)
+     */
+    public static final StringValidator NOT_BLANK = string().not().isBlank();
+
+    /**
      * Checks if String is not null and not blank
      */
     public static final StringValidator NOT_NULL_NOT_BLANK = string().not().isNull().not().isBlank();
