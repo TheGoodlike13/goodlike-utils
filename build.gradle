@@ -62,8 +62,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.36'
-def versionDescription = 'Added InputReader'
+version '0.0.37'
+def versionDescription = 'FileAppender now can be chained'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'

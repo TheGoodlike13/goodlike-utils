@@ -24,16 +24,20 @@ public final class FileAppender implements AutoCloseable {
 
     /**
      * Appends given string to the file of this appender
+     * @return this appender, for chaining
      */
-    public void append(String string) throws IOException {
+    public FileAppender append(String string) throws IOException {
         bufferedWriter.append(string);
+        return this;
     }
 
     /**
      * Appends given string and a new line symbol to the file of this appender
+     * @return this appender, for chaining
      */
-    public void appendLine(String string) throws IOException {
+    public FileAppender appendLine(String string) throws IOException {
         append(string + System.lineSeparator());
+        return this;
     }
 
     @Override
