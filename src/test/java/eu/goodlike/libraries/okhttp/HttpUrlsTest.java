@@ -25,4 +25,40 @@ public class HttpUrlsTest {
                 .isEqualTo(simpleUrl);
     }
 
+    @Test
+    public void gettingLastPathPart() {
+        assertThat(HttpUrls.getLastPathPart(HttpUrl.parse("https://localhost/part")))
+                .isEqualTo("part");
+
+        assertThat(HttpUrls.getLastPathPart(HttpUrl.parse("https://localhost/part/")))
+                .isEmpty();
+
+        assertThat(HttpUrls.getLastPathPart(HttpUrl.parse("https://localhost/part/file.txt")))
+                .isEqualTo("file.txt");
+
+        assertThat(HttpUrls.getLastPathPart(HttpUrl.parse("https://localhost/part?p=v#f")))
+                .isEqualTo("part");
+
+        assertThat(HttpUrls.getLastPathPart(HttpUrl.parse("https://localhost/")))
+                .isEmpty();
+    }
+
+    @Test
+    public void gettingLocationOfLastPathPart() {
+        assertThat(HttpUrls.getLocationOfLastPathPart(HttpUrl.parse("https://localhost/part")))
+                .isEqualTo(HttpUrl.parse("https://localhost/"));
+
+        assertThat(HttpUrls.getLocationOfLastPathPart(HttpUrl.parse("https://localhost/part/")))
+                .isEqualTo(HttpUrl.parse("https://localhost/part/"));
+
+        assertThat(HttpUrls.getLocationOfLastPathPart(HttpUrl.parse("https://localhost/part/file.txt")))
+                .isEqualTo(HttpUrl.parse("https://localhost/part/"));
+
+        assertThat(HttpUrls.getLocationOfLastPathPart(HttpUrl.parse("https://localhost/part?p=v#f")))
+                .isEqualTo(HttpUrl.parse("https://localhost/"));
+
+        assertThat(HttpUrls.getLocationOfLastPathPart(HttpUrl.parse("https://localhost/")))
+                .isEqualTo(HttpUrl.parse("https://localhost/"));
+    }
+
 }

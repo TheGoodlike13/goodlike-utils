@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Utility methods to help create/transform HttpUrls
@@ -98,6 +99,51 @@ public final class HttpUrls {
     public static boolean isPathVariable(String pathPart) {
         Null.check(pathPart).ifAny("Path part cannot be null");
         return isPathVariableNoNull(pathPart);
+    }
+
+    /**
+     * Extracts the last part of path from an url:
+     *      https://localhost/part          -> "part"
+     *      https://localhost/part/         -> ""
+     *      https://localhost/part/file.txt -> "file.txt"
+     *      https://localhost/part?p=v#f    -> "part"
+     *      https://localhost/              -> ""
+     *
+     * @param url url to get last part of
+     * @return last path part of an HttpUrl, empty String if no such part exists
+     * @throws NullPointerException if url is null
+     */
+    public static String getLastPathPart(HttpUrl url) {
+        Null.check(url).as("url");
+
+        List<String> pathSegments = url.pathSegments();
+        return pathSegments.get(pathSegments.size() - 1);
+    }
+
+    /**
+     * Extracts the location of last path part from an url:
+     *      https://localhost/part          -> "https://localhost/"
+     *      https://localhost/part/         -> "https://localhost/part/"
+     *      https://localhost/part/file.txt -> "https://localhost/part/"
+     *      https://localhost/part?p=v#f    -> "https://localhost/"
+     *      https://localhost/              -> "https://localhost/"
+     *
+     * @param url url to get location of last path part of
+     * @return url of location of last path part; same url if no path parts exist, or last path part is empty
+     * @throws NullPointerException if url is null
+     */
+    public static HttpUrl getLocationOfLastPathPart(HttpUrl url) {
+        Null.check(url).as("url");
+
+        HttpUrl.Builder builder = url.newBuilder();
+
+        builder.removePathSegment(url.pathSize() - 1);
+        builder.addPathSegment("");
+        Set<String> params = url.queryParameterNames();
+        params.forEach(builder::removeAllQueryParameters);
+        builder.fragment(null);
+
+        return builder.build();
     }
 
     // PRIVATE
