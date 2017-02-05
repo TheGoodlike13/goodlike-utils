@@ -2,11 +2,15 @@ package eu.goodlike.functional;
 
 import eu.goodlike.neat.Null;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static eu.goodlike.functional.ImmutableCollectors.toList;
 
 /**
  * Utility methods to work with CompletableFutures
@@ -71,6 +75,31 @@ public final class Futures {
         return optional.isPresent()
                 ? CompletableFuture.completedFuture(optional.get())
                 : Futures.failedFuture(onEmpty.get());
+    }
+
+    /**
+     * @return {@link CompletableFuture} which completes with values of given futures when they all complete
+     * @throws NullPointerException if futures is or contains null
+     */
+    @SafeVarargs
+    public static <T> CompletableFuture<List<T>> allOf(CompletableFuture<T>... futures) {
+        Null.checkArray(futures).as("futures");
+
+        return CompletableFuture.allOf(futures)
+                .thenApply(all -> Arrays.stream(futures).map(CompletableFuture::join).collect(toList()));
+    }
+
+    /**
+     * @return {@link CompletableFuture} which completes with the value of the first completed future
+     * @throws NullPointerException if futures is or contains null
+     */
+    @SafeVarargs
+    public static <T> CompletableFuture<T> anyOf(CompletableFuture<T>... futures) {
+        Null.checkArray(futures).as("futures");
+
+        @SuppressWarnings("unchecked")
+        CompletableFuture<T> future = (CompletableFuture<T>) CompletableFuture.anyOf(futures);
+        return future;
     }
 
     // PRIVATE
