@@ -1,7 +1,9 @@
 package eu.goodlike.cmd;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.libraries.slf4j.Log;
 import eu.goodlike.neat.Null;
+import eu.goodlike.str.Str;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +20,16 @@ public final class LoggingProcessRunner implements ProcessRunner {
 
     @Override
     public Optional<Process> execute(String command, String... args) {
+        log.log(LOGGER, "Launching process: " + getCommandLineString(command, ImmutableList.copyOf(args)));
+
         return processRunner.execute(command, args)
                 .map(process -> processHookAttacher.attachDuring(process, this::logAllOutput));
     }
 
     @Override
     public Optional<Process> execute(String command, List<String> args) {
+        log.log(LOGGER, "Launching process: " + getCommandLineString(command, args));
+
         return processRunner.execute(command, args)
                 .map(process -> processHookAttacher.attachDuring(process, this::logAllOutput));
     }
@@ -57,6 +63,12 @@ public final class LoggingProcessRunner implements ProcessRunner {
     private final ProcessRunner processRunner;
     private final Log log;
     private final ProcessHookAttacher processHookAttacher;
+
+    private String getCommandLineString(String command, List<String> args) {
+        return Str.of(command)
+                .andSome(" ", args)
+                .toString();
+    }
 
     private void logAllOutput(Process process) {
         BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
