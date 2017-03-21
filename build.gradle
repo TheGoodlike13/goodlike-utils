@@ -62,8 +62,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.42'
-def versionDescription = 'Either refactor, updated libs'
+version '0.0.43'
+def versionDescription = 'Added a way to pack Stream<Either<Stream>> into Either<Stream>'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
