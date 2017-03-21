@@ -1,460 +1,249 @@
 package eu.goodlike.functional;
 
-import eu.goodlike.neat.Null;
+import eu.goodlike.functional.impl.either.Left;
+import eu.goodlike.functional.impl.either.Neither;
+import eu.goodlike.functional.impl.either.Right;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.*;
 
 /**
- * <pre>
- * Contains one of two possible type of objects, never both; it can, however, contain neither
- *
- * This class mimics java.util.Optional behaviour, and uses it internally wherever possible, since most
- * of the logic is quite the same;
- * </pre>
+ * Contains one of two possible type of objects, left or right, never both; it can, however, contain neither
  */
-public final class Either<T1, T2> {
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+public interface Either<L, R> {
 
     /**
-     * @return value of first kind if this Either is of first kind
-     * @throws NoSuchElementException if this Either is of second or neither kind
+     * @return left value
+     * @throws NoSuchElementException if this Either is right or neither
      */
-    public T1 getFirstKind() {
-        //noinspection OptionalGetWithoutIsPresent
-        return firstKind.get();
-    }
+    L getLeft();
 
     /**
-     * @return value of second kind if this Either is of second kind
-     * @throws NoSuchElementException if this Either is of first or neither kind
+     * @return right value
+     * @throws NoSuchElementException if this Either is left or neither
      */
-    public T2 getSecondKind() {
-        //noinspection OptionalGetWithoutIsPresent
-        return secondKind.get();
-    }
+    R getRight();
 
     /**
-     * @return optional value of first kind of this Either
+     * @return optional value of left
      */
-    public Optional<T1> getFirstOptional() {
-        return firstKind;
-    }
+    Optional<L> toOptionalLeft();
 
     /**
-     * @return optional value of second kind of this Either
+     * @return optional value of right
      */
-    public Optional<T2> getSecondOptional() {
-        return secondKind;
-    }
+    Optional<R> toOptionalRight();
 
     /**
-     * @return true if this Either is of first kind
+     * @return true if this Either is left
      */
-    public boolean isFirstKind() {
-        return firstKind.isPresent();
-    }
+    boolean isLeft();
 
     /**
-     * @return true if this Either is of second kind
+     * @return true if this Either is right
      */
-    public boolean isSecondKind() {
-        return secondKind.isPresent();
-    }
+    boolean isRight();
 
     /**
-     * @return true if this Either is of first or second kind
+     * @return true if this Either is left or right
      */
-    public boolean isEitherKind() {
-        return isFirstKind() || isSecondKind();
-    }
+    boolean isEither();
 
     /**
-     * @return true if this Either is of neither kind
+     * @return true if this Either is neither
      */
-    public boolean isNeitherKind() {
-        return !isEitherKind();
-    }
+    boolean isNeither();
 
     /**
-     * Invokes the consumer if this Either is of first kind, otherwise does nothing
+     * Invokes the consumer if this Either is left, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public Either<T1, T2> ifFirstKind(Consumer<? super T1> consumer) {
-        Null.check(consumer).ifAny("Null consumers not allowed");
-        firstKind.ifPresent(consumer);
-        return this;
-    }
+    Either<L, R> ifLeft(Consumer<? super L> consumer);
 
     /**
-     * Invokes the consumer if this Either is of second kind, otherwise does nothing
+     * Invokes the consumer if this Either is right, otherwise does nothing
      * @throws NullPointerException if consumer is null
      */
-    public Either<T1, T2> ifSecondKind(Consumer<? super T2> consumer) {
-        Null.check(consumer).ifAny("Null consumers not allowed");
-        secondKind.ifPresent(consumer);
-        return this;
-    }
+    Either<L, R> ifRight(Consumer<? super R> consumer);
 
     /**
-     * Invokes the first consumer if this Either is of first kind, and the second consumer if it is of second kind
-     * @throws NullPointerException if any of the consumers are null
+     * Invokes an action if this Either is neither, otherwise does nothing
+     * @throws NullPointerException if action is null
      */
-    public Either<T1, T2> ifEitherKind(Consumer<? super T1> consumer1, Consumer<? super T2> consumer2) {
-        return ifFirstKind(consumer1).ifSecondKind(consumer2);
-    }
+    Either<L, R> ifNeither(Runnable action);
 
     /**
-     * Invokes an action if this Either is of neither kind, otherwise does nothing
-     * @throws NullPointerException if consumer is null
-     */
-    public Either<T1, T2> ifNeitherKind(Runnable action) {
-        Null.check(action).ifAny("Null actions not allowed");
-        if (isNeitherKind())
-            action.run();
-        return this;
-    }
-
-    /**
-     * @return Either with its first value filtered using the predicate; this only has an effect if this Either
-     * is of first kind; this will make the Either lose its kind if the predicate does not hold for the present
-     * value, otherwise the kind is retained
+     * @return Either which only retains the left value if it passes the predicate
      * @throws NullPointerException if predicate is null
      */
-    public Either<T1, T2> filterFirstKind(Predicate<? super T1> predicate) {
-        Null.check(predicate).ifAny("Null predicates not allowed");
-        return of(firstKind.filter(predicate), secondKind);
-    }
+    Either<L, R> filterLeft(Predicate<? super L> predicate);
 
     /**
-     * @return Either with its second value filtered using the predicate; this only has an effect if this Either
-     * is of second kind; this will make the Either lose its kind if the predicate does not hold for the present
-     * value, otherwise the kind is retained
+     * @return Either which only retains the right value if it passes the predicate
      * @throws NullPointerException if predicate is null
      */
-    public Either<T1, T2> filterSecondKind(Predicate<? super T2> predicate) {
-        Null.check(predicate).ifAny("Null predicates not allowed");
-        return of(firstKind, secondKind.filter(predicate));
-    }
+    Either<L, R> filterRight(Predicate<? super R> predicate);
 
     /**
-     * @return Either with its first value filtered using the first predicate, and its second value filtered using
-     * the second predicate; this will make the Either lose its kind if the predicate does not hold for the present
-     * value, otherwise the kind is retained
-     * @throws NullPointerException if any of the predicates are null
-     */
-    public Either<T1, T2> filter(Predicate<? super T1> predicate1, Predicate<? super T2> predicate2) {
-        Null.check(predicate1, predicate2).ifAny("Null predicates not allowed");
-        return of(firstKind.filter(predicate1), secondKind.filter(predicate2));
-    }
-
-    /**
-     * @return Either with its first value mapped using the mapper; this only has an effect if this Either
-     * is of the first kind
+     * @return Either which has its left value replaced by the result of mapper
      * @throws NullPointerException if mapper is null
      */
-    public <U1> Either<U1, T2> mapFirstKind(Function<? super T1, ? extends U1> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return of(firstKind.map(mapper), secondKind);
-    }
+    <U1> Either<U1, R> mapLeft(Function<? super L, ? extends U1> mapper);
 
     /**
-     * @return Either with its second value mapped using the mapper; this only has an effect if this Either
-     * is of the second kind
+     * @return Either which has its right value replaced by the result of mapper
      * @throws NullPointerException if mapper is null
      */
-    public <U2> Either<T1, U2> mapSecondKind(Function<? super T2, ? extends U2> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return of(firstKind, secondKind.map(mapper));
-    }
+    <U2> Either<L, U2> mapRight(Function<? super R, ? extends U2> mapper);
 
     /**
-     * @return Either with its first value mapped using the first mapper, and its second value mapped using
-     * the second mapper
-     * @throws NullPointerException if any of the mappers are null
+     * @return Optional which has the result of leftMapper if this Either is left, the result of rightMapper if this
+     * Either is right and empty if this Either is neither
+     * @throws NullPointerException if leftMapper or rightMapper is null
      */
-    public <U1, U2> Either<U1, U2> map(Function<? super T1, ? extends U1> mapper1,
-                                       Function<? super T2, ? extends U2> mapper2) {
-        Null.check(mapper1, mapper2).ifAny("Null mappers not allowed");
-        return of(firstKind.map(mapper1), secondKind.map(mapper2));
-    }
+    <U> Optional<U> collapse(Function<? super L, ? extends U> leftMapper,
+                             Function<? super R, ? extends U> rightMapper);
 
     /**
-     * @return Optional of this Either's first value, mapped using mapper
+     * @return Optional which has the result of mapper; missing values will be passed in as null
      * @throws NullPointerException if mapper is null
      */
-    public <U> Optional<U> mapFirstKindInto(Function<? super T1, ? extends U> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return firstKind.map(mapper);
-    }
+    <U> Optional<U> collapse(BiFunction<? super L, ? super R, ? extends U> mapper);
 
     /**
-     * @return Optional of this Either's second value, mapped using mapper
+     * @return similar to mapLeft(), except that the result is already an Either
      * @throws NullPointerException if mapper is null
      */
-    public <U> Optional<U> mapSecondKindInto(Function<? super T2, ? extends U> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return secondKind.map(mapper);
-    }
+    <U> Either<U, R> flatMapLeft(Function<? super L, Either<U, R>> mapper);
 
     /**
-     * @return Optional of this Either's value, mapped using mapper1 if this Either is of first kind, and mapper2
-     * if this Either is of second kind
-     * @throws NullPointerException if any of the mappers are null
-     */
-    public <U> Optional<U> mapInto(Function<? super T1, ? extends U> mapper1,
-                                   Function<? super T2, ? extends U> mapper2) {
-        Null.check(mapper1, mapper2).ifAny("Null mappers not allowed");
-        return isFirstKind()
-                ? firstKind.map(mapper1)
-                : secondKind.map(mapper2);
-    }
-
-    /**
-     * @return Optional of this Either's value, mapped using mapper; mapper MUST expect both of values to be null!
+     * @return similar to mapRight(), except that the result is already an Either
      * @throws NullPointerException if mapper is null
      */
-    public <U> Optional<U> mapInto(BiFunction<? super T1, ? super T2, ? extends U> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        //noinspection OptionalGetWithoutIsPresent
-        return isFirstKind()
-                ? Optional.ofNullable(mapper.apply(firstKind.get(), null))
-                : isSecondKind() ? Optional.ofNullable(mapper.apply(null, secondKind.get())) : Optional.ofNullable(mapper.apply(null, null));
-    }
+    <U> Either<L, U> flatMapRight(Function<? super R, Either<L, U>> mapper);
 
     /**
-     * @return similar to mapInto(), except that the BiFunction should return an Either (to avoid Optional of Either)
+     * @return Either which has the result of mapper; missing values will be passed in as null
+     * @throws NullPointerException if mapper is null
      */
-    public <U1, U2> Either<U1, U2> flatMap(BiFunction<? super T1, ? super T2, Either<U1, U2>> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        //noinspection OptionalGetWithoutIsPresent
-        return isFirstKind()
-                ? mapper.apply(firstKind.get(), null)
-                : isSecondKind() ? mapper.apply(null, secondKind.get()) : neither();
-    }
+    <U1, U2> Either<U1, U2> flatMap(BiFunction<? super L, ? super R, Either<U1, U2>> mapper);
 
     /**
-     * @return similar to mapInto(), except that the Function should return an Optional (to avoid Optional of Optional)
+     * @return left value of this either; if it is null, other is returned
      */
-    public <U> Optional<U> flatMapFirstKindInto(Function<? super T1, Optional<U>> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return firstKind.flatMap(mapper);
-    }
+    L leftOrElse(L other);
 
     /**
-     * @return similar to mapInto(), except that the Function should return an Optional (to avoid Optional of Optional)
+     * @return left value of this either; if it is null, supplier result is returned
+     * @throws NullPointerException if supplier is null
      */
-    public <U> Optional<U> flatMapSecondKindInto(Function<? super T2, Optional<U>> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        return secondKind.flatMap(mapper);
-    }
+    L leftOrGet(Supplier<? extends L> supplier);
 
     /**
-     * @return similar to mapInto(), except that the BiFunction should return an Optional (to avoid Optional of Optional)
+     * @return left value of this either
+     * @throws X if this Either is not left
+     * @throws NullPointerException if exceptionSupplier is null
      */
-    public <U> Optional<U> flatMapInto(BiFunction<? super T1, ? super T2, Optional<U>> mapper) {
-        Null.check(mapper).ifAny("Null mappers not allowed");
-        //noinspection OptionalGetWithoutIsPresent
-        return isFirstKind()
-                ? mapper.apply(firstKind.get(), null)
-                : isSecondKind() ? mapper.apply(null, secondKind.get()) : Optional.empty();
-    }
+    <X extends Throwable> L leftOrThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
-     * @return similar to mapInto(), except that the Functions should return an Optional (to avoid Optional of Optional)
+     * @return right value of this either; if it is null, other is returned
      */
-    public <U> Optional<U> flatMapInto(Function<? super T1, Optional<U>> mapper1,
-                                       Function<? super T2, Optional<U>> mapper2) {
-        Null.check(mapper1, mapper2).ifAny("Null mappers not allowed");
-        return isFirstKind()
-                ? firstKind.flatMap(mapper1)
-                : secondKind.flatMap(mapper2);
-    }
+    R rightOrElse(R other);
 
     /**
-     * @return first value if this Either is of first kind, given value otherwise
+     * @return right value of this either; if it is null, supplier result is returned
+     * @throws NullPointerException if supplier is null
      */
-    public T1 firstOrElse(T1 other) {
-        return firstKind.orElse(other);
-    }
+    R rightOrGet(Supplier<? extends R> supplier);
 
     /**
-     * @return first value if this Either is of first kind, result of supplier otherwise
+     * @return right value of this either
+     * @throws X if this Either is not right
+     * @throws NullPointerException if exceptionSupplier is null
      */
-    public T1 firstOrElseGet(Supplier<? extends T1> other) {
-        return firstKind.orElseGet(other);
-    }
-
-    /**
-     * @return first value if this Either is of first kind
-     * @throws X if this Either is not of first kind
-     */
-    public <X extends Throwable> T1 firstOrElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        return firstKind.orElseThrow(exceptionSupplier);
-    }
-
-    /**
-     * @return second value if this Either is of second kind, given value otherwise
-     */
-    public T2 secondOrElse(T2 other) {
-        return secondKind.orElse(other);
-    }
-
-    /**
-     * @return second value if this Either is of second kind, result of supplier otherwise
-     */
-    public T2 secondOrElseGet(Supplier<? extends T2> other) {
-        return secondKind.orElseGet(other);
-    }
-
-    /**
-     * @return second value if this Either is of second kind
-     * @throws X if this Either is not of second kind
-     */
-    public <X extends Throwable> T2 secondOrElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        return secondKind.orElseThrow(exceptionSupplier);
-    }
+    <X extends Throwable> R rightOrThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * @return this Either
-     * @throws X if this Either is of first kind
+     * @throws X if this Either is left
+     * @throws NullPointerException if exceptionSupplier is null
      */
-    public <X extends Throwable> Either<T1, T2> ifFirstThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        if (isFirstKind())
-            throw exceptionSupplier.get();
-
-        return this;
-    }
+    <X extends Throwable> Either<L, R> ifLeftThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * @return this Either
-     * @throws X if this Either is of first kind
+     * @throws X if this Either is left
+     * @throws NullPointerException if exceptionFunction is null
      */
-    public <X extends Throwable> Either<T1, T2> ifFirstThrowIt(Function<T1, ? extends X> exceptionSupplier) throws X {
-        if (isFirstKind())
-            //noinspection OptionalGetWithoutIsPresent
-            throw exceptionSupplier.apply(firstKind.get());
-
-        return this;
-    }
+    <X extends Throwable> Either<L, R> ifLeftThrowPass(Function<L, ? extends X> exceptionFunction) throws X;
 
     /**
      * @return this Either
-     * @throws X if this Either is of second kind
+     * @throws X if this Either is right
+     * @throws NullPointerException if exceptionSupplier is null
      */
-    public <X extends Throwable> Either<T1, T2> ifSecondThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        if (isSecondKind())
-            throw exceptionSupplier.get();
-
-        return this;
-    }
+    <X extends Throwable> Either<L, R> ifRightThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * @return this Either
-     * @throws X if this Either is of second kind
+     * @throws X if this Either is right
+     * @throws NullPointerException if exceptionFunction is null
      */
-    public <X extends Throwable> Either<T1, T2> ifSecondThrowIt(Function<T2, ? extends X> exceptionSupplier) throws X {
-        if (isSecondKind())
-            //noinspection OptionalGetWithoutIsPresent
-            throw exceptionSupplier.apply(secondKind.get());
-
-        return this;
-    }
+    <X extends Throwable> Either<L, R> ifRightThrowPass(Function<R, ? extends X> exceptionFunction) throws X;
 
     /**
      * @return this Either
-     * @throws X if this Either is of neither kind
+     * @throws X if this Either is neither
+     * @throws NullPointerException if exceptionSupplier is null
      */
-    public <X extends Throwable> Either<T1, T2> ifNeitherThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        if (isNeitherKind())
-            throw exceptionSupplier.get();
-
-        return this;
-    }
+    <X extends Throwable> Either<L, R> ifNeitherThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * @return Either with its types and value swapped around
      */
-    public Either<T2, T1> swap() {
-        return of(secondKind, firstKind);
-    }
+    Either<R, L> swap();
 
     // CONSTRUCTORS
 
-    public static <T1, T2> Either<T1, T2> neither() {
+    static <L, R> Either<L, R> neither() {
         @SuppressWarnings("unchecked")
-        Either<T1, T2> empty = (Either<T1, T2>)NEITHER;
+        Either<L, R> empty = (Either<L, R>)NEITHER;
         return empty;
     }
 
-    public static <T1, T2> Either<T1, T2> ofNeitherKind() {
-        return neither();
+    static <L, R> Either<L, R> left(L left) {
+        return left == null ? neither() : new Left<>(left);
     }
 
-    public static <T1, T2> Either<T1, T2> ofFirstKind(T1 t) {
-        return ofFirstKind(Optional.ofNullable(t));
+    static <L, R> Either<L, R> left(Optional<L> left) {
+        return left == null || !left.isPresent() ? neither() : new Left<>(left.get());
     }
 
-    public static <T1, T2> Either<T1, T2> ofFirstKind(Optional<T1> t) {
-        return t == null || !t.isPresent() ? neither() : new Either<>(t, Optional.empty());
+    static <L, R> Either<L, R> right(R right) {
+        return right == null ? neither() : new Right<>(right);
     }
 
-    public static <T1, T2> Either<T1, T2> ofSecondKind(T2 t) {
-        return ofSecondKind(Optional.ofNullable(t));
+    static <L, R> Either<L, R> right(Optional<R> right) {
+        return right == null || !right.isPresent() ? neither() : new Right<>(right.get());
     }
 
-    public static <T1, T2> Either<T1, T2> ofSecondKind(Optional<T2> t) {
-        return t == null || !t.isPresent() ? neither() : new Either<>(Optional.empty(), t);
-    }
-
-    public static <T1, T2> Either<T1, T2> of(T1 t1, T2 t2) {
-        if (t1 != null && t2 != null)
+    static <L, R> Either<L, R> of(L left, R right) {
+        if (left != null && right != null)
             throw new IllegalArgumentException("At least one of arguments has to be null");
 
-        return of(Optional.ofNullable(t1), Optional.ofNullable(t2));
+        return right == null ? left(left) : right(right);
     }
 
-    public static <T1, T2> Either<T1, T2> of(Optional<T1> t1, Optional<T2> t2) {
-        if (t1 != null && t2 != null && t1.isPresent() && t2.isPresent())
+    static <L, R> Either<L, R> of(Optional<L> left, Optional<R> right) {
+        if (left != null && right != null && left.isPresent() && right.isPresent())
             throw new IllegalArgumentException("At least one of arguments has to be null");
 
-        return t1 == null || !t1.isPresent()
-                ? ofSecondKind(t2)
-                : ofFirstKind(t1);
+        return right == null || !right.isPresent() ? left(left) : right(right);
     }
 
-    private Either(Optional<T1> firstKind, Optional<T2> secondKind) {
-        this.firstKind = firstKind;
-        this.secondKind = secondKind;
-    }
-
-    // PRIVATE
-
-    private final Optional<T1> firstKind;
-    private final Optional<T2> secondKind;
-
-    private static final Either<?, ?> NEITHER = new Either<>(Optional.empty(), Optional.empty());
-
-    // OBJECT OVERRIDES
-
-    @Override
-    public String toString() {
-        return "Either{" + firstKind + ", " + secondKind + "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Either)) return false;
-        Either<?, ?> either = (Either<?, ?>) o;
-        return Objects.equals(firstKind, either.firstKind) &&
-                Objects.equals(secondKind, either.secondKind);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstKind, secondKind);
-    }
+    Either NEITHER = new Neither();
 
 }
