@@ -44,6 +44,11 @@ public final class CallMock implements Call {
         return false;
     }
 
+    @Override
+    public Call clone() {
+        return this;
+    }
+
     // CONSTRUCTORS
 
     CallMock(Request request, Object jsonValue) throws IOException {
