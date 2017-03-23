@@ -10,8 +10,11 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.io.Files;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static eu.goodlike.misc.Constants.DEF_CHARSET;
@@ -19,6 +22,7 @@ import static eu.goodlike.misc.Constants.DEF_CHARSET;
 /**
  * Simple object which used Jackson annotations; used only in testing
  */
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public final class JsonObject {
 
     @JsonProperty
@@ -29,6 +33,16 @@ public final class JsonObject {
     @JsonProperty
     public Instant getTime() {
         return time;
+    }
+
+    @JsonProperty
+    public Path getPath() {
+        return path;
+    }
+
+    @JsonProperty
+    public Optional<String> getOptional() {
+        return optional;
     }
 
     @JsonIgnore
@@ -83,21 +97,28 @@ public final class JsonObject {
     // CONSTRUCTORS
 
     @JsonCreator
-    public JsonObject(int id, Instant time) {
+    public JsonObject(int id, Instant time, Path path, Optional<String> optional) {
         this.id = id;
         this.time = time;
-        this.string = "{\"id\":" + id + ",\"time\":\"" + time + "\"}";
+        this.path = path;
+        this.optional = optional;
+        this.string = "{\"id\":" + id + "," +
+                "\"time\":\"" + time + "\"," +
+                "\"path\":\"" + (path == null ? null : path.toUri()) + "\"," +
+                "\"optional\":\"" + (optional.isPresent() ? optional.get() : null) + "\"}";
         this.bytes = this.string.getBytes(DEF_CHARSET);
     }
 
     public JsonObject() {
-        this(1, Instant.now());
+        this(1, Instant.now(), Paths.get("here"), Optional.of("a"));
     }
 
     // PRIVATE
 
     private final int id;
     private final Instant time;
+    private final Path path;
+    private final Optional<String> optional;
     private final String string;
     private final byte[] bytes;
 

@@ -3,8 +3,9 @@ package eu.goodlike.libraries.jackson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paranamer.ParanamerModule;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 
@@ -19,14 +20,13 @@ public enum JsonMapper {
      * @return a copy of an ObjectMapper used by the JsonMapper singleton; useful when customized behaviour is needed
      */
     public static ObjectMapper newMapper() {
-        ObjectMapper mapper = Jackson2ObjectMapperBuilder.json()
-                .featuresToDisable(
-                        DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE,
-                        SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .build();
-        mapper.registerModule(new ParanamerModule());
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper;
+        return new ObjectMapper()
+                .registerModule(new ParanamerModule())
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule())
+                .configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false)
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     // WRAPPER METHODS
