@@ -37,6 +37,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr1', optional
     compile 'com.fasterxml.jackson.core:jackson-core:2.9.0.pr1', optional
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1', optional
+    compile 'com.fasterxml.jackson.module:jackson-module-paranamer:2.9.0.pr1', optional
 
     // needed for jooq package only
     compile 'org.jooq:jooq:3.9.1', optional
@@ -62,8 +63,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.43a'
-def versionDescription = 'Changed Optional:le:of to Optional::ofNullable to avoid exceptions'
+version '0.0.44'
+def versionDescription = 'Json class methods no longer requires @JsonProperty on constructors'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'

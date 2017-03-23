@@ -20,7 +20,7 @@ import static eu.goodlike.misc.Constants.DEF_CHARSET;
  */
 public final class JsonObject {
 
-    @JsonProperty(value = "id")
+    @JsonProperty
     public int getId() {
         return id;
     }
@@ -77,7 +77,7 @@ public final class JsonObject {
     // CONSTRUCTORS
 
     @JsonCreator
-    public JsonObject(@JsonProperty(value = "id") int id) {
+    public JsonObject(int id) {
         this.id = id;
         this.string = "{\"id\":" + id + "}";
         this.bytes = this.string.getBytes(DEF_CHARSET);

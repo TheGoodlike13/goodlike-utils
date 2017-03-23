@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.module.paranamer.ParanamerModule;
 
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ public enum JsonMapper {
      */
     public static ObjectMapper newMapper() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new ParanamerModule());
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper;
     }
