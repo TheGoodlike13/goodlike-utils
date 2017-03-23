@@ -24,7 +24,7 @@ dependencies {
 
     // used for caching
     compile 'com.github.ben-manes.caffeine:caffeine:2.4.0'
-    compile 'org.cache2k:cache2k-api:1.0.0.CR3'
+    compile 'org.cache2k:cache2k-api:1.0.0.CR4'
     compile 'org.cache2k:cache2k-core:1.0.0.CR3'
 
     // used for String formatting
@@ -34,9 +34,11 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.6.0', optional
 
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr1', optional
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0.pr1', optional
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr1', optional
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr2', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0.pr2', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr2', optional
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.0.pr2', optional
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0.pr2', optional
     compile 'com.fasterxml.jackson.module:jackson-module-paranamer:2.9.0.pr1', optional
 
     // needed for jooq package only
@@ -63,8 +65,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.44'
-def versionDescription = 'Json class methods no longer requires @JsonProperty on constructors'
+version '0.0.45'
+def versionDescription = 'Json class methods now support java 7/8 if modules are present'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'

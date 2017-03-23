@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.io.Files;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,6 +24,11 @@ public final class JsonObject {
     @JsonProperty
     public int getId() {
         return id;
+    }
+
+    @JsonProperty
+    public Instant getTime() {
+        return time;
     }
 
     @JsonIgnore
@@ -77,19 +83,21 @@ public final class JsonObject {
     // CONSTRUCTORS
 
     @JsonCreator
-    public JsonObject(int id) {
+    public JsonObject(int id, Instant time) {
         this.id = id;
-        this.string = "{\"id\":" + id + "}";
+        this.time = time;
+        this.string = "{\"id\":" + id + ",\"time\":\"" + time + "\"}";
         this.bytes = this.string.getBytes(DEF_CHARSET);
     }
 
     public JsonObject() {
-        this(1);
+        this(1, Instant.now());
     }
 
     // PRIVATE
 
     private final int id;
+    private final Instant time;
     private final String string;
     private final byte[] bytes;
 
