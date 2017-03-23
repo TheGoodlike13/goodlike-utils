@@ -62,8 +62,8 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.43'
-def versionDescription = 'Added a way to pack Stream<Either<Stream>> into Either<Stream>'
+version '0.0.43a'
+def versionDescription = 'Changed Optional:le:of to Optional::ofNullable to avoid exceptions'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'

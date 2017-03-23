@@ -96,7 +96,7 @@ public final class Left<L, R> implements Either<L, R> {
     @Override
     public <U> Optional<U> collapse(Function<? super L, ? extends U> leftMapper, Function<? super R, ? extends U> rightMapper) {
         Null.check(leftMapper, rightMapper).as("leftMapper, rightMapper");
-        return Optional.of(leftMapper.apply(left));
+        return Optional.ofNullable(leftMapper.apply(left));
     }
 
     @Override
