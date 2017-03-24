@@ -8,7 +8,7 @@ public final class TestableSupplier<T> implements Supplier<T> {
     @Override
     public T get() {
         timesQueried.incrementAndGet();
-        return object;
+        return supplier.get();
     }
 
     public boolean hasBeenQueried() {
@@ -26,13 +26,23 @@ public final class TestableSupplier<T> implements Supplier<T> {
     }
 
     public TestableSupplier(T object, long timesAlreadyQueried) {
-        this.object = object;
+        this(() -> object, timesAlreadyQueried);
+    }
+
+    public TestableSupplier(Supplier<T> supplier) {
+        this(supplier, 0);
+    }
+
+    public TestableSupplier(Supplier<T> supplier, long timesAlreadyQueried) {
+        this.supplier = supplier;
         this.timesQueried = new AtomicLong(timesAlreadyQueried);
     }
 
+
+
     // PRIVATE
 
-    private final T object;
+    private final Supplier<T> supplier;
     private final AtomicLong timesQueried;
 
 }

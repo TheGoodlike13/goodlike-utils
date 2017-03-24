@@ -60,4 +60,13 @@ public class TestableSupplierTest {
                 .isEqualTo(11);
     }
 
+    @Test
+    public void supplierWrapping() {
+        TestableSupplier<String> supplier = new TestableSupplier<>(() -> TEST_STRING);
+
+        assertThat(supplier.get()).isEqualTo(TEST_STRING);
+        assertThat(supplier.totalTimesQueried())
+                .isEqualTo(1);
+    }
+
 }
