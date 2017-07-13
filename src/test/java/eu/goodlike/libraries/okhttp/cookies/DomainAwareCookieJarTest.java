@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class DomainAwareCookieJarTest {
 
@@ -77,15 +76,6 @@ public class DomainAwareCookieJarTest {
         HttpUrl subDomainUrl = urlForDomain("ignition.customsforge.com");
         assertThat(cookieJar.loadForRequest(subDomainUrl))
                 .containsExactly(cookie);
-    }
-
-    @Test
-    public void cannotStoreCookiesForPublicDomain() {
-        HttpUrl publicDomainUrl = urlForDomain("not.quite.blogspot.com");
-        Cookie cookie = Cookie.parse(publicDomainUrl, "name=value; Domain=blogspot.com");
-
-        assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> cookieJar.saveFromResponse(publicDomainUrl, ImmutableList.of(cookie)));
     }
 
 }

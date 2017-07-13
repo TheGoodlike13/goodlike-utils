@@ -43,6 +43,7 @@ public class DefaultHttpRequestMakerTest {
                 .protocol(Protocol.HTTP_1_1)
                 .code(200)
                 .body(responseBody)
+                .message("OK")
                 .build();
     }
 

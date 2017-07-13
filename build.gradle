@@ -7,11 +7,11 @@ plugins {
     id "com.jfrog.bintray" version "1.7.3"
 
     // helps me keep up to date with dependencies
-    id "com.github.ben-manes.versions" version "0.14.0"
+    id "com.github.ben-manes.versions" version "0.15.0"
 
     // some of the dependencies are constricted to their own packages; if you don't use classes in these packages,
     // the dependencies becomes entirely optional
-    id 'nebula.optional-base' version '3.1.0'
+    id 'nebula.optional-base' version '3.2.0'
 }
 
 repositories {
@@ -20,44 +20,44 @@ repositories {
 
 dependencies {
     // used for various utility methods
-    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.guava:guava:22.0'
 
     // used for caching
-    compile 'com.github.ben-manes.caffeine:caffeine:2.4.0'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.5.3'
     compile 'org.cache2k:cache2k-api:1.0.0.CR4'
-    compile 'org.cache2k:cache2k-core:1.0.0.CR3'
+    compile 'org.cache2k:cache2k-core:1.0.0.CR4'
 
     // used for String formatting
     compile 'org.slf4j:slf4j-api:1.7.25'
 
     // used for OkHttp package only
-    compile 'com.squareup.okhttp3:okhttp:3.6.0', optional
+    compile 'com.squareup.okhttp3:okhttp:3.8.1', optional
 
     // needed for jackson package only
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr2', optional
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0.pr2', optional
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr2', optional
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.0.pr2', optional
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0.pr2', optional
-    compile 'com.fasterxml.jackson.module:jackson-module-paranamer:2.9.0.pr1', optional
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr4', optional
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0.pr4', optional
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0.pr4', optional
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.0.pr4', optional
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0.pr4', optional
+    compile 'com.fasterxml.jackson.module:jackson-module-paranamer:2.9.0.pr4', optional
 
     // needed for jooq package only
-    compile 'org.jooq:jooq:3.9.1', optional
+    compile 'org.jooq:jooq:3.9.3', optional
 
     // needed for spring.mockmvc package only
-    compile 'org.springframework:spring-test:4.3.7.RELEASE', optional
-    compile 'org.springframework:spring-web:4.3.7.RELEASE', optional
-    compile 'org.springframework:spring-beans:4.3.7.RELEASE', optional
-    compile 'javax.servlet:javax.servlet-api:4.0.0-b03', optional
+    compile 'org.springframework:spring-test:4.3.9.RELEASE', optional
+    compile 'org.springframework:spring-web:4.3.9.RELEASE', optional
+    compile 'org.springframework:spring-beans:4.3.9.RELEASE', optional
+    compile 'javax.servlet:javax.servlet-api:4.0.0-b07', optional
 
     // needed for spring.gmail package only
-    compile 'org.springframework:spring-context-support:4.3.7.RELEASE', optional
+    compile 'org.springframework:spring-context-support:4.3.9.RELEASE', optional
     compile 'javax.mail:javax.mail-api:1.5.6', optional
 
     // unit tests
     testCompile 'junit:junit:4.12'
     // better assertions
-    testCompile 'org.assertj:assertj-core:3.6.2'
+    testCompile 'org.assertj:assertj-core:3.8.0'
     // mocking various objects
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     // a little bit of reflection
@@ -65,11 +65,11 @@ dependencies {
 }
 
 group 'eu.goodlike'
-version '0.0.47'
-def versionDescription = 'Removed Eithers due to unnecessary complexity'
+version '0.0.48'
+def versionDescription = 'Updated dependencies'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '4.0.1'
 }
 
 tasks.withType(JavaCompile) {
